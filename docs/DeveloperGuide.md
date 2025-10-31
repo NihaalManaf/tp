@@ -639,35 +639,6 @@ Use case ends.
    4a1. CMS indicates an error has happened.<br/>
    Use case resumes from step 2.
 
-
-#### Use case: UC02 - Add multiple contacts
-
-**System:** Contact Management System (CMS)
-
-**Actor:** Salesperson
-
-**Guarantees:**
-
-- Contact is created only if all required fields are valid.
-- On validation error, no contacts are added.
-
-**MSS:**
-
-1. Salesperson chooses to add a new contact.
-2. Salesperson enters the add command with contact details.
-3. CMS creates the contact and displays a confirmation message.<br/>
-   Use case ends.
-
-**Extensions:**<br/>
-
-2a. CMS detects an error in the entered data.<br/>
-2a1. CMS indicates an error has happened.<br/>
-Use case resumes from step 2.
-
-2b. Contact already exists (same name).<br/>
-2b1. CMS indicates an error.
-Use case ends.
-
 #### Use case: UC02 - Import address book from clipboard
 
 **System:** Contact Management System (CMS)
@@ -1101,8 +1072,6 @@ testers are expected to do more *exploratory* testing.
    1. Re-launch the app by double-clicking the jar file.<br>
        Expected: The most recent window size and location is retained.
 
-1. _{ more test cases …​ }_
-
 ### Deleting a person
 
 1. Deleting a person while all persons are being shown
@@ -1243,13 +1212,3 @@ testers are expected to do more *exploratory* testing.
 
    1. Other test cases to try: `find p:9876`, `find e:example.com`, `find n:alex david` (multiple keywords), `find s:Invalid` (invalid status)<br>
       Expected: Appropriate results or empty list!
-
-
-
-### Saving data
-
-1. Dealing with missing/corrupted data files
-
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
-
-1. _{ more test cases …​ }_

@@ -5,7 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 /**
- * Used  to access the actual filesystem.
+ * Used to access the actual filesystem.
  */
 public class SystemFileSystemProvider implements FileSystemProvider {
     @Override
