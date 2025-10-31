@@ -57,7 +57,7 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
   e.g `n:NAME [t:TAG]` can be used as `n:John Doe t:friend` or as `n:John Doe`.
 
 - Items with `…`​ after them can be used multiple times including zero times.<br>
-  e.g. `[t:TAG]…​` can be used as ` ` (i.e. 0 times), `t:friend`, `t:friend t:family` etc.
+  e.g. `[t:TAG]…​` can be input as ` ` (i.e. blank string, indicating 0 times), `t:friend`, `t:friend t:family` etc.
 
 - Parameters can be in any order.<br>
   e.g. if the command specifies `n:NAME p:PHONE_NUMBER`, `p:PHONE_NUMBER n:NAME` is also acceptable.
@@ -74,13 +74,13 @@ Shows a message explaining how to access the help page.
 
 ![help message](images/helpMessage.png)
 
-Format: `help`
+**Format:** `help`
 
 ### Adding a person: `add`
 
 Adds a person to the address book.
 
-Format: `add n:NAME p:PHONE_NUMBER e:EMAIL [a:ADDRESS] [s:STATUS] [t:TAG]…​`
+**Format:** `add n:NAME p:PHONE_NUMBER e:EMAIL [a:ADDRESS] [s:STATUS] [t:TAG]…​`
 
 **Parameters:**
 
@@ -95,7 +95,7 @@ Format: `add n:NAME p:PHONE_NUMBER e:EMAIL [a:ADDRESS] [s:STATUS] [t:TAG]…​`
 A person can have any number of tags (including 0), but only 1 status (default: "Uncontacted")
 </div>
 
-Examples:
+**Examples:**
 * `add n:John Doe p:98765432 e:johnd@example.com`
 * `add n:Betsy Crowe t:friend e:betsycrowe@example.com a:Newgate Prison p:1234567 t:criminal s:contacted`
 
@@ -105,19 +105,19 @@ Examples:
 
 Shows a list of all persons in the address book.
 
-Format: `list`
+**Format:** `list`
 
 ### Changing a person's status: `status`
 
 Sets a person's status in the address book.
 
-Format: `status INDEX [STATUS]`
+**Format:** `status INDEX [STATUS]`
 
 * Changes the status of the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​ This field is mandatory.
 * Changes the status of the person with the specified `STATUS`. The status of a person can only be "Contacted", "Uncontacted", "Busy", "Rejected", "Accepted" and "Unreachable". If no status is specified, it defaults to "Uncontacted".
 * The status input is case-insensitive.
 
-Examples:
+**Examples:**
 
 * `status 12 Contacted`
 * `status 12 Rejected`
@@ -127,28 +127,26 @@ Examples:
 
 Edits an existing person in the address book.
 
-Format: `edit INDEX [n:NAME] [p:PHONE] [e:EMAIL] [a:ADDRESS] [s:STATUS] [t:TAG]...`
+**Format:** `edit INDEX [n:NAME] [p:PHONE] [e:EMAIL] [a:ADDRESS] [s:STATUS] [t:TAG]...`
 
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
+* When editing the phone number, it needs to be unique so that the edited contact is not treated as a duplicated person.
 * When editing status, the existing status of the person will be removed and replaced with the new one specified.
 * When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
 * You can remove all the person’s tags by typing `t:` without specifying any tags after it.
 
-Examples:
+**Examples:**
 *  `edit 1 p:91234567 e:johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n:Betsy Crower t:` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 *  `edit 3 a:557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694 s:Busy` Edits the address and status of the 3rd person to be `557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694` and `Busy` respectively.
-
-- `edit 1 p:91234567 e:johndoe@example.com` Edits the phone number and email address of tse 1st person to be `91234567` and `johndoe@example.com` respectively.
-- `edit 2 n:Betsy Crower t:` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 
 ### Locating customers: `find`
 
 Finds customers based on various search criteria including name, tags, status, phone number, or email.
 
-Format: `find KEYWORD [MORE_KEYWORDS]` OR `find [n:NAME] [t:TAG]... [s:STATUS] [p:PHONE] [e:EMAIL]`
+**Format:** `find KEYWORD [MORE_KEYWORDS]` OR `find [n:NAME] [t:TAG]... [s:STATUS] [p:PHONE] [e:EMAIL]`
 
 **Basic Search (by name):**
 
@@ -171,7 +169,7 @@ Format: `find KEYWORD [MORE_KEYWORDS]` OR `find [n:NAME] [t:TAG]... [s:STATUS] [
 - Do not mix styles in one command. For example, use `find n:alice t:friend` (advanced) or `find alice` (basic), not `find alice t:friend`.
 
 
-Examples:
+**Examples:**
 
 **Basic name search:**
 
@@ -234,7 +232,7 @@ When you use `find t:friends s:Contacted`, the Tag view will highlight "friends"
 
 Deletes one or more persons from the address book.
 
-Format: `delete INDEX [MORE_INDICES]...`
+**Format:** `delete INDEX [MORE_INDICES]...`
 
 * Deletes the person(s) at the specified `INDEX` (and `MORE_INDICES` if provided).
 * The index refers to the index number shown in the displayed person list.
@@ -243,7 +241,7 @@ Format: `delete INDEX [MORE_INDICES]...`
 * Indices can be provided in any order.
 * **All indices must be valid** - if any index is invalid, the command will fail and no persons will be deleted. The error message will show which specific indices are invalid.
 
-Examples:
+**Examples:**
 * `list` followed by `delete 2` deletes the 2nd person in the address book.
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
 * `delete 1 3 5` deletes the 1st, 3rd, and 5th persons in the displayed list.
@@ -258,7 +256,7 @@ Manages email templates for different contact statuses. You can open, edit, save
 
 Opens the template editor for a specific contact status.
 
-Format: `template s:STATUS`
+**Format:** `template s:STATUS`
 
 * Opens the template editor window for the specified `STATUS`.
 * `STATUS` must be one of: `Contacted`, `Uncontacted`, `Rejected`, `Accepted`, `Unreachable`, or `Busy`.
@@ -266,7 +264,7 @@ Format: `template s:STATUS`
 * The template editor allows you to view and edit the email template.
 * Changes are not saved automatically - use `template save` to save your changes.
 
-Examples:
+**Examples:**
 * `template s:Contacted` opens the template editor for the "Contacted" status.
 * `template s:rejected` opens the template editor for the "Rejected" status.
 * `template s:BUSY` opens the template editor for the "Busy" status.
@@ -275,20 +273,20 @@ Examples:
 
 Saves the currently open template.
 
-Format: `template save`
+**Format:** `template save`
 
 * Saves any changes made to the template currently displayed in the template editor.
 * A template must be open (using `template s:STATUS`) before you can save.
 * If no template is currently open, an error message will be shown.
 
-Examples:
+**Examples:**
 * After opening a template with `template s:Contacted` and making changes, use `template save` to save your edits.
 
 #### Copying a template to clipboard : `template copy s:STATUS`
 
 Copies the content of a template to your clipboard without opening the editor.
 
-Format: `template copy s:STATUS`
+**Format:** `template copy s:STATUS`
 
 * Copies the entire template content for the specified `STATUS` to your clipboard.
 * `STATUS` must be one of: `Contacted`, `Uncontacted`, `Rejected`, `Accepted`, `Unreachable`, or `Busy`.
@@ -296,7 +294,7 @@ Format: `template copy s:STATUS`
 * The template is copied as-is from storage - you can then paste it into your email client.
 * Does not open the template editor.
 
-Examples:
+**Examples:**
 * `template copy s:Contacted` copies the "Contacted" template to your clipboard.
 * `template copy s:unreachable` copies the "Unreachable" template to your clipboard.
 
@@ -312,7 +310,7 @@ Templates are stored as text files in the `templates` folder in your application
 
 Imports an address book from the clipboard and replaces the current address book.
 
-Format: `import`
+**Format:** `import`
 
 * The address book data should be copied to your clipboard before running this command.
 * Alternatively, press `F7` to open the import preview window where you can review the contacts before importing.
@@ -327,7 +325,7 @@ Import replaces your entire address book when data is valid. Make sure to export
 * "Clipboard does not contain any text to import" - The clipboard is empty. Copy the address book JSON data first.
 * "Failed to import: Clipboard does not contain valid address book JSON." - The clipboard content is not valid JSON or doesn't match the expected address book format.
 
-Examples:
+**Examples:**
 * Copy address book JSON data to clipboard, then run `import` to import all contacts.
 * Press `F7` to open the import preview window and review contacts before importing.
 
@@ -338,13 +336,13 @@ Examples:
 
 Clears all entries from the address book.
 
-Format: `clear`
+**Format:** `clear`
 
 ### Exiting the program : `exit`
 
 Exits the program.
 
-Format: `exit`
+**Format:** `exit`
 
 ### Saving the data
 
