@@ -155,6 +155,11 @@ Check the examples below for the correct usage of each search style.
 
 **Format:** `find NAME [MORE_NAMES]` OR `find [n:NAME] [t:TAG]... [s:STATUS] [p:PHONE] [e:EMAIL]`
 
+<p align="center">
+  <img src="images/FindCommand.png" alt="Find Command example showing Basic and Advanced Search input fields and results"><br>
+  <em>Find Command example showing Basic Search and its results</em>
+</p>
+
 **Basic Search (by name):**
 - The basic search is for names only!
 - The search is case-insensitive. e.g `hans` will match `Hans`
