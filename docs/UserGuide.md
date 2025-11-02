@@ -197,7 +197,6 @@ Finds customers based on various search criteria including name, tags, status, p
 
 **Search by email:**
 
-- `find e:gmail.com` returns customers with Gmail addresses
 - `find e:john@example.com` returns customers with that specific email
 
 **Combined multi-criteria search:**
