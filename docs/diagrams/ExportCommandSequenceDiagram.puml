@@ -9,7 +9,7 @@ end box
 box Logic LOGIC_COLOR_T1
 participant ":LogicManager" as logic LOGIC_COLOR
 participant ":AddressBookParser" as abp LOGIC_COLOR
-participant "ExportCommand" as ec LOGIC_COLOR
+participant ":ExportCommand" as ec LOGIC_COLOR
 participant ":ClipboardProvider" as clipboard LOGIC_COLOR
 end box
 
@@ -26,9 +26,10 @@ user -> logic : execute("export")
 activate logic
 logic -> abp : parseCommand("export")
 activate abp
-abp -> ec : create ExportCommand()
+abp -> ec : ExportCommand()
 activate ec
-abp --> logic : ExportCommand
+ec --> abp : ExportCommand
+deactivate ec
 deactivate abp
 logic -> ec : execute(model)
 activate ec
@@ -36,6 +37,10 @@ ec -> model : getAddressBookFilePath()
 activate model
 model --> ec : filePath
 deactivate model
+ec -> fsp : exists(filePath)
+activate fsp
+fsp --> ec : boolean
+deactivate fsp
 ec -> fsp : readFile(filePath)
 activate fsp
 fsp --> ec : fileContent

@@ -10,7 +10,7 @@ box Logic LOGIC_COLOR_T1
 participant ":LogicManager" as logic LOGIC_COLOR
 participant ":AddressBookParser" as abp LOGIC_COLOR
 participant ":SetStatusCommandParser" as sscp LOGIC_COLOR
-participant "SetStatusCommand" as ssc LOGIC_COLOR
+participant ":SetStatusCommand" as ssc LOGIC_COLOR
 end box
 
 box Model MODEL_COLOR_T1
@@ -25,9 +25,10 @@ logic -> abp : parseCommand("status 1 Contacted")
 activate abp
 abp -> sscp : parse("1 Contacted")
 activate sscp
-sscp -> ssc : create(index, "Contacted")
+sscp -> ssc : SetStatusCommand(index, "Contacted")
 activate ssc
-sscp --> abp : SetStatusCommand
+ssc --> sscp : SetStatusCommand
+deactivate ssc
 deactivate sscp
 abp --> logic : SetStatusCommand
 deactivate abp
@@ -45,7 +46,7 @@ ssc -> status : fromStringIgnoreCase("Contacted")
 activate status
 status --> ssc : newStatus
 deactivate status
-ssc -> person : create new Person with newStatus
+ssc -> person : new Person with newStatus
 activate person
 person --> ssc : updatedPerson
 deactivate person
