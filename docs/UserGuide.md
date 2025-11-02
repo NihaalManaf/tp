@@ -99,7 +99,7 @@ Person with the same phone number, is considered as duplicate and cannot be adde
 * `add n:John Doe p:98765432 e:johnd@example.com`
 * `add n:Betsy Crowe t:friend e:betsycrowe@example.com a:Newgate Prison p:1234567 t:criminal s:contacted`
 
-![Add Command Result](images/addCommandResult.png)
+![Add Command Result](images/AddCommand.png)
 
 ### Listing all persons : `list`
 
