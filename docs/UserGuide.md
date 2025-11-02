@@ -3,7 +3,13 @@ layout: page
 title: User Guide
 ---
 
-AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
+OnlySales is a **desktop app for managing contacts, optimised for Salespeople**, especially tech salespeople.
+What makes OnlySales unique is that it is a Command Line Interface-based (CLI) app. Essentially, what it means is
+that if you can type fast, OnlySales can get your contact management tasks done faster than traditional
+apps that need you to use a mouse.
+
+Whether you are on the go with your slim notebook or at home with your mechanical keyboard, OnlySales is
+your friend to help you close all those SALES, with ONLY your keyboard!
 
 - Table of Contents
 {:toc}
