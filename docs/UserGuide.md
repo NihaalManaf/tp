@@ -219,6 +219,10 @@ Do not mix styles in one command. For example, use `find n:alice t:friend` (adva
 - `find n:alice t:friends s:Contacted` returns customers named Alice, tagged as friends, and with "Contacted" status
 - `find s:Contacted s:Uncontacted` returns an error as you can only search for one status!
 
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+If you're wondering why we have 2 kinds of find command, it's to allow you to search either as broadly as possible (using basic search) or as specific as possible (using advanced search). Sky's the limit!
+</div>
+
 ### Tag View and Status View Integration
 
 When dealing with a large number of customers, it is important that salespeople can immediately identify the active filters applied to the customer list.
@@ -232,6 +236,7 @@ When dealing with a large number of customers, it is important that salespeople 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 When you use `find t:friends s:Contacted`, the Tag view will highlight "friends" and the Status view will highlight "Contacted", making it easy to see your current filters at a glance.
 </div>
+
 
 **Visual Example:**
 
