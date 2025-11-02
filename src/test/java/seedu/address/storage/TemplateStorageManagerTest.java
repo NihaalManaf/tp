@@ -29,7 +29,7 @@ public class TemplateStorageManagerTest {
         TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
         String result = storage.readTemplate(Status.CONTACTED);
         // Should return default template
-        assertEquals("Template for Contacted contacts", result);
+        assertEquals("This is the default template for status Contacted", result);
     }
 
     @Test
@@ -41,6 +41,42 @@ public class TemplateStorageManagerTest {
 
         String result = storage.readTemplate(Status.CONTACTED);
         assertEquals(expectedContent, result);
+    }
+
+    @Test
+    public void readTemplate_blankFile_returnsDefaultAndReplacesFile() throws IOException {
+        TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
+        Path templateFile = temporaryFolder.resolve("contactedTemplate.txt");
+
+        // Create file with only whitespace
+        Files.writeString(templateFile, "   \t\n  ");
+
+        String result = storage.readTemplate(Status.CONTACTED);
+
+        // Should return default template
+        assertEquals("This is the default template for status Contacted", result);
+
+        // File should now contain default template
+        String fileContent = Files.readString(templateFile);
+        assertEquals("This is the default template for status Contacted", fileContent);
+    }
+
+    @Test
+    public void readTemplate_emptyFile_returnsDefaultAndReplacesFile() throws IOException {
+        TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
+        Path templateFile = temporaryFolder.resolve("uncontactedTemplate.txt");
+
+        // Create empty file
+        Files.writeString(templateFile, "");
+
+        String result = storage.readTemplate(Status.UNCONTACTED);
+
+        // Should return default template
+        assertEquals("This is the default template for status Uncontacted", result);
+
+        // File should now contain default template
+        String fileContent = Files.readString(templateFile);
+        assertEquals("This is the default template for status Uncontacted", fileContent);
     }
 
     @Test
@@ -71,42 +107,42 @@ public class TemplateStorageManagerTest {
     public void getDefaultTemplate_contacted_returnsCorrectTemplate() {
         TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
         String template = storage.getDefaultTemplate(Status.CONTACTED);
-        assertEquals("Template for Contacted contacts", template);
+        assertEquals("This is the default template for status Contacted", template);
     }
 
     @Test
     public void getDefaultTemplate_uncontacted_returnsCorrectTemplate() {
         TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
         String template = storage.getDefaultTemplate(Status.UNCONTACTED);
-        assertEquals("Template for Uncontacted contacts", template);
+        assertEquals("This is the default template for status Uncontacted", template);
     }
 
     @Test
     public void getDefaultTemplate_rejected_returnsCorrectTemplate() {
         TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
         String template = storage.getDefaultTemplate(Status.REJECTED);
-        assertEquals("Template for Rejected contacts", template);
+        assertEquals("This is the default template for status Rejected", template);
     }
 
     @Test
     public void getDefaultTemplate_accepted_returnsCorrectTemplate() {
         TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
         String template = storage.getDefaultTemplate(Status.ACCEPTED);
-        assertEquals("Template for Accepted contacts", template);
+        assertEquals("This is the default template for status Accepted", template);
     }
 
     @Test
     public void getDefaultTemplate_unreachable_returnsCorrectTemplate() {
         TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
         String template = storage.getDefaultTemplate(Status.UNREACHABLE);
-        assertEquals("Template for Unreachable contacts", template);
+        assertEquals("This is the default template for status Unreachable", template);
     }
 
     @Test
     public void getDefaultTemplate_busy_returnsCorrectTemplate() {
         TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
         String template = storage.getDefaultTemplate(Status.BUSY);
-        assertEquals("Template for Busy contacts", template);
+        assertEquals("This is the default template for status Busy", template);
     }
 
     @Test
@@ -123,13 +159,45 @@ public class TemplateStorageManagerTest {
     }
 
     @Test
-    public void saveTemplate_emptyContent_savesEmptyFile() throws IOException {
+    public void saveTemplate_emptyContent_savesDefaultTemplate() throws IOException {
         TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
 
         storage.saveTemplate(Status.CONTACTED, "");
 
         String result = storage.readTemplate(Status.CONTACTED);
-        assertEquals("", result);
+        assertEquals("This is the default template for status Contacted", result);
+    }
+
+    @Test
+    public void saveTemplate_whitespaceOnly_savesDefaultTemplate() throws IOException {
+        TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
+
+        // Test with various whitespace-only content
+        storage.saveTemplate(Status.CONTACTED, "   ");
+        String result1 = storage.readTemplate(Status.CONTACTED);
+        assertEquals("This is the default template for status Contacted", result1);
+
+        storage.saveTemplate(Status.UNCONTACTED, "\t\t");
+        String result2 = storage.readTemplate(Status.UNCONTACTED);
+        assertEquals("This is the default template for status Uncontacted", result2);
+
+        storage.saveTemplate(Status.REJECTED, "\n\n\n");
+        String result3 = storage.readTemplate(Status.REJECTED);
+        assertEquals("This is the default template for status Rejected", result3);
+
+        storage.saveTemplate(Status.ACCEPTED, " \t\n ");
+        String result4 = storage.readTemplate(Status.ACCEPTED);
+        assertEquals("This is the default template for status Accepted", result4);
+    }
+
+    @Test
+    public void saveTemplate_nullContent_savesDefaultTemplate() throws IOException {
+        TemplateStorageManager storage = new TemplateStorageManager(temporaryFolder);
+
+        storage.saveTemplate(Status.CONTACTED, null);
+
+        String result = storage.readTemplate(Status.CONTACTED);
+        assertEquals("This is the default template for status Contacted", result);
     }
 
     @Test
@@ -158,17 +226,33 @@ public class TemplateStorageManagerTest {
         @Override
         public String readTemplate(Status status) throws IOException {
             String template = templates.get(status);
-            return template != null ? template : getDefaultTemplate(status);
+
+            // If no template exists, return default
+            if (template == null) {
+                return getDefaultTemplate(status);
+            }
+
+            // If template is blank, replace with default and save
+            if (template.isBlank()) {
+                String defaultTemplate = getDefaultTemplate(status);
+                saveTemplate(status, defaultTemplate);
+                return defaultTemplate;
+            }
+
+            return template;
         }
 
         @Override
         public void saveTemplate(Status status, String content) throws IOException {
-            templates.put(status, content);
+            // If content is blank (empty or only whitespace), save the default template instead
+            String contentToSave = (content == null || content.isBlank()) ? getDefaultTemplate(status) : content;
+            templates.put(status, contentToSave);
         }
 
         @Override
         public String getDefaultTemplate(Status status) {
-            return "Default template for " + status;
+            String statusName = status.name().charAt(0) + status.name().substring(1).toLowerCase();
+            return "This is the default template for status " + statusName;
         }
 
         public String getSavedTemplate(Status status) {
