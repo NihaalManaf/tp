@@ -981,7 +981,7 @@ Use case ends.
 
 ### Non-Functional Requirements
 
-1. Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
+1. Should work on any _mainstream OS_ as long as it has Java `17` installed (Java 17 JDK+FX Azul distribution on macOS).
 2. Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage, especially in things like returning search results or filtering by label.
 3. A user with above average typing speed (>60 WPM) for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 4. The commands should follow **consistent patterns** to reduce confusion and make it easier to learn them.
