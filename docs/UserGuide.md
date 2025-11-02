@@ -331,6 +331,20 @@ Import replaces your entire address book when data is valid. Make sure to export
 
 ![Import Contact Example](images/importContact.png)
 
+### Export contacts: `export`
+
+Exports all contacts from the address book to your clipboard. This allows you to share your contacts with other OnlySales users or create backups of your data.
+
+**Format:** `export`
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:**
+The exported data includes all contact information including names, phone numbers, email addresses, physical addresses, statuses, and tags.
+</div>
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+You can use this with the `import` command to transfer your contacts between different OnlySales installations or share them with other users.
+</div>
+
 
 ### Clearing all entries : `clear`
 

@@ -408,11 +408,11 @@ The status command is executed through the following sequence of steps:
    * Cons:
       * More inconvenient for salespeople when they want to reset everyone's status (e.g. when starting a new sale)
 
-### Export Command Feature
+### Export Command
 
 #### Implementation
 
-The export command feature allows users to export the address book data in JSON format to the system clipboard. It is implemented through the `ExportCommand` class and supported by two key interfaces:
+The export command allows users to export the address book data in JSON format to the system clipboard. It is implemented through the `ExportCommand` class and supported by two key interfaces:
 
 *   `ClipboardProvider` - For copying data to system clipboard.
 *   `FileSystemProvider` - For reading data from files.
