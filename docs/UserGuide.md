@@ -285,6 +285,7 @@ Opens the template editor for a specific contact status.
 * Status is case-insensitive (e.g., `contacted`, `CONTACTED`, `Contacted` all work).
 * The template editor allows you to view and edit the email template.
 * Changes are not saved automatically - use `template save` to save your changes.
+* If no custom template exists for the status, a default template will be displayed (e.g., "This is the default template for status Contacted").
 
 **Examples:**
 * `template s:Contacted` opens the template editor for the "Contacted" status.
@@ -300,9 +301,12 @@ Saves the currently open template.
 * Saves any changes made to the template currently displayed in the template editor.
 * A template must be open (using `template s:STATUS`) before you can save.
 * If no template is currently open, an error message will be shown.
+* **Important:** If you save a template that contains only whitespace or is empty, it will be automatically replaced with the default template for that status.
+* When saving blank content, you will see the message: "Detected empty template as input, saving as the default template instead."
 
 **Examples:**
 * After opening a template with `template s:Contacted` and making changes, use `template save` to save your edits.
+* If you clear all content and save, the default template will be restored.
 
 #### Copying a template to clipboard : `template copy s:STATUS`
 
@@ -315,6 +319,7 @@ Copies the content of a template to your clipboard without opening the editor.
 * Status is case-insensitive.
 * The template is copied as-is from storage - you can then paste it into your email client.
 * Does not open the template editor.
+* If the template file contains only whitespace or is empty, the default template will be copied instead and the file will be automatically updated with the default template.
 
 **Examples:**
 * `template copy s:Contacted` copies the "Contacted" template to your clipboard.

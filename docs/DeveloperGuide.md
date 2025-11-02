@@ -318,6 +318,36 @@ The following sequence diagram shows how the copy operation works:
 
 The template feature supports all six contact statuses (UNCONTACTED, CONTACTED, REJECTED, ACCEPTED, UNREACHABLE, BUSY), with each status having its own independent template file.
 
+#### Default Templates and Blank Content Handling
+
+The template system includes automatic handling of blank or invalid template content to ensure data integrity:
+
+**Default Templates:**
+
+- Each status has a default template in the format: "This is the default template for status [StatusName]"
+- Default templates are automatically created when:
+  - A template file doesn't exist for a status
+  - A template file contains only whitespace or is empty
+  - A user attempts to save blank content
+
+**Blank Content Detection:**
+
+- The system checks for blank content (null, empty string, or whitespace-only) in two places:
+  1. **During Save (`saveTemplate`)**: When a user saves a template with blank content, it's automatically replaced with the default template
+  2. **During Read (`readTemplate`)**: When reading a template file that contains blank content, the file is replaced with the default template
+
+**User Feedback:**
+
+- When saving blank content, users see: "Detected empty template as input, saving as the default template instead."
+- This prevents accidental deletion of templates and ensures meaningful content is always available
+
+**Implementation Details:**
+
+- `TemplateStorageManager.saveTemplate()` uses `String.isBlank()` to detect blank content before writing
+- `TemplateStorageManager.readTemplate()` validates file content after reading and replaces blank files
+- `TemplateCommand.executeSave()` detects blank content to show appropriate user feedback
+- All operations maintain consistency across template copy, open, and save workflows
+
 #### Design considerations:
 
 **Aspect: How templates are stored:**
@@ -352,6 +382,22 @@ The template feature supports all six contact statuses (UNCONTACTED, CONTACTED, 
 - **Alternative:** Only provide editor, remove direct copy command.
   - Pros: Simpler command set, encourages review before sending.
   - Cons: Less efficient for users who want to quickly copy without viewing.
+
+**Aspect: How to handle blank/empty template content:**
+
+- **Alternative 1 (current choice):** Automatically replace blank content with default template.
+
+  - Pros: Prevents accidental deletion of templates, ensures meaningful content always exists, provides clear fallback behavior, maintains data integrity across all operations.
+  - Cons: Users cannot intentionally create truly empty templates, slightly more complex implementation with validation in both read and write paths.
+
+- **Alternative 2:** Allow saving and storing blank templates.
+
+  - Pros: Simpler implementation, gives users complete control, allows intentional blank templates.
+  - Cons: Users could accidentally delete all content and lose their work, template copy operations would copy whitespace/empty content (confusing UX), no clear indication when template is blank vs. intentionally empty, violates principle of least surprise.
+
+- **Alternative 3:** Prevent saving blank templates with error message.
+  - Pros: Prevents data loss, clear user feedback about invalid input.
+  - Cons: Frustrating UX when users want to reset to default (would need separate command), doesn't handle externally-modified files with blank content, no automatic recovery from corrupted template files.
 
 ### Status Feature
 
@@ -807,6 +853,14 @@ Use case ends.
 3a. No template exists for the specified status.<br/>
 3a1. CMS displays an empty template.<br/>
 Use case resumes from step 4.
+3a. No template exists for the specified status, or the template file contains only blank/whitespace content.<br/>
+3a1. CMS displays the default template for that status.<br/>
+Use case resumes from step 4.
+
+6a. Salesperson saves blank or whitespace-only content.<br/>
+6a1. CMS detects the blank content and saves the default template instead.<br/>
+6a2. CMS displays: "Detected empty template as input, saving as the default template instead."<br/>
+Use case ends.
 
 #### Use case: UC07 - Copy email template to clipboard
 
@@ -818,6 +872,7 @@ Use case resumes from step 4.
 
 - Copying a template does not modify any data.
 - The template content is placed on the system clipboard.
+- If the template file is blank or contains only whitespace, the default template is copied instead.
 
 **MSS:**
 
