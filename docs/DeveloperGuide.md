@@ -899,8 +899,8 @@ Use case ends.
 **Extensions:**
 
 2a. No status is specified.<br/>
-   2a1. CMS indicates that an error has happened.<br/>
-   Use case ends.
+   2a1. CMS defaults the status of the contact to be 'Uncontacted".<br/>
+   Use case resumes at step 4.
 
 3a. The specified status is invalid.<br/>
    3a1. CMS indicates that an error has happened.<br/>
