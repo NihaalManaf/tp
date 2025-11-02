@@ -15,23 +15,26 @@ public class PersonMatchesKeywordsPredicate implements Predicate<Person> {
     private final String statusKeyword;
     private final String phoneKeyword;
     private final String emailKeyword;
+    private final String addressKeyword;
 
     /**
      * Constructs a predicate that matches a {@code Person}
      *
-     * @param nameKeywords  keywords to check against the person's name
-     * @param tagKeywords   keywords to check against the person's tags
-     * @param statusKeyword keywords to check against the person's status
-     * @param phoneKeyword  keywords to check against the person's phone
-     * @param emailKeyword  keywords to check against the person's email
+     * @param nameKeywords   keywords to check against the person's name
+     * @param tagKeywords    keywords to check against the person's tags
+     * @param statusKeyword  keywords to check against the person's status
+     * @param phoneKeyword   keywords to check against the person's phone
+     * @param emailKeyword   keywords to check against the person's email
+     * @param addressKeyword keywords to check against the person's address
      */
     public PersonMatchesKeywordsPredicate(List<String> nameKeywords, List<String> tagKeywords, String statusKeyword,
-            String phoneKeyword, String emailKeyword) {
+            String phoneKeyword, String emailKeyword, String addressKeyword) {
         this.nameKeywords = nameKeywords;
         this.tagKeywords = tagKeywords;
         this.statusKeyword = statusKeyword;
         this.phoneKeyword = phoneKeyword;
         this.emailKeyword = emailKeyword;
+        this.addressKeyword = addressKeyword;
     }
 
     @Override
@@ -52,7 +55,10 @@ public class PersonMatchesKeywordsPredicate implements Predicate<Person> {
         boolean matchesEmail = emailKeyword == null || emailKeyword.isEmpty()
                 || emailKeyword.equalsIgnoreCase(person.getEmail().value);
 
-        return matchesName && matchesTag && matchesStatus && matchesPhone && matchesEmail;
+        boolean matchesAddress = addressKeyword == null || addressKeyword.isEmpty()
+                || person.getAddress().value.toLowerCase().contains(addressKeyword.toLowerCase());
+
+        return matchesName && matchesTag && matchesStatus && matchesPhone && matchesEmail && matchesAddress;
     }
 
     /**
@@ -91,6 +97,15 @@ public class PersonMatchesKeywordsPredicate implements Predicate<Person> {
         return emailKeyword;
     }
 
+    /**
+     * Returns the address keyword used for filtering.
+     *
+     * @return The address keyword, or null if no address filter is applied.
+     */
+    public String getAddressKeyword() {
+        return addressKeyword;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -109,7 +124,9 @@ public class PersonMatchesKeywordsPredicate implements Predicate<Person> {
                 && (phoneKeyword == null ? otherPredicate.phoneKeyword == null
                         : phoneKeyword.equals(otherPredicate.phoneKeyword))
                 && (emailKeyword == null ? otherPredicate.emailKeyword == null
-                        : emailKeyword.equals(otherPredicate.emailKeyword));
+                        : emailKeyword.equals(otherPredicate.emailKeyword))
+                && (addressKeyword == null ? otherPredicate.addressKeyword == null
+                        : addressKeyword.equals(otherPredicate.addressKeyword));
     }
 
     @Override
@@ -120,6 +137,7 @@ public class PersonMatchesKeywordsPredicate implements Predicate<Person> {
                 .add("statusKeyword", statusKeyword)
                 .add("phoneKeyword", phoneKeyword)
                 .add("emailKeyword", emailKeyword)
+                .add("addressKeyword", addressKeyword)
                 .toString();
     }
 
