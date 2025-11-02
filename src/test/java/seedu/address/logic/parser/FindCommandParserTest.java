@@ -43,14 +43,14 @@ public class FindCommandParserTest {
     @Test
     public void parse_validNamePrefix_returnsFindCommand() {
         FindCommand expectedFindCommand = new FindCommand(
-                new PersonMatchesKeywordsPredicate(Arrays.asList("Alice", "Bob"), List.of(), null, null, null));
+                new PersonMatchesKeywordsPredicate(Arrays.asList("Alice", "Bob"), List.of(), null, null, null, null));
         assertParseSuccess(parser, " n:Alice Bob", expectedFindCommand);
     }
 
     @Test
     public void parse_singleValidTagPrefix_returnsFindCommand() {
         FindCommand expectedFindCommand = new FindCommand(
-                new PersonMatchesKeywordsPredicate(List.of(), Arrays.asList("colleague"), null, null, null));
+                new PersonMatchesKeywordsPredicate(List.of(), Arrays.asList("colleague"), null, null, null, null));
         assertParseSuccess(parser, " t:colleague", expectedFindCommand);
     }
 
@@ -69,14 +69,11 @@ public class FindCommandParserTest {
     public void parse_manyValidTagPrefix_returnsFindCommand() {
         FindCommand expectedFindCommand = new FindCommand(
                 new PersonMatchesKeywordsPredicate(List.of(), Arrays.asList("friend", "colleague"), null, null,
-                        null));
+                        null, null));
         assertParseSuccess(parser, " t:friend t:colleague", expectedFindCommand);
     }
 
     public void parse_manyInvalidTagPrefix_throwsParseException() {
-        FindCommand expectedFindCommand = new FindCommand(
-                new PersonMatchesKeywordsPredicate(List.of(), Arrays.asList("friend", "colleague"), null, null,
-                        null));
         assertParseFailure(parser, " t:friend t:student colleague", FindCommand.MESSAGE_USAGE);
     }
 
@@ -84,14 +81,14 @@ public class FindCommandParserTest {
     public void parse_validBothPrefixes_returnsFindCommand() {
         FindCommand expectedFindCommand = new FindCommand(
                 new PersonMatchesKeywordsPredicate(Arrays.asList("Alice"), Arrays.asList("colleague"), null, null,
-                        null));
+                        null, null));
         assertParseSuccess(parser, " n:Alice t:colleague", expectedFindCommand);
     }
 
     @Test
     public void parse_validStatusPrefix_returnsFindCommand() {
         FindCommand expectedFindCommand = new FindCommand(
-                new PersonMatchesKeywordsPredicate(List.of(), List.of(), "uncontacted", null, null));
+                new PersonMatchesKeywordsPredicate(List.of(), List.of(), "uncontacted", null, null, null));
         assertParseSuccess(parser, " s:uncontacted", expectedFindCommand);
     }
 
@@ -99,34 +96,34 @@ public class FindCommandParserTest {
     public void parse_validAllPrefixes_returnsFindCommand() {
         FindCommand expectedFindCommand = new FindCommand(
                 new PersonMatchesKeywordsPredicate(Arrays.asList("Alice"), Arrays.asList("colleague"), "contacted",
-                        null, null));
+                        null, null, null));
         assertParseSuccess(parser, " n:Alice t:colleague s:contacted", expectedFindCommand);
     }
 
     @Test
     public void parse_validPhonePrefix_returnsFindCommand() {
         FindCommand expectedFindCommand = new FindCommand(
-                new PersonMatchesKeywordsPredicate(List.of(), List.of(), null, "94351253", null));
+                new PersonMatchesKeywordsPredicate(List.of(), List.of(), null, "94351253", null, null));
         assertParseSuccess(parser, " p:94351253", expectedFindCommand);
     }
 
     @Test
     public void parse_validEmailPrefix_returnsFindCommand() {
         FindCommand expectedFindCommand = new FindCommand(
-                new PersonMatchesKeywordsPredicate(List.of(), List.of(), null, null, "alice@example.com"));
+                new PersonMatchesKeywordsPredicate(List.of(), List.of(), null, null, "alice@example.com", null));
         assertParseSuccess(parser, " e:alice@example.com", expectedFindCommand);
     }
 
     @Test
     public void parse_validPhoneAndEmailPrefix_returnsFindCommand() {
         FindCommand expectedFindCommand = new FindCommand(
-                new PersonMatchesKeywordsPredicate(List.of(), List.of(), null, "94351253", "alice@example.com"));
+                new PersonMatchesKeywordsPredicate(List.of(), List.of(), null, "94351253", "alice@example.com", null));
         assertParseSuccess(parser, " p:94351253 e:alice@example.com", expectedFindCommand);
     }
 
     @Test
     public void parse_multipleStatusPrefix_throwsParseException() {
         assertParseFailure(parser, " s:contacted s:rejected",
-                "Only one status filter is allowed at a time!");
+                "Only one filter per field is allowed at a time!\n" + FindCommand.MESSAGE_USAGE);
     }
 }
