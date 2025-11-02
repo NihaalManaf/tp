@@ -238,6 +238,10 @@ When you use `find t:friends s:Contacted`, the Tag view will highlight "friends"
 
 Deletes one or more persons from the address book.
 
+<div markdown="span" class="alert alert-danger">:exclamation: **Warning:**
+Deleting a contact is an irreversible process. Once deleted, the contact information cannot be recovered. Make sure you have exported your address book if you need a backup.
+</div>
+
 **Format:** `delete INDEX [MORE_INDICES]...`
 
 * Deletes the person(s) at the specified `INDEX` (and `MORE_INDICES` if provided).
@@ -246,6 +250,7 @@ Deletes one or more persons from the address book.
 * Multiple indices can be specified to delete multiple persons at once.
 * Indices can be provided in any order.
 * **All indices must be valid** - if any index is invalid, the command will fail and no persons will be deleted. The error message will show which specific indices are invalid.
+* **All indices must be unique** - if duplicate indices are detected, the command will fail and no persons will be deleted.
 
 **Examples:**
 * `list` followed by `delete 2` deletes the 2nd person in the address book.
@@ -253,10 +258,17 @@ Deletes one or more persons from the address book.
 * `delete 1 3 5` deletes the 1st, 3rd, and 5th persons in the displayed list.
 * `delete 4 2 6` deletes the 2nd, 4th, and 6th persons in the displayed list (order doesn't matter).
 * `delete 2 99` (when only 2 persons exist) will fail with error message "Invalid index(es) detected: 99" and no deletions will occur.
+* `delete 1 1 3` will fail with error message "Duplicate indices were detected! Please ensure all indices are unique." and no deletions will occur.
+
+![Delete Example](images/deleteSample.png)
 
 ### Managing email templates :
 
 Manages email templates for different contact statuses. You can open, edit, save, and copy templates to streamline your email communications.
+
+<div markdown="span" class="alert alert-info">:information_source: **Keyboard Navigation:**
+You can navigate between the command input box and the template editor using only your keyboard by pressing `Tab` to move to the template editor and `Shift + Tab` to return to the command input box (works on Windows, macOS, and Linux).
+</div>
 
 #### Opening a template for editing : `template s:STATUS`
 
@@ -276,6 +288,8 @@ Opens the template editor for a specific contact status.
 * `template s:rejected` opens the template editor for the "Rejected" status.
 * `template s:BUSY` opens the template editor for the "Busy" status.
 
+![Status Template Example](images/statusTemplate.png)
+
 #### Saving the current template : `template save`
 
 Saves the currently open template.
@@ -292,6 +306,8 @@ Saves the currently open template.
 * After opening a template with `template s:Contacted` and making changes, use `template save` to save your edits.
 * If you clear all content and save, the default template will be restored.
 
+![Save Template Example](images/saveTemplate.png)
+
 #### Copying a template to clipboard : `template copy s:STATUS`
 
 Copies the content of a template to your clipboard without opening the editor.
@@ -303,11 +319,14 @@ Copies the content of a template to your clipboard without opening the editor.
 * Status is case-insensitive.
 * The template is copied as-is from storage - you can then paste it into your email client.
 * Does not open the template editor.
+* **This command works anywhere in the application** - you don't need to have a template open to use it.
 * If the template file contains only whitespace or is empty, the default template will be copied instead and the file will be automatically updated with the default template.
 
 **Examples:**
 * `template copy s:Contacted` copies the "Contacted" template to your clipboard.
 * `template copy s:unreachable` copies the "Unreachable" template to your clipboard.
+
+![Copy Template Example](images/copyTemplate.png)
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 Use `template copy` for quick access to templates when you need to send emails, and use `template s:STATUS` followed by `template save` when you need to update your templates.
