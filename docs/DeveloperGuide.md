@@ -570,11 +570,11 @@ The following activity diagram illustrates the complete workflow of sharing cont
 
 | Field | Validation Rule | Rationale |
 |-------|----------------|-----------|
-| **Name** | Must contain only alphanumeric characters, spaces, hyphens, apostrophes, slashes, and periods. Cannot be blank or start with whitespace. | Supports international names (e.g., "Mary-Jane", "O'Brien", "Dr. Smith"). |
-| **Phone** | Must contain only digits and be at least 3 digits long. | Accommodates both local and international formats without requiring country codes or special characters. Minimum length prevents trivial inputs like "1" or "12". |
-| **Email** | Must follow standard email format, which we enforce losely by checking for `@`.<br>- Local part: alphanumeric and special characters (`+`, `_`, `.`, `-`), cannot start/end with special characters<br>- Domain: alphanumeric labels separated by periods, must end with at least 2-character domain label | Helps prevent typo of definitely invalid email address such as "name@", "abcgmail.com" and "@gmail.com" |
+| **Name** | Must contain only alphanumeric characters, spaces, hyphens, apostrophes, slashes, commas, and periods. Cannot be blank or start with whitespace. | Supports international names (e.g., "Mary-Jane", "O'Brien", "Dr. Smith"). |
+| **Phone** | Must contain only digits, a single optional `+` at the start and be at least 3 digits long. This should not be duplicated. | Allows both local and international formats. Minimum length prevents some invalid inputs like "1" or "12". We use the phone number to check for duplicate person. <br />However, we do not take into account the country code when comparing the phone number, that is, we treat `+6598765432` and `98765432` as 2 different number. This is because we want to give users the choice to omit the country code if they are dealing with only local customer, but still not assuming that they are in a certain country. |
+| **Email** | Must follow standard email format, which we enforce losely by checking for `@` separating local part and domain.<br />- Local part: alphanumeric and special characters (`+`, `_`, `.`, `-`), cannot start/end with special characters<br>- Domain: alphanumeric domain labels, 2 characters or longer, separated by periods. It must end with at least 2-characters domain label | Helps prevent typo of definitely invalid email address such as "name@", "abcgmail.com" and "@gmail.com". |
 | **Address** | Can contain any characters but must not exceed 200 characters. | Allows flexibility for diverse address formats while preventing unreasonably long inputs that could affect UI display. |
-| **Tag** | Must be alphanumeric only (no spaces or special characters). | Tags, used for categorising, should be a single word. Alphanumeric restriction prevents parsing conflicts with command syntax. |
+| **Tag** | Only lowercase alphanumeric characters, not longer than 50 characters (no spaces or special characters). | Tags should be a single word as it is used only for categorisation and not as a note. We decided upon the use of lowercase alphanumeric character only to ease the checking of duplicate tags, searching, and readability. |
 | **Status** | View the list below table for the list of status, and recommended meaning. Defaults to "Uncontacted" if not specified. | Helps to track contacts for the sales workflow. Case-insensitive matching improves user experience. |
 
 **Valid contact statuses**:
@@ -1212,3 +1212,11 @@ testers are expected to do more *exploratory* testing.
 
    1. Other test cases to try: `find p:9876`, `find e:example.com`, `find n:alex david` (multiple keywords), `find s:Invalid` (invalid status)<br>
       Expected: Appropriate results or empty list!
+
+## **Appendix: Planned Enhancements**"
+
+### Better Phone Number Validation
+
+Because the app is platform‑independent, we cannot reliably determine the user’s region to infer a default country code. Additionally, telephone numbers vary widely from country to country, with varying length of country codes and local number. Hence, implementing robust parsing without third‑party libraries was out of scope for this release. For example, `+355` is considered as a valid number by our application, but in reality is invalid as all 3 digits are used for the country code.
+
+We plan to be able to implement a better phone validation customised to the country code, if provided. Additionally, we plan to infer a reasonable default country code from the device locale or user settings, so that we could better check for duplicate numbers by removing the country code prefix.
