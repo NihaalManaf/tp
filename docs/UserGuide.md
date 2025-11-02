@@ -142,14 +142,21 @@ Edits an existing person in the address book.
 *  `edit 2 n:Betsy Crower t:` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 *  `edit 3 a:557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694 s:Busy` Edits the address and status of the 3rd person to be `557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694` and `Busy` respectively.
 
-### Locating customers: `find`
+### Finding customers: `find`
 
-Finds customers based on various search criteria including name, tags, status, phone number, or email.
+You can find customers by searching for their name, tags, status, phone number, or email. There are two ways to use the `find` command:
 
-**Format:** `find KEYWORD [MORE_KEYWORDS]` OR `find [n:NAME] [t:TAG]... [s:STATUS] [p:PHONE] [e:EMAIL]`
+- **Basic search:** Type one or more names after `find` to look up customers by name. (See examples below.)
+- **Advanced search:** Use prefixes like `n:`, `t:`, `s:`, `p:`, or `e:` to search more specifically by name, tag, status, phone, or email.
+
+Use basic search when you just want to find by name. Use advanced search if you want to search by tags, status, phone or email, or combine several criteria!
+
+Check the examples below for the correct usage of each search style.
+
+**Format:** `find NAME [MORE_NAMES]` OR `find [n:NAME] [t:TAG]... [s:STATUS] [p:PHONE] [e:EMAIL]`
 
 **Basic Search (by name):**
-
+- The basic search is for names only!
 - The search is case-insensitive. e.g `hans` will match `Hans`
 - The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
 - Only full words will be matched e.g. `Han` will not match `Hans`
@@ -165,8 +172,13 @@ Finds customers based on various search criteria including name, tags, status, p
 - `e:EMAIL` - Search by email address
 - Multiple criteria can be combined for more precise searches
 - All searches are case-insensitive
-- You can use either prefixes (advanced search) or a basic name-only search.
-- Do not mix styles in one command. For example, use `find n:alice t:friend` (advanced) or `find alice` (basic), not `find alice t:friend`.
+- For each advanced search command, you can specify at most one of each of the following: name, email, address, status, and phone number. You can, however, include as many tags (`t:TAG`) as you like in a single search!
+
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:**
+Do not mix styles in one command. For example, use `find n:alice t:friend` (advanced) or `find alice` (basic), not `find alice t:friend`.
+</div>
+
 
 
 **Examples:**
@@ -205,6 +217,7 @@ Finds customers based on various search criteria including name, tags, status, p
 - `find n:john s:Contacted` returns customers named John with "Contacted" status
 - `find t:VIP s:Uncontacted` returns VIP customers who haven't been contacted yet
 - `find n:alice t:friends s:Contacted` returns customers named Alice, tagged as friends, and with "Contacted" status
+- `find s:Contacted s:Uncontacted` returns an error as you can only search for one status!
 
 ### Tag View and Status View Integration
 
