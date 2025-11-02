@@ -344,6 +344,10 @@ Exits the program.
 
 **Format:** `exit`
 
+<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
+This action is irreversible! All contacts will be permanently deleted from the address book right aftr you enter the clear command!
+</div>
+
 ### Saving the data
 
 AddressBook data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
