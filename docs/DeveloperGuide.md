@@ -75,7 +75,7 @@ The **API** of this component is specified in [`Ui.java`](https://github.com/AY2
 
 ![Structure of the UI Component](images/UiClassDiagram.png)
 
-The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter`, `SidebarPanel`, `TemplateViewPanel` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
+The UI consists of a `MainWindow` that is made up of parts e.g. `CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter`, `SidebarPanel`, `TemplateViewPanel` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
 **New UI Components in OnlySales:**
 * `ImportWindow` - A separate window for importing customer data from clipboard
@@ -84,7 +84,7 @@ The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `Re
 * `TagsViewPanel` - Displays all currently active tag filters applied through the find command  
 * `TemplateViewPanel` - Displays and manages email templates for different customer status types
 
-The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/resources/view/MainWindow.fxml)
+The `UI` component uses the JavaFX UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/resources/view/MainWindow.fxml)
 
 The `UI` component,
 
@@ -109,8 +109,8 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 
 How the `Logic` component works:
 
-1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g., `DeleteCommandParser`) and uses it to parse the command.
-1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteCommand`) which is executed by the `LogicManager`.
+1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g. `DeleteCommandParser`) and uses it to parse the command.
+1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g. `DeleteCommand`) which is executed by the `LogicManager`.
 1. The command can communicate with the `Model` when it is executed (e.g. to delete a person).<br>
    Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take several interactions (between the command object and the `Model`) to achieve.
 1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
@@ -120,8 +120,8 @@ Here are the other classes in `Logic` (omitted from the class diagram above) tha
 <img src="images/ParserClasses.png" width="600"/>
 
 How the parsing works:
-* When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
-* All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
+* When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g. `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g. `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
+* All `XYZCommandParser` classes (e.g. `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
 ### Model component
 **API** : [`Model.java`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/java/seedu/address/model/Model.java)
@@ -131,8 +131,8 @@ How the parsing works:
 
 The `Model` component,
 
-* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
-* stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
+* stores the address book data i.e. all `Person` objects (which are contained in a `UniquePersonList` object).
+* stores the currently 'selected' `Person` objects (e.g. results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 * stores a `UserPrefs` object that represents the user's preferences. This is exposed to the outside as `ReadOnlyUserPrefs` objects.
 * stores view state objects (`StatusViewState`, `TagsViewState`, `TemplateViewState`) as observable properties that track the current UI filter and display states. These are exposed as `ReadOnlyObjectProperty` instances that the UI can observe for reactive updates.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
@@ -173,7 +173,7 @@ This section describes some noteworthy details on how certain features are imple
 
 #### Overview
 
-The Status View and Tag View feature provides visual feedback to users about which filters are currently active when using the `find` command. When users search for customers by status (e.g., `find s:Contacted`) or tags (e.g., `find t:friends`), dedicated UI panels automatically update to display the active filters, making it easy to see what subset of data is being viewed.
+The Status View and Tag View feature provides visual feedback to users about which filters are currently active when using the `find` command. When users search for customers by status (e.g. `find s:Contacted`) or tags (e.g. `find t:friends`), dedicated UI panels automatically update to display the active filters, making it easy to see what subset of data is being viewed.
 
 #### Architecture
 
@@ -285,7 +285,7 @@ Step 4. The salesperson decides to save the edited template by executing `templa
 
 ![TemplateState3](images/TemplateState3.png)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If the salesperson switches to a different view (e.g., executes `list` or `find`) without saving, the edited content is discarded and not persisted.
+<div markdown="span" class="alert alert-info">:information_source: **Note:** If the salesperson switches to a different view (e.g. executes `list` or `find`) without saving, the edited content is discarded and not persisted.
 
 </div>
 
@@ -544,8 +544,8 @@ The following activity diagram illustrates the complete workflow of sharing cont
 - Salespersons who manage a large number of contacts
 - Prefer desktop apps over other types
 - Can type fast and prefer typing to mouse interactions for efficiency
-- Need to categorize leads by tags and track sales-specific statuses (e.g., Contacted, Rejected, Accepted)
-- Occasionally need to import many contacts at once (e.g., from sales manager assignments)
+- Need to categorize leads by tags and track sales-specific statuses (e.g. Contacted, Rejected, Accepted)
+- Occasionally need to import many contacts at once (e.g. from sales manager assignments)
 - Are reasonably comfortable using CLI apps
 
 **Value proposition**: An address book tailored for salespeople to manage contacts significantly faster than a typical mouse/GUI driven app, with support for bulk additions, powerful filtering by name/tag/status, status tracking to streamline outreach workflows, and templated email generation for selected contact cohorts.
@@ -571,14 +571,14 @@ The following activity diagram illustrates the complete workflow of sharing cont
 
 **Field validations for contacts**:
 
-| Field | Validation Rule                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | Rationale                                                                                                                                                         |
-|-------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Name** | Must contain only alphanumeric characters, spaces, hyphens, apostrophes, slashes, and periods. Cannot be blank or start with whitespace.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | Supports international names (e.g., "Mary-Jane", "O'Brien", "Dr. Smith").                                                                                         |
-| **Phone** | Must contain only digits and be at least 3 digits long.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | Accommodates both local and international formats without requiring country codes or special characters. Minimum length prevents trivial inputs like "1" or "12". |
-| **Email** | Must follow standard email format, which we enforce losely by checking for `@`.<br>- Local part: alphanumeric and special characters (`+`, `_`, `.`, `-`), cannot start/end with special characters<br>- Domain: alphanumeric labels separated by periods, must end with at least 2-character domain label<br>- Email validation intentionally does not enforce top-level domain requirements (like .com, .org, etc.) in email addresses | Helps prevent typo of definitely invalid email address such as "name@", "abcgmail.com" and "@gmail.com". Also helps to accommodate rare but valid use cases where contacts may have email addresses on internal networks or custom domains that do not follow the conventional format.                                              |
-| **Address** | Can contain any characters but must not exceed 200 characters.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | Allows flexibility for diverse address formats while preventing unreasonably long inputs that could affect UI display.                                            |
-| **Tag** | Must be alphanumeric only (no spaces or special characters).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | Tags, used for categorising, should be a single word. Alphanumeric restriction prevents parsing conflicts with command syntax.                                    |
-| **Status** | View the list below table for the list of status, and recommended meaning. Defaults to "Uncontacted" if not specified.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | Helps to track contacts for the sales workflow. Case-insensitive matching improves user experience.                                                               |
+| Field | Validation Rule                                                                                                                                                                                                                                                                                                                                                                                                                           | Rationale                                                                                                                                                        |
+|-------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Name** | Must contain only alphanumeric characters, spaces, hyphens, apostrophes, slashes, and periods. Cannot be blank or start with whitespace.                                                                                                                                                                                                                                                                                                  | Supports international names (e.g. "Mary-Jane", "O'Brien", "Dr. Smith").                                                                                         |
+| **Phone** | Must contain only digits and be at least 3 digits long.                                                                                                                                                                                                                                                                                                                                                                                   | Accommodates both local and international formats without requiring country codes or special characters. Minimum length prevents trivial inputs like "1" or "12". |
+| **Email** | Must follow standard email format, which we enforce loosely by checking for `@`.<br>- Local part: alphanumeric and special characters (`+`, `_`, `.`, `-`), cannot start/end with special characters<br>- Domain: alphanumeric labels separated by periods, must end with at least 2-character domain label<br>- Email validation intentionally does not enforce top-level domain requirements (like .com, .org, etc.) in email addresses | Helps prevent typo of definitely invalid email address such as "name@", "abcgmail.com" and "@gmail.com". Also helps to accommodate rare but valid use cases where contacts may have email addresses on internal networks or custom domains that do not follow the conventional format.                                             |
+| **Address** | Can contain any characters but must not exceed 200 characters.                                                                                                                                                                                                                                                                                                                                                                            | Allows flexibility for diverse address formats while preventing unreasonably long inputs that could affect UI display.                                           |
+| **Tag** | Must be alphanumeric only (no spaces or special characters).                                                                                                                                                                                                                                                                                                                                                                              | Tags, used for categorising, should be a single word. Alphanumeric restriction prevents parsing conflicts with command syntax.                                   |
+| **Status** | View the list below table for the list of status, and recommended meaning. Defaults to "Uncontacted" if not specified.                                                                                                                                                                                                                                                                                                                    | Helps to track contacts for the sales workflow. Case-insensitive matching improves user experience.                                                              |
 
 **Valid contact statuses**:
 
@@ -779,7 +779,7 @@ Use case ends.
 
 **Extensions:**
 
-*a. At any time, Salesperson enters a different command (e.g., list, find).<br/>
+*a. At any time, Salesperson enters a different command (e.g. list, find).<br/>
    *a1. CMS switches back to the main view and discards any unsaved edits.<br/>
    Use case ends.
 
@@ -991,7 +991,7 @@ Use case ends.
 5. User data should be **automatically saved** after commands such that user data is not lost even after unexpected shutdowns.
 6. The program should be able to be self-contained as a single JAR/ZIP file that should work without requiring any installer.
 7. The GUI should _work well_ for standard screen resolutions 1920x1080 and higher, and, for screen scales 100% and 125%, meaning that no clipping or obvious bugs show in the GUI.
-8. The GUI should be _usable_ (i.e., all functions can be used even if the user experience is not optimal) for resolutions 1280x720 and higher, and, for screen scales 150%.
+8. The GUI should be _usable_ (i.e. all functions can be used even if the user experience is not optimal) for resolutions 1280x720 and higher, and, for screen scales 150%.
 9. There should not be a server component. All data should be stored on the user's local machine.
 
 ### Glossary
@@ -1005,7 +1005,7 @@ Use case ends.
 * **Index**: A 1-based position reference used in commands to identify contacts in the displayed list. Internally converted to 0-based for `List` operations. Represented by the `Index` class.
 * **Mainstream OS**: Windows, Linux, MacOS - target platforms for the application.
 * **PDPA (Personal Data Protection Act)**: Singapore's data protection regulation. Application supports compliance through bulk deletion and data export features.
-* **Predicate**: A functional interface representing a boolean-valued function. Used extensively for filtering (e.g., `PersonMatchesKeywordsPredicate`, `NameContainsKeywordsPredicate`).
+* **Predicate**: A functional interface representing a boolean-valued function. Used extensively for filtering (e.g. `PersonMatchesKeywordsPredicate`, `NameContainsKeywordsPredicate`).
 * **Status**: An enum-like class representing contact lifecycle states (Contacted, Rejected, Accepted, Unreachable, Busy, Uncontacted). Used for filtering and template association.
 
 --------------------------------------------------------------------------------------------------------------------
@@ -1125,12 +1125,12 @@ testers are expected to do more *exploratory* testing.
 
 1. Importing with invalid JSON
 
-   1. Copy invalid JSON to clipboard (e.g., `{invalid json}`).
+   1. Copy invalid JSON to clipboard (e.g. `{invalid json}`).
 
    1. Test case: `import`<br>
       Expected: Error message "Failed to import: Clipboard does not contain valid address book JSON.". Address book remains unchanged.
 
-   1. Copy non-address-book JSON to clipboard (e.g., `{"name": "test"}`).
+   1. Copy non-address-book JSON to clipboard (e.g. `{"name": "test"}`).
 
    1. Test case: `import`<br>
       Expected: Error message "Failed to import: Clipboard does not contain valid address book JSON.". Address book remains unchanged.

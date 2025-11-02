@@ -260,7 +260,7 @@ Opens the template editor for a specific contact status.
 
 * Opens the template editor window for the specified `STATUS`.
 * `STATUS` must be one of: `Contacted`, `Uncontacted`, `Rejected`, `Accepted`, `Unreachable`, or `Busy`.
-* Status is case-insensitive (e.g., `contacted`, `CONTACTED`, `Contacted` all work).
+* Status is case-insensitive (e.g. `contacted`, `CONTACTED`, `Contacted` all work).
 * The template editor allows you to view and edit the email template.
 * Changes are not saved automatically - use `template save` to save your changes.
 
@@ -368,7 +368,7 @@ AddressBook data are saved automatically as a JSON file `[JAR file location]/dat
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
 If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
-Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g. if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </div>
 
 ### Archiving data files `[coming in v2.0]`
@@ -395,16 +395,16 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** | `add n:NAME p:PHONE_NUMBER e:EMAIL a:ADDRESS [s:STATUS] [t:TAG]...` <br> e.g., `add n:James Ho p:22224444 e:jamesho@example.com a:123, Clementi Rd, 1234665 t:friend t:colleague`
+**Add** | `add n:NAME p:PHONE_NUMBER e:EMAIL a:ADDRESS [s:STATUS] [t:TAG]...` <br> e.g. `add n:James Ho p:22224444 e:jamesho@example.com a:123, Clementi Rd, 1234665 t:friend t:colleague`
 **Clear** | `clear`
-**Delete** | `delete INDEX [MORE_INDICES]...`<br> e.g., `delete 3` or `delete 1 2 3`
-**Edit** | `edit INDEX [n:NAME] [p:PHONE_NUMBER] [e:EMAIL] [a:ADDRESS] [s:STATUS] [t:TAG]...`<br> e.g.,`edit 2 n:James Lee e:jameslee@example.com`
+**Delete** | `delete INDEX [MORE_INDICES]...`<br> e.g. `delete 3` or `delete 1 2 3`
+**Edit** | `edit INDEX [n:NAME] [p:PHONE_NUMBER] [e:EMAIL] [a:ADDRESS] [s:STATUS] [t:TAG]...`<br> e.g.`edit 2 n:James Lee e:jameslee@example.com`
 **Status** | `status INDEX [STATUS]`<br> e.g. `status 4 busy`
-**Find** | `find KEYWORD [MORE_KEYWORDS]` OR `find [n:NAME] [t:TAG]... [s:STATUS] [p:PHONE] [e:EMAIL]`<br> e.g., `find John`, `find n:alice t:friends s:Contacted`
+**Find** | `find KEYWORD [MORE_KEYWORDS]` OR `find [n:NAME] [t:TAG]... [s:STATUS] [p:PHONE] [e:EMAIL]`<br> e.g. `find John`, `find n:alice t:friends s:Contacted`
 **List** | `list`
 **Help** | `help`
-**Template (Open)** | `template s:STATUS`<br> e.g., `template s:Contacted`
+**Template (Open)** | `template s:STATUS`<br> e.g. `template s:Contacted`
 **Template (Save)** | `template save`
-**Template (Copy)** | `template copy s:STATUS`<br> e.g., `template copy s:Rejected`
+**Template (Copy)** | `template copy s:STATUS`<br> e.g. `template copy s:Rejected`
 **Import Contacts** | `import`
 **Export Contacts** | `export`
