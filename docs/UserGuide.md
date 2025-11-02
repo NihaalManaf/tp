@@ -89,7 +89,7 @@ Adds a person to the address book.
 - `e:EMAIL` - The email address (required)
 - `a:ADDRESS` - The physical address (optional, max 200 characters)
 - `s:STATUS` - The contact status (optional, defaults to "Uncontacted". Must be one of: "Contacted", "Uncontacted", "Busy", "Rejected", "Accepted", "Unreachable")
-- `t:TAG` - Tags for categorization (optional, can have any number of tag (including 0). Each tag consist of only lowercase alphanumeric characters not longer than 50 characters)
+- `t:TAG` - Tags for categorization (optional, can have any number of tag (including 0). Each tag consist of only lowercase alphanumeric characters not longer than 50 characters. None of the tag value can be empty. )
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 Person with the same phone number, is considered as duplicate and cannot be added. But we treat `+6598765432` and `98765432` as 2 different number, because they might not be in the same country code.
