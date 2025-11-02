@@ -81,7 +81,6 @@ public class DeleteCommand extends Command {
                 throw new CommandException(MESSAGE_DUPLICATE_INDICES);
             }
         }
-        
         // Then check for invalid indices
         List<Integer> invalidIndices = new ArrayList<>();
         for (Index index : targetIndices) {
