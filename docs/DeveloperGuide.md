@@ -9,7 +9,10 @@ title: Developer Guide
 
 ## **Acknowledgements**
 
-* {list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
+Zhao Ruixuan
+* Used cursor to write some test cases for status and export
+* Used cursor to check if status and export implementation were correct
+* Used ChatGPT to check for spelling and formatting issues in the UG and DG
 
 --------------------------------------------------------------------------------------------------------------------
 
