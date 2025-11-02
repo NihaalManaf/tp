@@ -338,15 +338,16 @@ Clears all entries from the address book.
 
 **Format:** `clear`
 
+<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
+This action is irreversible! All contacts will be permanently deleted from the address book right aftr you enter the clear command!
+</div>
+
+
 ### Exiting the program : `exit`
 
 Exits the program.
 
 **Format:** `exit`
-
-<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
-This action is irreversible! All contacts will be permanently deleted from the address book right aftr you enter the clear command!
-</div>
 
 ### Saving the data
 
