@@ -1211,4 +1211,4 @@ testers are expected to do more *exploratory* testing.
       Expected: Error message indicating invalid command format.
 
    1. Other test cases to try: `find p:9876`, `find e:example.com`, `find n:alex david` (multiple keywords), `find s:Invalid` (invalid status)<br>
-      Expected: Appropriate results or empty list!
+      Expected: Error thrown or empty list!
