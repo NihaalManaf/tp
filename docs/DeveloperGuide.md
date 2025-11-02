@@ -9,7 +9,12 @@ title: Developer Guide
 
 ## **Acknowledgements**
 
-* {list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well}
+
+* Used Cursor to help write test cases for the find command! (model: Auto)
+* Used Cursor to help check for poor code quality in play like DRY (model: Auto)
+* Used Cursor for error checking, debugging in general(model: Auto)
+* Used Cursor to help understand the codebase architecture pattern and understand how to implement status view and tag view (model: Sonnet 4.5)
+* Used Cursor to build the tag view plane and status view plane in sidebar panel! (model: Auto)
 
 --------------------------------------------------------------------------------------------------------------------
 
