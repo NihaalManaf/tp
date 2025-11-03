@@ -2,6 +2,7 @@ package seedu.address.logic.parser;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
@@ -23,7 +24,7 @@ import seedu.address.model.person.PersonMatchesKeywordsPredicate;
  */
 public class FindCommandParser implements Parser<FindCommand> {
 
-    private static final String MESSAGE_INVALID_STATUS_DUPLICATE = "Only one status filter is allowed at a time!";
+    private static final String MESSAGE_INVALID_FILTER_DUPLICATE = "Only one filter per field is allowed at a time!";
     private static final String MESSAGE_INVALID_STATUS = "Invalid status provided: %s\n"
             + "Please use one of the following: Uncontacted, Contacted, Rejected, Accepted, Unreachable, Busy";
 
@@ -37,7 +38,7 @@ public class FindCommandParser implements Parser<FindCommand> {
     public FindCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap map = ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_TAG, PREFIX_STATUS, PREFIX_PHONE,
-                PREFIX_EMAIL);
+                PREFIX_EMAIL, PREFIX_ADDRESS);
 
         String preamble = map.getPreamble();
 
@@ -46,9 +47,10 @@ public class FindCommandParser implements Parser<FindCommand> {
         boolean hasStatus = arePrefixesPresent(map, PREFIX_STATUS);
         boolean hasPhone = arePrefixesPresent(map, PREFIX_PHONE);
         boolean hasEmail = arePrefixesPresent(map, PREFIX_EMAIL);
+        boolean hasAddress = arePrefixesPresent(map, PREFIX_ADDRESS);
 
         // Non-prefixed mode: no prefixes, use preamble as name keywords
-        if (!hasName && !hasTag && !hasStatus && !hasPhone && !hasEmail) {
+        if (!hasName && !hasTag && !hasStatus && !hasPhone && !hasEmail && !hasAddress) {
             String trimmed = preamble.trim();
             if (trimmed.isEmpty()) {
                 throw new ParseException(
@@ -74,11 +76,11 @@ public class FindCommandParser implements Parser<FindCommand> {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FindCommand.MESSAGE_USAGE));
         }
 
-        // Verify that status prefix is not duplicated
+        // Verify that none of the single-use prefixes are duplicated
         try {
-            map.verifyNoDuplicatePrefixesFor(PREFIX_STATUS);
+            map.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_STATUS, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS);
         } catch (ParseException e) {
-            throw new ParseException(String.format(MESSAGE_INVALID_STATUS_DUPLICATE, FindCommand.MESSAGE_USAGE));
+            throw new ParseException(MESSAGE_INVALID_FILTER_DUPLICATE + "\n" + FindCommand.MESSAGE_USAGE);
         }
 
         // Get name keywords
@@ -110,6 +112,11 @@ public class FindCommandParser implements Parser<FindCommand> {
                 .map(String::trim)
                 .orElse(null);
 
+        // Get address keyword
+        String addressKeyword = map.getValue(PREFIX_ADDRESS)
+                .map(String::trim)
+                .orElse(null);
+
         if (statusKeyword != null) {
             try {
                 parseStatus(statusKeyword); // will throw ParseException if invalid
@@ -119,7 +126,7 @@ public class FindCommandParser implements Parser<FindCommand> {
         }
 
         return new FindCommand(new PersonMatchesKeywordsPredicate(nameKeywords, tagKeywords, statusKeyword,
-                phoneKeyword, emailKeyword));
+                phoneKeyword, emailKeyword, addressKeyword));
     }
 
     private static boolean arePrefixesPresent(ArgumentMultimap argumentMultimap, Prefix... prefixes) {

@@ -2,11 +2,11 @@ package seedu.address.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.logic.commands.CommandTestUtil.showPersonAtIndex;
+import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
+import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
@@ -170,21 +171,15 @@ public class DeleteCommandTest {
     }
 
     @Test
-    public void execute_duplicateIndices_deletesOnlyOnce() {
+    public void execute_duplicateIndices_throwsCommandException() {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        Person personToDelete = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
 
         // Delete same person twice using duplicate indices
-        // This should work - duplicate indices just mean we collect the same person multiple times
-        // But since we're deleting from the model directly, duplicates shouldn't cause issues
-        // if we use a Set or handle it properly
+        // This should throw CommandException with duplicate indices message
         DeleteCommand deleteCommand = new DeleteCommand(
                 Arrays.asList(INDEX_FIRST_PERSON, INDEX_FIRST_PERSON));
 
-        // Note: This test documents current behavior where duplicate indices
-        // will cause the person to be listed twice in the success message
-        // but only deleted once from the model
-        assertThrows(seedu.address.model.person.exceptions.PersonNotFoundException.class, ()
+        assertThrows(CommandException.class, DeleteCommand.MESSAGE_DUPLICATE_INDICES, ()
                 -> deleteCommand.execute(model));
     }
 

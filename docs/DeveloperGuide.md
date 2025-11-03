@@ -2,66 +2,82 @@
 layout: page
 title: Developer Guide
 ---
-* Table of Contents
-{:toc}
 
---------------------------------------------------------------------------------------------------------------------
+- Table of Contents
+  {:toc}
+
+---
 
 ## **Acknowledgements**
 
-Zhao Ruixuan
-* Used cursor to write some test cases for status and export
-* Used cursor to check if status and export implementation were correct
-* Used ChatGPT to check for spelling and formatting issues in the UG and DG
+#### Zhao Ruixuan
+* Used cursor to write some test cases for status and export (model: auto)
+* Used cursor to check if status and export implementation were correct (model: auto)
+* Used ChatGPT to check for spelling and formatting issues in the UG and DG (model: GPT-5)
 
---------------------------------------------------------------------------------------------------------------------
+#### Nihaal Manaf
+* Used Cursor to help write test cases for the find command! (model: Auto)
+* Used Cursor to help check for poor code quality in play like DRY (model: Auto)
+* Used Cursor for error checking, debugging in general(model: Auto)
+* Used Cursor to help understand the codebase architecture pattern and understand how to implement status view and tag view (model: Sonnet 4.5)
+* Used Cursor to build the tag view plane and status view plane in sidebar panel! (model: Auto)
+
+#### Sean Hardjanto
+* Used Copilot to write test cases for delete and template (Claude Sonnet 4.5)
+* Used Copilot to check and write JavaDoc comments for delete and template methods (Claude Sonnet 4.5)
+* Used Copilot to scan code for areas of code to increase code quality (Claude Sonnet 4.5)
+* Used Copilot to assist with debugging of code (Claude Sonnet 4.5)
+
+---
 
 ## **Setting up, getting started**
 
 Refer to the guide [_Setting up and getting started_](SettingUp.md).
 
---------------------------------------------------------------------------------------------------------------------
+---
 
 ## **Design**
 
 <div markdown="span" class="alert alert-primary">
 
 :bulb: **Tip:** The `.puml` files used to create diagrams are in this document `docs/diagrams` folder. Refer to the [_PlantUML Tutorial_ at se-edu/guides](https://se-education.org/guides/tutorials/plantUml.html) to learn how to create and edit diagrams.
+
 </div>
 
 ### Architecture
 
 <img src="images/ArchitectureDiagram.png" width="280" />
 
-The ***Architecture Diagram*** given above explains the high-level design of the App.
+The **_Architecture Diagram_** given above explains the high-level design of the App.
 
 Given below is a quick overview of main components and how they interact with each other.
 
 **Main components of the architecture**
 
 **`Main`** (consisting of classes [`Main`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
-* At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
-* At shut down, it shuts down the other components and invokes cleanup methods where necessary.
+
+- At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
+- At shut down, it shuts down the other components and invokes cleanup methods where necessary.
 
 The bulk of the app's work is done by the following four components:
 
-* [**`UI`**](#ui-component): The UI of the App.
-* [**`Logic`**](#logic-component): The command executor.
-* [**`Model`**](#model-component): Holds the data of the App in memory.
-* [**`Storage`**](#storage-component): Reads data from, and writes data to, the hard disk.
+- [**`UI`**](#ui-component): The UI of the App.
+- [**`Logic`**](#logic-component): The command executor.
+- [**`Model`**](#model-component): Holds the data of the App in memory.
+- [**`Storage`**](#storage-component): Reads data from, and writes data to, the hard disk.
 
 [**`Commons`**](#common-classes) represents a collection of classes used by multiple other components.
 
 **How the architecture components interact with each other**
 
-The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
+The _Sequence Diagram_ below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
 
 <img src="images/ArchitectureSequenceDiagram.png" width="574" />
 
 Each of the four main components (also shown in the diagram above),
 
-* defines its *API* in an `interface` with the same name as the Component.
-* implements its functionality using a concrete `{Component Name}Manager` class (which follows the corresponding API `interface` mentioned in the previous point.
+- defines its _API_ in an `interface` with the same name as the Component.
+- implements its functionality using a concrete `{Component Name}Manager` class (which follows the corresponding API `interface` mentioned in the previous point.
 
 For example, the `Logic` component defines its API in the `Logic.java` interface and implements its functionality using the `LogicManager.java` class which follows the `Logic` interface. Other components interact with a given component through its interface rather than the concrete class (reason: to prevent outside component's being coupled to the implementation of a component), as illustrated in the (partial) class diagram below.
 
@@ -78,22 +94,23 @@ The **API** of this component is specified in [`Ui.java`](https://github.com/AY2
 The UI consists of a `MainWindow` that is made up of parts e.g. `CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter`, `SidebarPanel`, `TemplateViewPanel` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
 **New UI Components in OnlySales:**
-* `ImportWindow` - A separate window for importing customer data from clipboard
-* `SidebarPanel` - A panel that contains the `StatusViewPanel` and `TagsViewPanel` for displaying active filters
-* `StatusViewPanel` - Displays all currently active status filters applied through the find command
-* `TagsViewPanel` - Displays all currently active tag filters applied through the find command  
-* `TemplateViewPanel` - Displays and manages email templates for different customer status types
+
+- `ImportWindow` - A separate window for importing customer data from clipboard
+- `SidebarPanel` - A panel that contains the `StatusViewPanel` and `TagsViewPanel` for displaying active filters
+- `StatusViewPanel` - Displays all currently active status filters applied through the find command
+- `TagsViewPanel` - Displays all currently active tag filters applied through the find command
+- `TemplateViewPanel` - Displays and manages email templates for different customer status types
 
 The `UI` component uses the JavaFX UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/resources/view/MainWindow.fxml)
 
 The `UI` component,
 
-* executes user commands using the `Logic` component.
-* listens for changes to `Model` data so that the UI can be updated with the modified data.
-* keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
-* depends on some classes in the `Model` component, as it displays `Person` objects residing in the `Model`.
-* The `SidebarPanel` contains nested UI components (`StatusViewPanel` and `TagsViewPanel`) that update automatically when filter commands are executed.
-* The `ImportWindow` interacts with the `Logic` component to process imported customer data.
+- executes user commands using the `Logic` component.
+- listens for changes to `Model` data so that the UI can be updated with the modified data.
+- keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
+- depends on some classes in the `Model` component, as it displays `Person` objects residing in the `Model`.
+- The `SidebarPanel` contains nested UI components (`StatusViewPanel` and `TagsViewPanel`) that update automatically when filter commands are executed.
+- The `ImportWindow` interacts with the `Logic` component to process imported customer data.
 
 ### Logic component
 
@@ -124,10 +141,10 @@ How the parsing works:
 * All `XYZCommandParser` classes (e.g. `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
 ### Model component
+
 **API** : [`Model.java`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/java/seedu/address/model/Model.java)
 
 <img src="images/ModelClassDiagram.png" width="450" />
-
 
 The `Model` component,
 
@@ -137,12 +154,6 @@ The `Model` component,
 * stores view state objects (`StatusViewState`, `TagsViewState`, `TemplateViewState`) as observable properties that track the current UI filter and display states. These are exposed as `ReadOnlyObjectProperty` instances that the UI can observe for reactive updates.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
-
-<img src="images/BetterModelClassDiagram.png" width="450" />
-
-</div>
-
 
 ### Storage component
 
@@ -151,19 +162,19 @@ The `Model` component,
 <img src="images/StorageClassDiagram.png" width="550" />
 
 The `Storage` component,
-* can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
-* inherits from both `AddressBookStorage`, `UserPrefStorage` and `TemplateStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
-* uses a facade pattern and delegates storage operations to three specialized storage implementations:
-  * `JsonAddressBookStorage` — Handles address book persistence using JSON format
-  * `JsonUserPrefsStorage` — Handles user preferences persistence using JSON format
-  * `TemplateStorageManager` — Handles email templates persistence as individual text files
 
+- can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
+- inherits from both `AddressBookStorage`, `UserPrefStorage` and `TemplateStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
+- uses a facade pattern and delegates storage operations to three specialized storage implementations:
+  - `JsonAddressBookStorage` — Handles address book persistence using JSON format
+  - `JsonUserPrefsStorage` — Handles user preferences persistence using JSON format
+  - `TemplateStorageManager` — Handles email templates persistence as individual text files
 
 ### Common classes
 
 Classes used by multiple components are in the `seedu.address.commons` package.
 
---------------------------------------------------------------------------------------------------------------------
+---
 
 ## **Implementation**
 
@@ -184,10 +195,12 @@ The implementation follows the **Observer Pattern** using JavaFX's property bind
 **Key Components:**
 
 1. **Model Layer:**
+
    - `StatusViewState` and `TagsViewState`: Immutable state objects that represent current filter states
    - `ModelManager`: Stores these states as `ObjectProperty` objects and exposes them via the `Model` interface
 
 2. **Logic Layer:**
+
    - `Logic` interface: Exposes `getStatusViewStateProperty()` and `getTagsViewStateProperty()` methods
    - `FindCommand`: Updates the view states in `Model` when executing filter operations
 
@@ -217,29 +230,31 @@ The following sequence diagram shows how the view states are updated when a user
 
 **Aspect: How to represent filter state in the UI**
 
-* **Alternative 1 (Chosen):** Use explicit state objects (`StatusViewState`, `TagsViewState`) to track user intent
-  * Pros: UI displays what the user explicitly searched for (intent), not just the consequence. Handles edge cases where multiple filter combinations produce the same result. Clear separation of concerns.
-  * Cons: Additional state management complexity, requires synchronization between filter predicates and view states
+- **Alternative 1 (Chosen):** Use explicit state objects (`StatusViewState`, `TagsViewState`) to track user intent
 
-* **Alternative 2:** Derive view state from `FilteredPersonList`
-  * Pros: Single source of truth, no state synchronization needed, simpler implementation
-  * Cons: UI displays consequence rather than intent. For example, if a user searches for `s:Contacted` but no customers have that status, the filtered list would be empty and the UI couldn't distinguish whether filters were applied or not. Cannot accurately determine which specific filters were applied if multiple filter combinations produce the same filtered list.
+  - Pros: UI displays what the user explicitly searched for (intent), not just the consequence. Handles edge cases where multiple filter combinations produce the same result. Clear separation of concerns.
+  - Cons: Additional state management complexity, requires synchronization between filter predicates and view states
+
+- **Alternative 2:** Derive view state from `FilteredPersonList`
+  - Pros: Single source of truth, no state synchronization needed, simpler implementation
+  - Cons: UI displays consequence rather than intent. For example, if a user searches for `s:Contacted` but no customers have that status, the filtered list would be empty and the UI couldn't distinguish whether filters were applied or not. Cannot accurately determine which specific filters were applied if multiple filter combinations produce the same filtered list.
 
 **Aspect: How to communicate filter state to UI**
 
-* **Alternative 1:** Direct UI method calls from Command classes
-  * Pros: Simpler to understand, explicit control flow
-  * Cons: Violates architectural boundaries (Logic calling UI directly) and tight coupling!!
+- **Alternative 1:** Direct UI method calls from Command classes
+  - Pros: Simpler to understand, explicit control flow
+  - Cons: Violates architectural boundaries (Logic calling UI directly) and tight coupling!!
 
 **Aspect: Where to store view state**
 
-* **Alternative 1 (Chosen):** Store in `Model` layer
-  * Pros: Centralized state management, follows MVC pattern, testable
-  * Cons: Model becomes slightly more complex
+- **Alternative 1 (Chosen):** Store in `Model` layer
 
-* **Alternative 2:** Store in UI components only
-  * Pros: Simpler Model layer
-  * Cons: State is scattered, harder to test, UI must deduce state from filtered list
+  - Pros: Centralized state management, follows MVC pattern, testable
+  - Cons: Model becomes slightly more complex
+
+- **Alternative 2:** Store in UI components only
+  - Pros: Simpler Model layer
+  - Cons: State is scattered, harder to test, UI must deduce state from filtered list
 
 ### Template Feature
 
@@ -249,19 +264,21 @@ The template feature allows salespersons to create, edit, and copy email templat
 
 The template mechanism is facilitated by `TemplateStorage`, `TemplateCommand`, and `TemplateViewState`. It uses the following key components:
 
-* `TemplateStorage` — Interface for reading and writing template files.
-* `TemplateStorageManager` — Concrete implementation that stores templates as text files in the data directory.
-* `TemplateCommand` — Command that handles both opening templates for editing and saving edited templates.
-* `TemplateViewState` — Model class that tracks the currently displayed template (status and content).
-* `TemplateViewPanel` — UI component that displays the template editor.
+- `TemplateStorage` — Interface for reading and writing template files.
+- `TemplateStorageManager` — Concrete implementation that stores templates as text files in the data directory.
+- `TemplateCommand` — Command that handles both opening templates for editing and saving edited templates.
+- `TemplateViewState` — Model class that tracks the currently displayed template (status and content).
+- `TemplateViewPanel` — UI component that displays the template editor.
 
 These operations are exposed in the `Model` interface as:
-* `Model#getTemplateViewStateProperty()` — Returns an observable property for the current template state.
-* `Model#setTemplateViewState(TemplateViewState)` — Updates the template view state.
+
+- `Model#getTemplateViewStateProperty()` — Returns an observable property for the current template state.
+- `Model#setTemplateViewState(TemplateViewState)` — Updates the template view state.
 
 And in the `Storage` interface as:
-* `Storage#readTemplate(Status)` — Reads a template for a specific status.
-* `Storage#saveTemplate(Status, String)` — Saves template content for a specific status.
+
+- `Storage#readTemplate(Status)` — Reads a template for a specific status.
+- `Storage#saveTemplate(Status, String)` — Saves template content for a specific status.
 
 Given below is an example usage scenario and how the template mechanism behaves at each step.
 
@@ -307,37 +324,96 @@ The following sequence diagram shows how the copy operation works:
 
 The template feature supports all six contact statuses (UNCONTACTED, CONTACTED, REJECTED, ACCEPTED, UNREACHABLE, BUSY), with each status having its own independent template file.
 
+#### Default Templates and Blank Content Handling
+
+The template system includes automatic handling of blank or invalid template content to ensure data integrity:
+
+**Default Templates:**
+* Each status has a default template in the format: "This is the default template for status [StatusName]"
+* Default templates are automatically created when:
+  - A template file doesn't exist for a status
+  - A template file contains only whitespace or is empty
+  - A user attempts to save blank content
+
+**Blank Content Detection:**
+* The system checks for blank content (null, empty string, or whitespace-only) in two places:
+  1. **During Save (`saveTemplate`)**: When a user saves a template with blank content, it's automatically replaced with the default template
+  2. **During Read (`readTemplate`)**: When reading a template file that contains blank content, the file is replaced with the default template
+
+**User Feedback:**
+* When saving blank content, users see: "Detected empty template as input, saving as the default template instead."
+* This prevents accidental deletion of templates and ensures meaningful content is always available
+
+**Implementation Details:**
+* `TemplateStorageManager.saveTemplate()` uses `String.isBlank()` to detect blank content before writing
+* `TemplateStorageManager.readTemplate()` validates file content after reading and replaces blank files
+* `TemplateCommand.executeSave()` detects blank content to show appropriate user feedback
+* All operations maintain consistency across template copy, open, and save workflows
+
 #### Design considerations:
 
 **Aspect: How templates are stored:**
 
-* **Alternative 1 (current choice):** Store each template as a separate text file per status.
-  * Pros: Simple to implement, easy to manually edit templates outside the application, human-readable format.
-  * Cons: Requires file I/O for each template operation, potential for file system errors.
+- **Alternative 1 (current choice):** Store each template as a separate text file per status.
 
-* **Alternative 2:** Store all templates in a single JSON file.
-  * Pros: Single file to manage, consistent with address book storage format, easier to backup.
-  * Cons: More complex serialization/deserialization, harder for users to manually edit, risk of corrupting all templates if JSON is malformed.
+  - Pros: Simple to implement, easy to manually edit templates outside the application, human-readable format.
+  - Cons: Requires file I/O for each template operation, potential for file system errors.
+
+- **Alternative 2:** Store all templates in a single JSON file.
+  - Pros: Single file to manage, consistent with address book storage format, easier to backup.
+  - Cons: More complex serialization/deserialization, harder for users to manually edit, risk of corrupting all templates if JSON is malformed.
 
 **Aspect: When to save template changes:**
 
-* **Alternative 1 (current choice):** Require explicit `template save` command.
-  * Pros: Gives users control over when changes are persisted, prevents accidental overwrites, clear user intent.
-  * Cons: Users might forget to save and lose their edits.
+- **Alternative 1 (current choice):** Require explicit `template save` command.
 
-* **Alternative 2:** Auto-save on every keystroke or after a delay.
-  * Pros: No risk of losing work, more convenient for users.
-  * Cons: May cause performance issues with frequent file I/O, harder to implement "cancel" functionality, could save incomplete/incorrect templates.
+  - Pros: Gives users control over when changes are persisted, prevents accidental overwrites, clear user intent.
+  - Cons: Users might forget to save and lose their edits.
+
+- **Alternative 2:** Auto-save on every keystroke or after a delay.
+  - Pros: No risk of losing work, more convenient for users.
+  - Cons: May cause performance issues with frequent file I/O, harder to implement "cancel" functionality, could save incomplete/incorrect templates.
 
 **Aspect: Template editor vs. clipboard copy:**
 
-* **Current implementation:** Provides both `template s:STATUS` (opens editor) and `copy s:STATUS` (direct clipboard copy).
-  * Pros: Flexibility for different workflows - edit for customization, copy for quick use.
-  * Cons: Two different commands to learn and maintain.
+- **Current implementation:** Provides both `template s:STATUS` (opens editor) and `copy s:STATUS` (direct clipboard copy).
 
-* **Alternative:** Only provide editor, remove direct copy command.
-  * Pros: Simpler command set, encourages review before sending.
-  * Cons: Less efficient for users who want to quickly copy without viewing.
+  - Pros: Flexibility for different workflows - edit for customization, copy for quick use.
+  - Cons: Two different commands to learn and maintain.
+
+- **Alternative:** Only provide editor, remove direct copy command.
+  - Pros: Simpler command set, encourages review before sending.
+  - Cons: Less efficient for users who want to quickly copy without viewing.
+
+**Aspect: How to handle blank/empty template content:**
+
+- **Alternative 1 (current choice):** Automatically replace blank content with default template.
+
+  - Pros: Prevents accidental deletion of templates, ensures meaningful content always exists, provides clear fallback behavior, maintains data integrity across all operations.
+  - Cons: Users cannot intentionally create truly empty templates, slightly more complex implementation with validation in both read and write paths.
+
+- **Alternative 2:** Allow saving and storing blank templates.
+
+  - Pros: Simpler implementation, gives users complete control, allows intentional blank templates.
+  - Cons: Users could accidentally delete all content and lose their work, template copy operations would copy whitespace/empty content (confusing UX), no clear indication when template is blank vs. intentionally empty, violates principle of least surprise.
+
+- **Alternative 3:** Prevent saving blank templates with error message.
+  - Pros: Prevents data loss, clear user feedback about invalid input.
+  - Cons: Frustrating UX when users want to reset to default (would need separate command), doesn't handle externally-modified files with blank content, no automatic recovery from corrupted template files.
+
+**Aspect: How to handle blank/empty template content:**
+
+* **Alternative 1 (current choice):** Automatically replace blank content with default template.
+  * Pros: Prevents accidental deletion of templates, ensures meaningful content always exists, provides clear fallback behavior, maintains data integrity across all operations.
+  * Cons: Users cannot intentionally create truly empty templates, slightly more complex implementation with validation in both read and write paths.
+
+* **Alternative 2:** Allow saving and storing blank templates.
+  * Pros: Simpler implementation, gives users complete control, allows intentional blank templates.
+  * Cons: Users could accidentally delete all content and lose their work, template copy operations would copy whitespace/empty content (confusing UX), no clear indication when template is blank vs. intentionally empty, violates principle of least surprise.
+
+* **Alternative 3:** Prevent saving blank templates with error message.
+  * Pros: Prevents data loss, clear user feedback about invalid input.
+  * Cons: Frustrating UX when users want to reset to default (would need separate command), doesn't handle externally-modified files with blank content, no automatic recovery from corrupted template files.
 
 ### Status Feature
 
@@ -347,10 +423,10 @@ The status command feature allows users to set and track the contact status of e
 
 The implementation is supported by the following key components:
 
-* `SetStatusCommand` - Handles the execution of the status command.
-* `Status` - Represents the contact status of a person as an immutable value object.
-* `StatusValue` - An enum defining all possible status values, and is nested in the Status class.
-* `Person` - Contains a person's status along with other attributes.
+- `SetStatusCommand` - Handles the execution of the status command.
+- `Status` - Represents the contact status of a person as an immutable value object.
+- `StatusValue` - An enum defining all possible status values, and is nested in the Status class.
+- `Person` - Contains a person's status along with other attributes.
 
 Below is the class diagram showing the relationship between these components:
 
@@ -378,38 +454,40 @@ The status command is executed through the following sequence of steps:
 
 **Aspect: Status Value Implementation**
 
-* **Alternative 1 (current choice)**: Use enum-based Status class with predefined values
-   * Pros:
-      * Type-safe implementation prevents invalid status values.
-      * Clear indication of all available status options.
-      * Easy to validate input strings.
-   * Cons:
-      * Adding new status values requires code changes.
-      * Less flexible for user customisation.
+- **Alternative 1 (current choice)**: Use enum-based Status class with predefined values
 
-* **Alternative 2**: Use string-based status implementation
-   * Pros:
-      * Flexible - users could create custom status values.
-      * Easier to extend without code changes.
-    * Cons:
-      * Less type safety.
-      * More complex validation required.
+  - Pros:
+    - Type-safe implementation prevents invalid status values.
+    - Clear indication of all available status options.
+    - Easy to validate input strings.
+  - Cons:
+    - Adding new status values requires code changes.
+    - Less flexible for user customisation.
+
+- **Alternative 2**: Use string-based status implementation
+  - Pros:
+    - Flexible - users could create custom status values.
+    - Easier to extend without code changes.
+  - Cons:
+    - Less type safety.
+    - More complex validation required.
 
 **Aspect: Default Status Behavior**
 
-* **Alternative 1 (current choice)**: Default to "Uncontacted" for empty/null input
-   * Pros:
-      * Consistent with the use case of tracking initial contact status
-      * Prevents null status values
-   * Cons:
-      * May not be intuitive that empty input has a default value
+- **Alternative 1 (current choice)**: Default to "Uncontacted" for empty/null input
 
-* **Alternative 2**: Require explicit status input
-   * Pros:
-      * More explicit - users must state their intention
-      * Prevents accidental status changes
-   * Cons:
-      * More inconvenient for salespeople when they want to reset everyone's status (e.g. when starting a new sale)
+  - Pros:
+    - Consistent with the use case of tracking initial contact status
+    - Prevents null status values
+  - Cons:
+    - May not be intuitive that empty input has a default value
+
+- **Alternative 2**: Require explicit status input
+  - Pros:
+    - More explicit - users must state their intention
+    - Prevents accidental status changes
+  - Cons:
+    - More inconvenient for salespeople when they want to reset everyone's status (e.g. when starting a new sale)
 
 ### Export Command
 
@@ -417,14 +495,14 @@ The status command is executed through the following sequence of steps:
 
 The export command allows users to export the address book data in JSON format to the system clipboard. It is implemented through the `ExportCommand` class and supported by two key interfaces:
 
-*   `ClipboardProvider` - For copying data to system clipboard.
-*   `FileSystemProvider` - For reading data from files.
+- `ClipboardProvider` - For copying data to system clipboard.
+- `FileSystemProvider` - For reading data from files.
 
 The implementation is supported by these components:
 
-*   `SystemClipboardProvider` - Concrete implementation for clipboard operations.
-*   `SystemFileSystemProvider` - Concrete implementation for file system operations.
-*   `JsonAddressBookUtil` - Handles JSON data conversion.
+- `SystemClipboardProvider` - Concrete implementation for clipboard operations.
+- `SystemFileSystemProvider` - Concrete implementation for file system operations.
+- `JsonAddressBookUtil` - Handles JSON data conversion.
 
 Below is the class diagram for the export command:
 
@@ -449,39 +527,41 @@ The typical flow of operations is:
 
 **Aspect: Export Format**
 
-* **Alternative 1 (current choice)**: Use JSON format
-   * Pros:
-      * Standard format with wide tool support
-      * Human-readable
-      * Preserves data structure
-   * Cons:
-      * Larger size compared to binary formats, might be too large for some systems' clipboard to handle
-      * May expose sensitive data in readable form
+- **Alternative 1 (current choice)**: Use JSON format
 
-* **Alternative 2**: Use binary format
-   * Pros:
-      * More compact
-      * Data not human-readable (better for sensitive information)
-   * Cons:
-      * Requires special tools to read/edit
-      * Less interoperable with other systems
+  - Pros:
+    - Standard format with wide tool support
+    - Human-readable
+    - Preserves data structure
+  - Cons:
+    - Larger size compared to binary formats, might be too large for some systems' clipboard to handle
+    - May expose sensitive data in readable form
+
+- **Alternative 2**: Use binary format
+  - Pros:
+    - More compact
+    - Data not human-readable (better for sensitive information)
+  - Cons:
+    - Requires special tools to read/edit
+    - Less interoperable with other systems
 
 **Aspect: Export Destination**
 
-* **Alternative 1 (current choice)**: Export contacts directly to clipboard
-   * Pros:
-      * Convenient for both backup and sharing
-      * Easier for salespeople to use, since they may not be familiar with how to locate save files
-   * Cons:
-      * More complex implementation
-      * More code to maintain
+- **Alternative 1 (current choice)**: Export contacts directly to clipboard
 
-* **Alternative 2**: Direct user to storage file
-   * Pros:
-      * Simpler implementation
-   * Cons:
-      * Less convenient for quick sharing
-      * Requires file system access and understanding
+  - Pros:
+    - Convenient for both backup and sharing
+    - Easier for salespeople to use, since they may not be familiar with how to locate save files
+  - Cons:
+    - More complex implementation
+    - More code to maintain
+
+- **Alternative 2**: Direct user to storage file
+  - Pros:
+    - Simpler implementation
+  - Cons:
+    - Less convenient for quick sharing
+    - Requires file system access and understanding
 
 ### Import Feature
 
@@ -491,11 +571,11 @@ The import feature enables salespersons to share address book data between team 
 
 The import mechanism is facilitated by `ImportCommand`, and `ClipboardProvider`. It uses the following key components:
 
-* `ImportCommand` — Reads JSON from clipboard and replaces the current address book
-* `ClipboardProvider` — Abstraction for clipboard operations (enables testing with mock clipboard)
-* `FileSystemProvider` — Abstraction for file system operations (enables testing without actual file I/O)
-* `JsonAddressBookUtil` — Utility for JSON serialization/deserialization
-* `ImportWindow` — UI window for previewing import data before confirming
+- `ImportCommand` — Reads JSON from clipboard and replaces the current address book
+- `ClipboardProvider` — Abstraction for clipboard operations (enables testing with mock clipboard)
+- `FileSystemProvider` — Abstraction for file system operations (enables testing without actual file I/O)
+- `JsonAddressBookUtil` — Utility for JSON serialization/deserialization
+- `ImportWindow` — UI window for previewing import data before confirming
 
 The following activity diagram illustrates the complete workflow of sharing contacts between team members via an external messaging application:
 
@@ -505,35 +585,37 @@ The following activity diagram illustrates the complete workflow of sharing cont
 
 **Aspect: Clipboard vs file-based import**
 
-* **Alternative 1 (current choice):** Use system clipboard for data transfer.
-  * Pros: Quick and convenient. Works across different file systems and network drives. No file permissions issues. Platform-independent.
-  * Cons: Large address books might exceed clipboard limits. Data is not persisted if clipboard is cleared. However, we accept this as a trade-off because clipboard should not be used for persistence.
+- **Alternative 1 (current choice):** Use system clipboard for data transfer.
 
-* **Alternative 2:** Export/import via file selection dialog.
-  * Pros: Better for very large datasets. Persistent storage.
-  * Cons: Slower workflow. Requires file system navigation. Path/permission issues. Reliance on the operating system's implementation makes it hard to ensure that it would be bug-free, and violates the constraints.
+  - Pros: Quick and convenient. Works across different file systems and network drives. No file permissions issues. Platform-independent.
+  - Cons: Large address books might exceed clipboard limits. Data is not persisted if clipboard is cleared. However, we accept this as a trade-off because clipboard should not be used for persistence.
+
+- **Alternative 2:** Export/import via file selection dialog.
+  - Pros: Better for very large datasets. Persistent storage.
+  - Cons: Slower workflow. Requires file system navigation. Path/permission issues. Reliance on the operating system's implementation makes it hard to ensure that it would be bug-free, and violates the constraints.
 
 **Aspect: Import replaces vs merges**
 
-* **Alternative 1 (current choice):** Import replaces entire address book.
-  * Pros: Simple and predictable behavior. No duplicate handling needed. Clean state after import.
-  * Cons: Destructive operation - loses current data if not exported first. Since sharing of contact is done to allocate the salesperson their new assignment contacts, this behaviour is acceptable.
+- **Alternative 1 (current choice):** Import replaces entire address book.
 
-* **Alternative 2:** Merge imported contacts with existing ones.
-  * Pros: Non-destructive. Allows incremental updates.
-  * Cons: Complex duplicate detection and resolution. Unclear user expectations for what is considered a conflict or a new entry.
+  - Pros: Simple and predictable behavior. No duplicate handling needed. Clean state after import.
+  - Cons: Destructive operation - loses current data if not exported first. Since sharing of contact is done to allocate the salesperson their new assignment contacts, this behaviour is acceptable.
 
---------------------------------------------------------------------------------------------------------------------
+- **Alternative 2:** Merge imported contacts with existing ones.
+  - Pros: Non-destructive. Allows incremental updates.
+  - Cons: Complex duplicate detection and resolution. Unclear user expectations for what is considered a conflict or a new entry.
+
+---
 
 ## **Documentation, logging, testing, configuration, dev-ops**
 
-* [Documentation guide](Documentation.md)
-* [Testing guide](Testing.md)
-* [Logging guide](Logging.md)
-* [Configuration guide](Configuration.md)
-* [DevOps guide](DevOps.md)
+- [Documentation guide](Documentation.md)
+- [Testing guide](Testing.md)
+- [Logging guide](Logging.md)
+- [Configuration guide](Configuration.md)
+- [DevOps guide](DevOps.md)
 
---------------------------------------------------------------------------------------------------------------------
+---
 
 ## **Appendix: Requirements**
 
@@ -571,14 +653,13 @@ The following activity diagram illustrates the complete workflow of sharing cont
 
 **Field validations for contacts**:
 
-| Field | Validation Rule                                                                                                                                                                                                                                                                                                                                                                                                                           | Rationale                                                                                                                                                        |
-|-------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Name** | Must contain only alphanumeric characters, spaces, hyphens, apostrophes, slashes, and periods. Cannot be blank or start with whitespace.                                                                                                                                                                                                                                                                                                  | Supports international names (e.g. "Mary-Jane", "O'Brien", "Dr. Smith").                                                                                         |
-| **Phone** | Must contain only digits and be at least 3 digits long.                                                                                                                                                                                                                                                                                                                                                                                   | Accommodates both local and international formats without requiring country codes or special characters. Minimum length prevents trivial inputs like "1" or "12". |
-| **Email** | Must follow standard email format, which we enforce loosely by checking for `@`.<br>- Local part: alphanumeric and special characters (`+`, `_`, `.`, `-`), cannot start/end with special characters<br>- Domain: alphanumeric labels separated by periods, must end with at least 2-character domain label<br>- Email validation intentionally does not enforce top-level domain requirements (like .com, .org, etc.) in email addresses | Helps prevent typo of definitely invalid email address such as "name@", "abcgmail.com" and "@gmail.com". Also helps to accommodate rare but valid use cases where contacts may have email addresses on internal networks or custom domains that do not follow the conventional format.                                             |
-| **Address** | Can contain any characters but must not exceed 200 characters.                                                                                                                                                                                                                                                                                                                                                                            | Allows flexibility for diverse address formats while preventing unreasonably long inputs that could affect UI display.                                           |
-| **Tag** | Must be alphanumeric only (no spaces or special characters).                                                                                                                                                                                                                                                                                                                                                                              | Tags, used for categorising, should be a single word. Alphanumeric restriction prevents parsing conflicts with command syntax.                                   |
-| **Status** | View the list below table for the list of status, and recommended meaning. Defaults to "Uncontacted" if not specified.                                                                                                                                                                                                                                                                                                                    | Helps to track contacts for the sales workflow. Case-insensitive matching improves user experience.                                                              |
+| Field       | Validation Rule                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | Rationale                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Name**    | Must contain only alphanumeric characters, spaces, hyphens, apostrophes, slashes, commas, and periods. Cannot be blank or start with whitespace.                                                                                                                                                                                                                                                                                                                                                                | Supports international names (e.g., "Mary-Jane", "O'Brien", "Dr. Smith").                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| **Phone**   | Must contain only digits, a single optional `+` at the start and be at least 3 digits long. This should not be duplicated.                                                                                                                                                                                                                                                                                                                                                                                      | Allows both local and international formats. Minimum length prevents some invalid inputs like "1" or "12". We use the phone number to check for duplicate person. <br />However, we do not take into account the country code when comparing the phone number, that is, we treat `+6598765432` and `98765432` as 2 different number. This is because we want to give users the choice to omit the country code if they are dealing with only local customer, but still not assuming that they are in a certain country. |
+| **Email**   | Must follow standard email format, which we enforce losely by checking for `@` separating local part and domain.<br />- Local part: alphanumeric and special characters (`+`, `_`, `.`, `-`), cannot start/end with special characters<br>- Domain: alphanumeric domain labels, 2 characters or longer, separated by periods. It must end with at least 2-characters domain label<br>- Email validation intentionally does not enforce top-level domain requirements (like .com, .org, etc.) in email addresses | Helps prevent typo of definitely invalid email address such as "name@", "abcgmail.com" and "@gmail.com". Also helps to accommodate rare but valid use cases where contacts may have email addresses on internal networks or custom domains that do not follow the conventional format.                                                                                                                                                                                                                                  |
+| **Tag**     | Only lowercase alphanumeric characters, not longer than 50 characters (no spaces or special characters).                                                                                                                                                                                                                                                                                                                                                                                                        | Tags should be a single word as it is used only for categorisation and not as a note. We decided upon the use of lowercase alphanumeric character only to ease the checking of duplicate tags, searching, and readability.                                                                                                                                                                                                                                                                                              |
+| **Status**  | View the list below table for the list of status, and recommended meaning. Defaults to "Uncontacted" if not specified.                                                                                                                                                                                                                                                                                                                                                                                          | Helps to track contacts for the sales workflow. Case-insensitive matching improves user experience.                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 **Valid contact statuses**:
 
@@ -593,26 +674,26 @@ The following activity diagram illustrates the complete workflow of sharing cont
 
 Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Novel (unlikely to have) - `*`
 
-| Priority | As a …               | I want to …                                                        | So that I can…                                                                 |
-| -------- | -------------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
-| `* * *`  | salesperson          | add contacts                                                       | see their details in the future                                                |
-| `* * *`  | salesperson          | delete contacts                                                    | don't over clutter my contact book                                             |
-| `* *`    | salesperson          | delete multiple contacts                                           | ensure that PDPA retention limitation is adhered to                            |
-| `* * *`  | careless salesperson | edit contact details                                               | ensure the data is accurate                                                    |
-| `* * *`  | salesperson          | search by name                                                     | easily find contacts by name due to the large number of contacts               |
-| `* *`    | salesperson          | search by tags                                                     | easily find contacts by tags                                                   |
-| `* *`    | salesperson          | search by status                                                   | easily find contacts by their status                                           |
-| `* * *`  | salesperson          | list all contacts                                                  | know what contacts I have saved                                                |
-| `* * *`  | forgetful user       | have my edits autosaved                                            | data won't be lost if I forget to save it                                      |
-| `* *`    | salesperson team IC  | export and share the contacts I have with others easily            | don't need my team to use each others' accounts                                |
-| `* *`    | salesperson team IC  | import contacts shared by others                                   | quickly add contacts provided by my team                                       |
-| `* *`    | salesperson          | add tags to contacts                                               | categorise them for filtering                                                  |
-| `* *`    | salesperson          | add multiple tags to each contact                                  | better categorise contacts with different characteristics                      |
-| `* *`    | salesperson          | set a status for each contact                                      | track which contacts have been contacted, accepted, rejected, etc.             |
-| `*`      | salesperson          | create and edit email templates for different contact types        | save time from writing up the same outreach materials over and over again      |
-| `*`      | salesperson          | copy a template message to clipboard                               | quickly paste it into my email application                                     |
-| `*`      | salesperson          | mark clients as rejected                                           | avoid wasting time by contacting them again                                    |
-| `*`      | busy salesperson     | mark clients based on how receptive they are                       | focus my limited time on those likely to buy the product                       |
+| Priority | As a …               | I want to …                                                 | So that I can…                                                            |
+| -------- | -------------------- | ----------------------------------------------------------- | ------------------------------------------------------------------------- |
+| `* * *`  | salesperson          | add contacts                                                | see their details in the future                                           |
+| `* * *`  | salesperson          | delete contacts                                             | don't over clutter my contact book                                        |
+| `* *`    | salesperson          | delete multiple contacts                                    | ensure that PDPA retention limitation is adhered to                       |
+| `* * *`  | careless salesperson | edit contact details                                        | ensure the data is accurate                                               |
+| `* * *`  | salesperson          | search by name                                              | easily find contacts by name due to the large number of contacts          |
+| `* *`    | salesperson          | search by tags                                              | easily find contacts by tags                                              |
+| `* *`    | salesperson          | search by status                                            | easily find contacts by their status                                      |
+| `* * *`  | salesperson          | list all contacts                                           | know what contacts I have saved                                           |
+| `* * *`  | forgetful user       | have my edits autosaved                                     | data won't be lost if I forget to save it                                 |
+| `* *`    | salesperson team IC  | export and share the contacts I have with others easily     | don't need my team to use each others' accounts                           |
+| `* *`    | salesperson team IC  | import contacts shared by others                            | quickly add contacts provided by my team                                  |
+| `* *`    | salesperson          | add tags to contacts                                        | categorise them for filtering                                             |
+| `* *`    | salesperson          | add multiple tags to each contact                           | better categorise contacts with different characteristics                 |
+| `* *`    | salesperson          | set a status for each contact                               | track which contacts have been contacted, accepted, rejected, etc.        |
+| `*`      | salesperson          | create and edit email templates for different contact types | save time from writing up the same outreach materials over and over again |
+| `*`      | salesperson          | copy a template message to clipboard                        | quickly paste it into my email application                                |
+| `*`      | salesperson          | mark clients as rejected                                    | avoid wasting time by contacting them again                               |
+| `*`      | busy salesperson     | mark clients based on how receptive they are                | focus my limited time on those likely to buy the product                  |
 
 ### Use cases
 
@@ -624,8 +705,8 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 
 **Guarantees:**
 
-* Contact is created only if all required fields are valid.
-* On validation error, no contacts are added.
+- Contact is created only if all required fields are valid.
+- On validation error, no contacts are added.
 
 **MSS:**
 
@@ -634,7 +715,7 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 3. Salesperson submits the command.
 4. CMS validates the details.
 5. CMS creates the contact and displays a confirmation message.<br/>
-Use case ends.
+   Use case ends.
 
 **Extensions:**<br/>
 
@@ -663,12 +744,12 @@ Use case ends.
 **Extensions:**
 
 3a. Clipboard is empty.<br />
-3a1. CMS displays: "Clipboard does not contain any text to import".<br />
-Use case ends.
+   3a1. CMS displays: "Clipboard does not contain any text to import".<br />
+   Use case ends.
 
 3b. Clipboard content is not valid address book JSON or fails validation.<br />
-3b1. CMS displays: "Failed to import: Clipboard does not contain valid address book JSON.".<br />
-Use case ends.
+   3b1. CMS displays: "Failed to import: Clipboard does not contain valid address book JSON.".<br />
+   Use case ends.
 
 #### Use case: UC03 - List all contacts
 
@@ -678,20 +759,20 @@ Use case ends.
 
 **Guarantees:**
 
-* Listing does not modify any data.
-* The latest saved state of contacts is displayed.
+- Listing does not modify any data.
+- The latest saved state of contacts is displayed.
 
 **MSS:**
 
 1. Salesperson chooses to view all contacts.
 2. Salesperson enters the list command.
 3. CMS displays all contacts.<br/>
-Use case ends.
+   Use case ends.
 
 **Extensions:**
 
 3a. The contact list is empty.<br/>
-   3a1. CMS indicates that no contacts are found.
+   3a1. CMS indicates that no contacts are found.<br/>
    Use case ends.
 
 
@@ -703,8 +784,8 @@ Use case ends.
 
 **Guarantees:**
 
-* Search does not modify customer data.
-* Tag view and status view panels update to reflect active filters.
+- Search does not modify customer data.
+- Tag view and status view panels update to reflect active filters.
 
 **MSS:**
 
@@ -712,7 +793,7 @@ Use case ends.
 2. Salesperson enters the find command with specified search criteria.
 3. CMS searches for customers matching ALL specified criteria (AND logic between different types, OR logic within same type).
 4. CMS displays the matching customers and updates the tag view and status view panels to show active filters.<br/>
-Use case ends.
+   Use case ends.
 
 **Extensions:**
 
@@ -724,7 +805,6 @@ Use case ends.
    3a1. CMS displays an empty list while keeping the filters visible in tag view and status view to show search intent.<br/>
    Use case ends.
 
-
 #### Use case: UC05 - Find contact by status
 
 **System:** Contact Management System (CMS)
@@ -733,7 +813,7 @@ Use case ends.
 
 **Guarantees:**
 
-* Filtering does not modify contact data.
+- Filtering does not modify contact data.
 
 **MSS:**
 
@@ -741,7 +821,7 @@ Use case ends.
 2. Salesperson specifies the status.
 3. CMS searches for contacts with the specified status.
 4. CMS displays the matching contacts.<br/>
-Use case ends.
+   Use case ends.
 
 **Extensions:**
 
@@ -752,7 +832,6 @@ Use case ends.
 4a. No contacts match the specified status.<br/>
    4a1. CMS indicates that no contacts are found.<br/>
    Use case ends.
-
 
 #### Use case: UC06 - Open and edit email template
 
@@ -765,6 +844,7 @@ Use case ends.
 * Opening a template does not modify any data.
 * Template is saved only when the save command is explicitly issued.
 * If the template view is switched without saving, no changes are will be saved.
+* Blank or whitespace-only content is automatically replaced with the default template.
 
 **MSS:**
 
@@ -775,7 +855,7 @@ Use case ends.
 5. Salesperson edits the template content.
 6. Salesperson issues the save command.
 7. CMS saves the updated template.<br/>
-Use case ends.
+   Use case ends.
 
 **Extensions:**
 
@@ -787,9 +867,14 @@ Use case ends.
    2a1. CMS indicates that an error has happened.<br/>
    Use case ends.
 
-3a. No template exists for the specified status.<br/>
-   3a1. CMS displays an empty template.<br/>
+3a. No template exists for the specified status, or the template file contains only blank/whitespace content.<br/>
+   3a1. CMS displays the default template for that status.<br/>
    Use case resumes from step 4.
+
+6a. Salesperson saves blank or whitespace-only content.<br/>
+   6a1. CMS detects the blank content and saves the default template instead.<br/>
+   6a2. CMS displays: "Detected empty template as input, saving as the default template instead."<br/>
+   Use case ends.
 
 
 #### Use case: UC07 - Copy email template to clipboard
@@ -802,6 +887,7 @@ Use case ends.
 
 * Copying a template does not modify any data.
 * The template content is placed on the system clipboard.
+* If the template file is blank or contains only whitespace, the default template is copied instead.
 
 **MSS:**
 
@@ -810,7 +896,7 @@ Use case ends.
 3. CMS retrieves the template for the specified status.
 4. CMS copies the template content to the clipboard.
 5. CMS displays a confirmation message.<br/>
-Use case ends.
+   Use case ends.
 
 **Extensions:**
 
@@ -818,9 +904,9 @@ Use case ends.
    2a1. CMS indicates that an error has happened.<br/>
    Use case ends.
 
-3a. No template exists for the specified status.<br/>
-   3a1. CMS copies an empty string to the clipboard.<br/>
-   Use case resumes from step 4.
+3a. No template exists for the specified status, or the template file contains only blank/whitespace content.<br/>
+   3a1. CMS retrieves the default template for that status and copies it to the clipboard.<br/>
+   Use case resumes from step 5.
 
 
 #### Use case: UC08 - Edit contact
@@ -831,8 +917,8 @@ Use case ends.
 
 **Guarantees:**
 
-* Only the specified fields are updated, the other fields remain unchanged.
-* On validation error, no changes are applied.
+- Only the specified fields are updated, the other fields remain unchanged.
+- On validation error, no changes are applied.
 
 **MSS:**
 
@@ -840,18 +926,17 @@ Use case ends.
 2. Salesperson specifies the contact ID and fields to edit.
 3. CMS validates the updated details.
 4. CMS updates the contact information.<br/>
-Use case ends.
+   Use case ends.
 
 **Extensions:**
 
 2a. The specified contact ID does not exist.<br/>
-   2a1. CMS indicates that an error has happened.  <br/>
+   2a1. CMS indicates that an error has happened. <br/>
    Use case resumes from step 2.
 
 3a. CMS detects an error in the entered data.<br/>
-   3a1. CMS indicates that an error has happened.  <br/>
+   3a1. CMS indicates that an error has happened. <br/>
    Use case resumes from step 2.
-
 
 #### Use case: UC09 - Delete contact(s)
 
@@ -861,11 +946,11 @@ Use case ends.
 
 **Guarantees:**
 
-* Deletion removes only the specified contact(s) without modifying other data.
-* All specified contacts must be valid or none will be deleted.
-* Deletion is irreversible once confirmed.
-* On failure, no deletion occurs.
-* All specified indices must be valid; if any index is invalid, no deletions are performed.
+- Deletion removes only the specified contact(s) without modifying other data.
+- All specified contacts must be valid or none will be deleted.
+- Deletion is irreversible once confirmed.
+- On failure, no deletion occurs.
+- All specified indices must be valid; if any index is invalid, no deletions are performed.
 
 **MSS:**
 
@@ -873,7 +958,7 @@ Use case ends.
 2. Salesperson specifies the contact ID(s) to delete.
 3. CMS validates all contact IDs.
 4. CMS deletes the contact(s) and displays a confirmation.<br/>
-Use case ends.
+   Use case ends.
 
 **Extensions:**
 
@@ -889,7 +974,7 @@ Use case ends.
 
 **Guarantees:**
 
-* If an invalid status is provided, no changes are made.
+- If an invalid status is provided, no changes are made.
 
 **MSS:**
 
@@ -897,7 +982,7 @@ Use case ends.
 2. Salesperson specifies the contact ID and new status.
 3. CMS validates the contact ID and status.
 4. CMS updates the contact's status and displays a confirmation message.<br/>
-Use case ends.
+   Use case ends.
 
 **Extensions:**
 
@@ -920,9 +1005,10 @@ Use case ends.
 **Actor:** Salesperson
 
 **Guarantees:**
-* Export copies the exact state of the address book to clipboard as JSON.
-* All contact data is preserved during export.
-* The operation does not modify any existing data.
+
+- Export copies the exact state of the address book to clipboard as JSON.
+- All contact data is preserved during export.
+- The operation does not modify any existing data.
 
 **MSS:**
 
@@ -932,7 +1018,7 @@ Use case ends.
 4. CMS converts the data to JSON format.
 5. CMS copies the JSON to the system clipboard.
 6. CMS displays a success message.<br/>
-Use case ends.
+   Use case ends.
 
 **Extensions:**
 
@@ -951,7 +1037,8 @@ Use case ends.
 **Actor:** Salesperson
 
 **Guarantees:**
-* Import either succeeds completely or fails without modifying existing data.
+
+- Import either succeeds completely or fails without modifying existing data.
 
 **MSS:**
 
@@ -961,7 +1048,7 @@ Use case ends.
 4. CMS validates the JSON format and contact data.
 5. CMS overwrites the existing address book with the imported data.
 6. CMS displays a success message.<br/>
-Use case ends.
+   Use case ends.
 
 **Extensions:**
 1a. Salesperson presses F7 or clicks the import button under File.<br/>
@@ -1070,7 +1157,7 @@ testers are expected to do more *exploratory* testing.
    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
 
    1. Re-launch the app by double-clicking the jar file.<br>
-       Expected: The most recent window size and location is retained.
+      Expected: The most recent window size and location is retained.
 
 ### Deleting a person
 
@@ -1130,12 +1217,12 @@ testers are expected to do more *exploratory* testing.
    1. Test case: `add n:Jane Doe p:98765432 e:different@example.com a:Different Address`<br>
       Expected: Error message "This person already exists in the address book". No new contact is added. (Note: Duplicate detection is based on phone only)
 
-
 ### Importing address book from clipboard
 
 1. Importing valid address book JSON
 
    1. Copy the following valid JSON to clipboard:
+
       ```json
       {
         "persons": [
@@ -1176,6 +1263,7 @@ testers are expected to do more *exploratory* testing.
 1. Importing with invalid data
 
    1. Copy JSON with missing required fields:
+
       ```json
       {
         "persons": [
@@ -1190,7 +1278,6 @@ testers are expected to do more *exploratory* testing.
 
    1. Test case: `import`<br>
       Expected: Error message "Failed to import: Clipboard does not contain valid address book JSON.". Address book remains unchanged.
-
 
 ### Finding customers
 
@@ -1217,6 +1304,6 @@ testers are expected to do more *exploratory* testing.
 
 ### Better Phone Number Validation
 
-Because the app is platform‑independent, we cannot reliably determine the user’s region to infer a default country code. Additionally, telephone numbers vary widely from country to country, with varying length of country codes and local number. Hence, implementing robust parsing without third‑party libraries was out of scope for this release. For example, `+355` is considered as a valid number by our application, but in reality is invalid as all 3 digits are used for the country code.
+Because the app is platform‑independent, we cannot reliably determine the user’s region to infer a default country code. Additionally, telephone numbers vary widely from country to country, with varying length of country codes and local numbers. Hence, implementing robust parsing without third‑party libraries is out of scope for this release. For example, `+355` is considered as a valid number by our application, but in reality, it is invalid as all 3 digits are used for the country code.
 
 We plan to be able to implement a better phone validation customised to the country code, if provided. Additionally, we plan to infer a reasonable default country code from the device locale or user settings, so that we could better check for duplicate numbers by removing the country code prefix.
