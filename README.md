@@ -19,7 +19,7 @@
 
 ## Documentation
 
-View the documentation [here](https://nus-cs2103-ay2526s1.github.io/tp/)
+View the documentation [here](https://ay2526s1-cs2103t-t08-2.github.io/tp/)
 
 ## Support
 

@@ -3,6 +3,13 @@ layout: page
 title: User Guide
 ---
 
+## Why OnlySales?
+
+As a salesperson, you need to:
+  * Track hundreds of contacts
+  * Quickly search and filter their contact information
+  * Send multiple follow-up email quickly
+
 OnlySales is a **desktop app for managing contacts, optimised for Salespeople**, especially tech salespeople.
 What makes OnlySales unique is that it is a Command Line Interface-based (CLI) app. Essentially, what it means is
 that if you can type fast, OnlySales can get your contact management tasks done faster than traditional
@@ -11,6 +18,16 @@ apps that need you to use a mouse.
 Whether you are on the go with your slim notebook or at home with your mechanical keyboard, OnlySales is
 your friend to help you close all those SALES, with ONLY your keyboard!
 
+## Key Features
+
+* Ensure correct data with our validation for fields
+* **Email Template**: No more time wasted typing the same email message
+* **Status Tracking**: Viewing and update status to track who haven't been contacted
+* **Advanced Searching** for contacts by name, email, phone and more
+* **Automatic Saving**: No more losing data and sleep after forgetting to save data.
+* **Cross-Platform**: Works on any mainstream OS (Windows, Mac, Linux).
+
+
 - Table of Contents
 {:toc}
 
@@ -18,9 +35,10 @@ your friend to help you close all those SALES, with ONLY your keyboard!
 
 ## Quick start
 
-1. Ensure you have any version of Java `17` installed in your Computer.<br>
-   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
-
+1. Ensure you have any version of Java `17` installed in your Computer. Installation guide for:<br>
+    * [**Windows Java Installation**](https://se-education.org/guides/tutorials/javaInstallationWindows.html)
+    * [**Mac Java Installation**](https://se-education.org/guides/tutorials/javaInstallationMac.html)
+    * [**Linux Java Installation**](https://se-education.org/guides/tutorials/javaInstallationLinux.html)
 1. Download the latest `.jar` file from [here](https://github.com/AY2526S1-CS2103T-T08-2/tp/releases/).
 
 1. Copy the file to the folder you want to use as the _home folder_ for your OnlySales.
@@ -28,6 +46,7 @@ your friend to help you close all those SALES, with ONLY your keyboard!
 1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar OnlySales.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
+   <p class="figcaption">Sample screenshot of the app</p>
 
 1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
@@ -78,9 +97,10 @@ your friend to help you close all those SALES, with ONLY your keyboard!
 
 Shows a message explaining how to access the help page.
 
-![help message](images/helpMessage.png)
-
 **Format:** `help`
+
+![help message](images/helpMessage.png)
+<p class="figcaption">Help Window</p>
 
 ### Adding a person: `add`
 
@@ -106,6 +126,7 @@ Person with the same phone number, is considered as duplicate and cannot be adde
 * `add n:Betsy Crowe t:friend e:betsycrowe@example.com a:Newgate Prison p:1234567 t:criminal s:contacted`
 
 ![Add Command Result](images/AddCommand.png)
+<p class="figcaption">Sample Add Command Window</p>
 
 ### Listing all persons : `list`
 
@@ -146,7 +167,7 @@ Edits an existing person in the address book.
 **Examples:**
 *  `edit 1 p:91234567 e:johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
 *  `edit 2 n:Betsy Crower t:` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
-*  `edit 3 a:557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694 s:Busy` Edits the address and status of the 3rd person to be `557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694` and `Busy` respectively.
+
 
 ### Finding customers: `find`
 
@@ -289,7 +310,7 @@ Deleting a contact is an irreversible process. Once deleted, the contact informa
 Manages email templates for different contact statuses. You can open, edit, save, and copy templates to streamline your email communications.
 
 <div markdown="span" class="alert alert-info">:information_source: **Keyboard Navigation:**
-You can navigate between the command input box and the template editor using only your keyboard by pressing `Tab` to move to the template editor and `Shift + Tab` to return to the command input box (works on Windows, macOS, and Linux).
+You can navigate between the command input box and the template editor using only your keyboard by pressing `Tab` to move to the template editor and `Shift + Tab` to return to the command input box.
 </div>
 
 #### Opening a template for editing : `template s:STATUS`
@@ -428,16 +449,21 @@ If your changes to the data file makes its format invalid, OnlySales will discar
 Furthermore, certain edits can cause the OnlySales to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </div>
 
-### Archiving data files `[coming in v2.0]`
-
-_Details coming soon ..._
-
 ---
 
 ## FAQ
 
 **Q**: How do I transfer my data to another Computer?<br>
 **A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous OnlySales home folder. Alternatively, you can use the import and export commands.
+
+**Q**: Is my contact data secure?<br/>
+**A**: OnlySales only stores data locally on your laptop, no data is sent to external servers. However, the data file is not encrypted, so do ensure that your device is password protected.
+
+**Q**: How do I handle duplicate contacts?<br/>
+**A**: It would be unlikely that there would be a duplicate as each phone number would be owned by a person. You could resolve this by deleting the unwanted entries, or include or exclude the country code for local contacts.
+
+**Q**: The app is not functioning as expected.<br/>
+**A**: Do check the known issues and FAQ. If you have any issues, please file a bug report at: [Customer Feedback Form](https://forms.gle/UBbeXtpVAmTjDf499)
 
 ---
 
