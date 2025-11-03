@@ -9,6 +9,13 @@ title: Developer Guide
 
 ## **Acknowledgements**
 
+#### Nihaal Manaf
+* Used Cursor to help write test cases for the find command! (model: Auto)
+* Used Cursor to help check for poor code quality in play like DRY (model: Auto)
+* Used Cursor for error checking, debugging in general(model: Auto)
+* Used Cursor to help understand the codebase architecture pattern and understand how to implement status view and tag view (model: Sonnet 4.5)
+* Used Cursor to build the tag view plane and status view plane in sidebar panel! (model: Auto)
+
 Sean Hardjanto
 * Used Copilot to write test cases for delete and template (Claude Sonnet 4.5)
 * Used Copilot to check and write JavaDoc comments for delete and template methods (Claude Sonnet 4.5)
@@ -1256,4 +1263,4 @@ testers are expected to do more *exploratory* testing.
       Expected: Error message indicating invalid command format.
 
    1. Other test cases to try: `find p:9876`, `find e:example.com`, `find n:alex david` (multiple keywords), `find s:Invalid` (invalid status)<br>
-      Expected: Appropriate results or empty list!
+      Expected: Error thrown or empty list!
