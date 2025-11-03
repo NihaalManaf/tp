@@ -90,7 +90,7 @@ Adds a person to the address book.
 
 **Parameters:**
 
-- `n:NAME` - The full name of the contact (required, only contains letters, numbers, spaces, and symbols such as hyphens, apostrophes, commas, slashes and periods)
+- `n:NAME` - The full name of the contact (required, contains letters, numbers, spaces, and symbols such as hyphens, apostrophes, commas, slashes and periods)
 - `p:PHONE_NUMBER` - The phone number (required)
 - `e:EMAIL` - The email address (required)
 - `a:ADDRESS` - The physical address (optional, max 200 characters)
