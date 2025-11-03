@@ -1,0 +1,52 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box External #white
+actor User as user
+end box
+
+box Logic LOGIC_COLOR_T1
+participant ":LogicManager" as logic LOGIC_COLOR
+participant ":AddressBookParser" as abp LOGIC_COLOR
+participant ":ImportCommand" as ic LOGIC_COLOR
+participant ":ClipboardProvider" as clipboard LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant ":Model" as model MODEL_COLOR
+end box
+
+box Storage STORAGE_COLOR_T1
+participant ":JsonAddressBookUtil" as jabu STORAGE_COLOR
+end box
+
+user -> logic : execute("import")
+activate logic
+logic -> abp : parseCommand("import")
+activate abp
+abp -> ic : ImportCommand()
+activate ic
+ic --> abp : ImportCommand
+deactivate ic
+abp --> logic : ImportCommand
+deactivate abp
+logic -> ic : execute(model)
+activate ic
+ic -> clipboard : getString()
+activate clipboard
+clipboard --> ic : jsonString
+deactivate clipboard
+ic -> jabu : readAddressBookFromJsonString(jsonString)
+activate jabu
+jabu --> ic : AddressBook
+deactivate jabu
+ic -> model : setAddressBook(AddressBook)
+activate model
+model --> ic : void
+deactivate model
+ic --> logic : CommandResult
+deactivate ic
+logic --> user : "Imported address book data from clipboard."
+deactivate logic
+@enduml

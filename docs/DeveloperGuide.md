@@ -4,7 +4,7 @@ title: Developer Guide
 ---
 
 - Table of Contents
-  {:toc}
+{:toc}
 
 ---
 
@@ -27,6 +27,13 @@ title: Developer Guide
 * Used Copilot to check and write JavaDoc comments for delete and template methods (Claude Sonnet 4.5)
 * Used Copilot to scan code for areas of code to increase code quality (Claude Sonnet 4.5)
 * Used Copilot to assist with debugging of code (Claude Sonnet 4.5)
+
+#### Poh Anson
+
+* Used Copilot to help with the writing and refinement of the testcases and JavaDoc (Claude Sonnet 4.5)
+* Used Copilot to help to check for coding standards violation, poor code quality and suggestions for improvements of the code base, as well as documentations. (Claude Sonnet 4.5)
+* Used Copilot to help debug the code when I am stuck (Claude 4.5)
+
 
 ---
 
@@ -232,29 +239,43 @@ The following sequence diagram shows how the view states are updated when a user
 
 - **Alternative 1 (Chosen):** Use explicit state objects (`StatusViewState`, `TagsViewState`) to track user intent
 
-  - Pros: UI displays what the user explicitly searched for (intent), not just the consequence. Handles edge cases where multiple filter combinations produce the same result. Clear separation of concerns.
-  - Cons: Additional state management complexity, requires synchronization between filter predicates and view states
+  - Pros:
+      - UI displays what the user explicitly searched for (intent), not just the consequence. Handles edge cases where multiple filter combinations produce the same result. Clear separation of concerns.
+  - Cons:
+      - Additional state management complexity, requires synchronization between filter predicates and view states.
 
 - **Alternative 2:** Derive view state from `FilteredPersonList`
-  - Pros: Single source of truth, no state synchronization needed, simpler implementation
-  - Cons: UI displays consequence rather than intent. For example, if a user searches for `s:Contacted` but no customers have that status, the filtered list would be empty and the UI couldn't distinguish whether filters were applied or not. Cannot accurately determine which specific filters were applied if multiple filter combinations produce the same filtered list.
+  - Pros:
+      - Single source of truth, no state synchronization needed, simpler implementation.
+  - Cons:
+      - UI displays consequence rather than intent. For example, if a user searches for `s:Contacted` but no customers have that status, the filtered list would be empty and the UI couldn't distinguish whether filters were applied or not.
+      - Cannot accurately determine which specific filters were applied if multiple filter combinations produce the same filtered list.
 
 **Aspect: How to communicate filter state to UI**
 
 - **Alternative 1:** Direct UI method calls from Command classes
-  - Pros: Simpler to understand, explicit control flow
-  - Cons: Violates architectural boundaries (Logic calling UI directly) and tight coupling!!
+  - Pros:
+      - Simpler to understand.
+      - Explicit control flow.
+  - Cons:
+      - Violates architectural boundaries (Logic calling UI directly) and tight coupling.
 
 **Aspect: Where to store view state**
 
 - **Alternative 1 (Chosen):** Store in `Model` layer
 
-  - Pros: Centralized state management, follows MVC pattern, testable
-  - Cons: Model becomes slightly more complex
+  - Pros:
+      - Centralized state management, follows MVC pattern.
+      - Greater Testability as we can mock the data.
+  - Cons:
+      - Model becomes slightly more complex.
 
 - **Alternative 2:** Store in UI components only
-  - Pros: Simpler Model layer
-  - Cons: State is scattered, harder to test, UI must deduce state from filtered list
+  - Pros:
+      - Simpler Model layer.
+  - Cons:
+      - State is scattered.
+      - Harder to test, UI must deduce state from filtered list.
 
 ### Template Feature
 
@@ -314,7 +335,7 @@ The following sequence diagram shows how the template save operation works:
 
 ![TemplateSaveSequenceDiagram](images/TemplateSaveSequenceDiagram.png)
 
-Step 5. The salesperson can also copy a template directly to the clipboard without opening the editor by executing `copy s:CONTACTED`. This reads the template and places it on the system clipboard for pasting into an email client.
+Step 5. The salesperson can also copy a template directly to the clipboard without opening the editor by executing `template copy s:CONTACTED`. This reads the template and places it on the system clipboard for pasting into an email client.
 
 ![TemplateState4](images/TemplateState4.png)
 
@@ -350,74 +371,84 @@ The template system includes automatic handling of blank or invalid template con
 * `TemplateCommand.executeSave()` detects blank content to show appropriate user feedback
 * All operations maintain consistency across template copy, open, and save workflows
 
-#### Design considerations:
+#### Design Considerations
 
-**Aspect: How templates are stored:**
+**Aspect: How templates are stored**
 
-- **Alternative 1 (current choice):** Store each template as a separate text file per status.
+- **Alternative 1 (current choice):** Store each template as a separate text file per status
 
-  - Pros: Simple to implement, easy to manually edit templates outside the application, human-readable format.
-  - Cons: Requires file I/O for each template operation, potential for file system errors.
+  - Pros:
+      - Simple to implement
+      - Easy to manually edit templates outside the application
+      - Human-readable format.
+  - Cons:
+      - Requires file I/O for each template operation, more potential for file system errors.
 
-- **Alternative 2:** Store all templates in a single JSON file.
-  - Pros: Single file to manage, consistent with address book storage format, easier to backup.
-  - Cons: More complex serialization/deserialization, harder for users to manually edit, risk of corrupting all templates if JSON is malformed.
+- **Alternative 2:** Store all templates in a single JSON file
+  - Pros:
+      - Single file to manage, consistent with address book storage format, easier to backup.
+  - Cons:
+      - More complex serialization/deserialization.
+      - Harder for users to manually edit, risk of corrupting all templates if JSON is malformed.
 
 **Aspect: When to save template changes:**
 
-- **Alternative 1 (current choice):** Require explicit `template save` command.
+- **Alternative 1 (current choice):** Require explicit `template save` command
 
-  - Pros: Gives users control over when changes are persisted, prevents accidental overwrites, clear user intent.
-  - Cons: Users might forget to save and lose their edits.
+  - Pros:
+      - Gives users control over when changes are persisted, prevents accidental overwrites.
+  - Cons:
+      - Users might forget to save and lose their edits.
 
-- **Alternative 2:** Auto-save on every keystroke or after a delay.
-  - Pros: No risk of losing work, more convenient for users.
-  - Cons: May cause performance issues with frequent file I/O, harder to implement "cancel" functionality, could save incomplete/incorrect templates.
+- **Alternative 2:** Auto-save on every keystroke or after a delay
+  - Pros:
+      - No risk of losing work, more convenient for users.
+  - Cons:
+      - May cause performance issues with frequent file I/O
+      - Harder to implement "cancel" functionality, causing user to save incomplete/incorrect templates.
 
 **Aspect: Template editor vs. clipboard copy:**
 
-- **Current implementation:** Provides both `template s:STATUS` (opens editor) and `copy s:STATUS` (direct clipboard copy).
+- **Current implementation:** Provides both `template s:STATUS` (opens editor) and `template copy s:STATUS` (direct clipboard copy)
 
-  - Pros: Flexibility for different workflows - edit for customization, copy for quick use.
-  - Cons: Two different commands to learn and maintain.
+  - Pros:
+      - Flexibility for different workflows - edit for customization, copy for quick use.
+  - Cons:
+      - Two different commands to learn and maintain.
 
-- **Alternative:** Only provide editor, remove direct copy command.
-  - Pros: Simpler command set, encourages review before sending.
-  - Cons: Less efficient for users who want to quickly copy without viewing.
+- **Alternative:** Only provide editor, remove direct copy command
+  - Pros:
+      - Simpler command set, encourages review before sending
+  - Cons:
+      - Less efficient for users who want to quickly copy without viewing.
 
 **Aspect: How to handle blank/empty template content:**
 
-- **Alternative 1 (current choice):** Automatically replace blank content with default template.
+- **Alternative 1 (current choice):** Automatically replace blank content with default template
 
-  - Pros: Prevents accidental deletion of templates, ensures meaningful content always exists, provides clear fallback behavior, maintains data integrity across all operations.
-  - Cons: Users cannot intentionally create truly empty templates, slightly more complex implementation with validation in both read and write paths.
+  - Pros:
+      - Prevents accidental deletion of templates, ensures meaningful content always exists.
+      - Provides clear fallback behavior, maintains data integrity across all operations.
+  - Cons:
+      - Users cannot intentionally create truly empty templates.
+      - Slightly more complex implementation with validation in both read and write paths.
 
-- **Alternative 2:** Allow saving and storing blank templates.
+- **Alternative 2:** Allow saving and storing blank templates
 
   - Pros: Simpler implementation, gives users complete control, allows intentional blank templates.
   - Cons: Users could accidentally delete all content and lose their work, template copy operations would copy whitespace/empty content (confusing UX), no clear indication when template is blank vs. intentionally empty, violates principle of least surprise.
 
-- **Alternative 3:** Prevent saving blank templates with error message.
-  - Pros: Prevents data loss, clear user feedback about invalid input.
-  - Cons: Frustrating UX when users want to reset to default (would need separate command), doesn't handle externally-modified files with blank content, no automatic recovery from corrupted template files.
-
-**Aspect: How to handle blank/empty template content:**
-
-* **Alternative 1 (current choice):** Automatically replace blank content with default template.
-  * Pros: Prevents accidental deletion of templates, ensures meaningful content always exists, provides clear fallback behavior, maintains data integrity across all operations.
-  * Cons: Users cannot intentionally create truly empty templates, slightly more complex implementation with validation in both read and write paths.
-
-* **Alternative 2:** Allow saving and storing blank templates.
-  * Pros: Simpler implementation, gives users complete control, allows intentional blank templates.
-  * Cons: Users could accidentally delete all content and lose their work, template copy operations would copy whitespace/empty content (confusing UX), no clear indication when template is blank vs. intentionally empty, violates principle of least surprise.
-
-* **Alternative 3:** Prevent saving blank templates with error message.
-  * Pros: Prevents data loss, clear user feedback about invalid input.
-  * Cons: Frustrating UX when users want to reset to default (would need separate command), doesn't handle externally-modified files with blank content, no automatic recovery from corrupted template files.
+- **Alternative 3:** Prevent saving blank templates with error message
+  - Pros:
+      - Prevents data loss.
+      - Clear user feedback about invalid input.
+  - Cons:
+      - Frustrating UX when users want to reset to default (would need separate command).
+      - Doesn't handle externally-modified files with blank content, no automatic recovery from corrupted template files.
 
 ### Status Feature
 
-#### Implementation
+#### Implementation Details
 
 The status command feature allows users to set and track the contact status of each person in the address book. The status command is facilitated by the `SetStatusCommand` class which implements the `Command` interface. It allows users to mark contacts with predefined statuses. The only valid statuses are: "Uncontacted", "Contacted", "Rejected", "Accepted", "Unreachable", and "Busy".
 
@@ -477,21 +508,25 @@ The status command is executed through the following sequence of steps:
 - **Alternative 1 (current choice)**: Default to "Uncontacted" for empty/null input
 
   - Pros:
-    - Consistent with the use case of tracking initial contact status
-    - Prevents null status values
+    - Consistent with the use case of tracking initial contact status.
+    - Prevents null status values.
   - Cons:
-    - May not be intuitive that empty input has a default value
+    - May not be intuitive that empty input has a default value.
 
 - **Alternative 2**: Require explicit status input
   - Pros:
-    - More explicit - users must state their intention
-    - Prevents accidental status changes
+    - More explicit - users must state their intention.
+    - Prevents accidental status changes.
   - Cons:
-    - More inconvenient for salespeople when they want to reset everyone's status (e.g. when starting a new sale)
+    - More inconvenient for salespeople when they want to reset everyone's status (e.g. when starting a new sale).
 
-### Export Command
+### Sharing of Contacts
 
-#### Implementation
+The sharing of contact is required to support team collaboration workflows where managers distribute lead lists or team members share contact databases. The sharing is done via a 2-step process, **exporting** the contact and **importing** it into the app as shown by the activity diagram:
+
+![Import/Export Activity Diagram](images/ImportExportActivityDiagram.png)
+
+#### Export Implementation Details
 
 The export command allows users to export the address book data in JSON format to the system clipboard. It is implemented through the `ExportCommand` class and supported by two key interfaces:
 
@@ -523,57 +558,14 @@ The typical flow of operations is:
 7.  The content is then copied to the system clipboard using the `ClipboardProvider`.
 8.  A `CommandResult` is returned and displayed to the user.
 
-#### Design Considerations
-
-**Aspect: Export Format**
-
-- **Alternative 1 (current choice)**: Use JSON format
-
-  - Pros:
-    - Standard format with wide tool support
-    - Human-readable
-    - Preserves data structure
-  - Cons:
-    - Larger size compared to binary formats, might be too large for some systems' clipboard to handle
-    - May expose sensitive data in readable form
-
-- **Alternative 2**: Use binary format
-  - Pros:
-    - More compact
-    - Data not human-readable (better for sensitive information)
-  - Cons:
-    - Requires special tools to read/edit
-    - Less interoperable with other systems
-
-**Aspect: Export Destination**
-
-- **Alternative 1 (current choice)**: Export contacts directly to clipboard
-
-  - Pros:
-    - Convenient for both backup and sharing
-    - Easier for salespeople to use, since they may not be familiar with how to locate save files
-  - Cons:
-    - More complex implementation
-    - More code to maintain
-
-- **Alternative 2**: Direct user to storage file
-  - Pros:
-    - Simpler implementation
-  - Cons:
-    - Less convenient for quick sharing
-    - Requires file system access and understanding
-
-### Import Feature
-
-#### Implementation
+#### Import Implementation Details
 
 The import feature enables salespersons to share address book data between team members via the system clipboard. This supports team collaboration workflows where managers distribute lead lists or team members share contact databases.
 
-The import mechanism is facilitated by `ImportCommand`, and `ClipboardProvider`. It uses the following key components:
+The import mechanism is facilitated by `ImportCommand` and `ClipboardProvider`. It uses the following key components:
 
 - `ImportCommand` — Reads JSON from clipboard and replaces the current address book
 - `ClipboardProvider` — Abstraction for clipboard operations (enables testing with mock clipboard)
-- `FileSystemProvider` — Abstraction for file system operations (enables testing without actual file I/O)
 - `JsonAddressBookUtil` — Utility for JSON serialization/deserialization
 - `ImportWindow` — UI window for previewing import data before confirming
 
@@ -581,29 +573,79 @@ The following activity diagram illustrates the complete workflow of sharing cont
 
 ![Import/Export Activity Diagram](images/ImportExportActivityDiagram.png)
 
+The sequence diagram below shows the execution flow of the import command:
+
+![Import Command Sequence Diagram](images/ImportCommandSequenceDiagram.png)
+
+The typical flow of operations is:
+
+1.  User executes the `import` command.
+2.  `LogicManager` calls `AddressBookParser` which creates an `ImportCommand`.
+3.  The `execute()` method of `ImportCommand` is called.
+4.  The command retrieves JSON data from the clipboard using `ClipboardProvider`.
+5.  The JSON content is validated and parsed into an `AddressBook` object using `JsonAddressBookUtil`.
+6.  The `Model` is updated with the new `AddressBook`, replacing the existing data.
+7.  A `CommandResult` is returned and displayed to the user.
+
 #### Design Considerations
+
+**Aspect: Export/Import Format**
+
+- **Alternative 1 (current choice)**: Use JSON format
+
+  - Pros:
+    - Standard format with wide tool support.
+    - Human-readable.
+    - Preserves data structure.
+  - Cons:
+    - Larger size compared to binary formats, might be too large for some systems' clipboard to handle.
+    - May expose sensitive data in readable form.
+
+- **Alternative 2**: Use binary format
+  - Pros:
+    - More compact.
+    - Data not human-readable (better for sensitive information).
+  - Cons:
+    - Requires special tools to read/edit.
+    - Less interoperable with other systems.
 
 **Aspect: Clipboard vs file-based import**
 
-- **Alternative 1 (current choice):** Use system clipboard for data transfer.
+- **Alternative 1 (current choice)**: Using system clipboard for data transfer
 
-  - Pros: Quick and convenient. Works across different file systems and network drives. No file permissions issues. Platform-independent.
-  - Cons: Large address books might exceed clipboard limits. Data is not persisted if clipboard is cleared. However, we accept this as a trade-off because clipboard should not be used for persistence.
+  - Pros:
+    - Convenient for both backup and sharing.
+    - Easier for salespeople to use, since they may not be familiar with how to locate the data files.
+    - Do not have to deal with the various OS file system.
+  - Cons:
+    - More complex implementation, compared to just reading the file.
+    - Large address books might exceed clipboard limits.
+    - Data is not persisted if clipboard is cleared. However, we accept this as a trade-off because clipboard should not be used for persistence.
 
-- **Alternative 2:** Export/import via file selection dialog.
-  - Pros: Better for very large datasets. Persistent storage.
-  - Cons: Slower workflow. Requires file system navigation. Path/permission issues. Reliance on the operating system's implementation makes it hard to ensure that it would be bug-free, and violates the constraints.
+- **Alternative 2**: Export/import via file selection dialog
+  - Pros:
+    - Simpler implementation. Just select and return the file.
+    - Better for very large datasets.
+  - Cons:
+    - Less convenient for quick sharing.
+    - Requires file system access.
+    - Reliance on the operating system's implementation, making it hard to ensure that it would be bug-free, and violates the constraints.
 
 **Aspect: Import replaces vs merges**
 
-- **Alternative 1 (current choice):** Import replaces entire address book.
+- **Alternative 1 (current choice):** Import replaces entire address book
 
-  - Pros: Simple and predictable behavior. No duplicate handling needed. Clean state after import.
-  - Cons: Destructive operation - loses current data if not exported first. Since sharing of contact is done to allocate the salesperson their new assignment contacts, this behaviour is acceptable.
+  - Pros:
+      - Simple and predictable behavior. No data update conflict handling is required.
+      - Easier to implement within the short timeframe.
+  - Cons:
+      - Destructive operation loses current data if not exported first. Since sharing of contact is done to allocate the salesperson their new assignment contacts, this behaviour is acceptable.
 
-- **Alternative 2:** Merge imported contacts with existing ones.
-  - Pros: Non-destructive. Allows incremental updates.
-  - Cons: Complex duplicate detection and resolution. Unclear user expectations for what is considered a conflict or a new entry.
+- **Alternative 2:** Merge imported contacts with existing ones
+  - Pros:
+      - No data is lost, allowing incremental updates.
+  - Cons:
+      - Complex duplicate detection and resolution. Unclear user expectations for what is considered a conflict or a new entry.
 
 ---
 
@@ -1088,50 +1130,51 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 * **Case-insensitive**: String matching that ignores letter casing (e.g., "John" matches "joHn", "JOHN").
 * **CLI (Command-Line Interface)**: Text-based user interface where users type commands. Parsed by `AddressBookParser` and individual `XYZCommandParser` classes.
 * **Clipboard**: System clipboard abstracted through the `ClipboardProvider` interface. Allows copying templates and address book data for external use. Production code uses `SystemClipboardProvider`, tests use stubs.
+* **ClipboardProvider**: An abstraction/interface for operations that interact with the system clipboard (e.g. for copying contacts information or templates programmatically).
 * **Command**: An executable object representing a user action. All commands extend the abstract `Command` class and implement `execute(Model)`. Examples: `AddCommand`, `DeleteCommand`, `TemplateCommand`.
+* **CommandBox**: The text input area in the UI where users enter commands.
 * **CommandResult**: Encapsulates the outcome of command execution. Contains success/error message and flags indicating UI actions (e.g., `isShowHelp`, `isExit`, `isShowTemplate`).
 * **Contact**: Refers to a `Person` object in the domain model. Used interchangeably with "Person" in documentation.
 * **Email Template**: Persistent text content associated with a `Status` enum value. Stored in JSON files by `TemplateStorage` and managed via `TemplateCommand`.
 * **Export/Import**: Features to serialise/deserialise the entire `AddressBook` to/from clipboard as a JSON formatted string. Uses `JsonAddressBookUtil` for conversion. Enables easier data sharing between users.
+* **FileSystemProvider**: Interface that abstracts file read/write operations from the file system for portability and testing.
 * **Filter**: Applying a `Predicate<Person>` to the `filteredPersons` observable list in `Model`. Updates the UI to show only matching contacts.
 * **GUI (Graphical User Interface)**: The JavaFX-based visual interface. Implemented in the `UI` component with FXML layouts and corresponding controller classes.
+* **ImportWindow**: A separate UI window dedicated to importing customer data from the clipboard, allowing preview or validation before adding contacts.
 * **Index**: A 1-based position reference used in commands to identify contacts in the displayed list. Internally converted to 0-based for `List` operations. Represented by the `Index` class.
+* **JsonAddressBookUtil**: A utility class that handles conversion (serialization/deserialization) between Address Book data structures and JSON format.
+* **LogicManager**: The concrete implementation of the application’s Logic component. Orchestrates command parsing, command execution, and data flow between UI and Model.
 * **Mainstream OS**: Windows, Linux, MacOS - target platforms for the application.
+* **MainWindow**: The primary application window in the UI, containing CommandBox, PersonListPanel, SidebarPanel, and other subcomponents.
 * **Model**: The component responsible for holding application data in memory. Manages `AddressBook`, `UserPrefs`, and filtered lists. Exposes data through `ObservableList` for reactive UI updates.
+* **ModelManager**: The main implementation of the `Model` interface. Manages, updates, and exposes application data in-memory and propagates property changes to the UI.
+* **ObservableList**: A JavaFX collection that notifies listeners about changes (additions, removals, updates). Used to keep the UI view synchronized with app data in real time.
+* **ObjectProperty**: A JavaFX property type that holds and notifies changes to a single object, supporting binding and listeners for UI updates.
 * **Observer Pattern**: Design pattern used to keep UI synchronized with Model. JavaFX `ObservableList` and `ObjectProperty` notify listeners (UI components) when data changes.
 * **Parameter**: Command argument specified with a prefix (e.g., `n:NAME`, `p:PHONE`). Parsed by `ArgumentTokenizer` which splits input into `ArgumentMultimap`.
 * **Parser**: Class responsible for converting user input strings into `Command` objects. All parsers implement the `Parser` interface.
 * **PDPA (Personal Data Protection Act)**: Singapore's data protection regulation. Application supports compliance through bulk deletion and data export features.
+* **PersonListPanel**: The panel or list view in the UI that displays all persons/contacts matching the current list or filter.
 * **Predicate**: A functional interface representing a boolean-valued function. Used extensively for filtering (e.g. `PersonMatchesKeywordsPredicate`, `NameContainsKeywordsPredicate`).
 * **Prefix**: A `Prefix` object (e.g., `PREFIX_NAME`, `PREFIX_PHONE`) used by parsers to identify parameter types. Defined in `CliSyntax`.
+* **ResultDisplay**: A UI box or output panel that shows feedback, messages, and results to users following command execution.
+* **SidebarPanel**: A UI panel that contains and displays active filters; houses the StatusViewPanel and TagsViewPanel.
 * **Status**: An enum-like class representing contact lifecycle states (Contacted, Rejected, Accepted, Unreachable, Busy, Uncontacted). Used for filtering and template association.
+* **StatusViewPanel**: UI component that displays the list of currently active status filters applied (e.g., via find command).
+* **StatusViewState**: Model object representing the current state of selected or displayed status filters for UI update.
 * **Storage**: The component handling data persistence. Implements both `AddressBookStorage` and `UserPrefStorage` interfaces. Uses JSON format.
-* **Template Storage**: Subsystem for persisting email templates. Uses `TemplateStorage` interface with file-based implementation (`TemplateStorageManager`). Templates stored as individual files per status.
-* **UI Component**: JavaFX-based view layer. Inherits from `UiPart` base class. FXML files in `resources/view` define layouts, Java classes handle logic.
-* **UniquePersonList**: Internal data structure in `AddressBook` that ensures no duplicate persons. Duplicates determined by `Person#isSamePerson()` method.
-* **Validation**: Input checking performed by parsers and domain objects. For example, `Phone` validates format, `Email` validates structure. Throws `ParseException` or `IllegalArgumentException` on invalid input.
-* **ObservableList**: A JavaFX collection that notifies listeners about changes (additions, removals, updates). Used to keep the UI view synchronized with app data in real time.
-* **ObjectProperty**: A JavaFX property type that holds and notifies changes to a single object, supporting binding and listeners for UI updates.
-* **ClipboardProvider**: An abstraction/interface for operations that interact with the system clipboard (e.g. for copying contacts information or templates programmatically).
-* **FileSystemProvider**: Interface that abstracts file read/write operations from the file system for portability and testing.
 * **SystemClipboardProvider**: The production implementation of `ClipboardProvider` that interacts with the real system clipboard on the user’s OS.
 * **SystemFileSystemProvider**: The production implementation of `FileSystemProvider` that uses the local file system for file operations.
-* **JsonAddressBookUtil**: A utility class that handles conversion (serialization/deserialization) between Address Book data structures and JSON format.
-* **UiPart**: Abstract Java class that defines common logic for UI components/parts (JavaFX controls) in the app. All custom UI views inherit from this base class
-* **ModelManager**: The main implementation of the `Model` interface. Manages, updates, and exposes application data in-memory and propagates property changes to the UI.
-* **MainWindow**: The primary application window in the UI, containing CommandBox, PersonListPanel, SidebarPanel, and other subcomponents.
-* **CommandBox**: The text input area in the UI where users enter commands.
-* **ImportWindow**: A separate UI window dedicated to importing customer data from the clipboard, allowing preview or validation before adding contacts.
-* **SidebarPanel**: A UI panel that contains and displays active filters; houses the StatusViewPanel and TagsViewPanel.
-* **StatusViewPanel**: UI component that displays the list of currently active status filters applied (e.g., via find command).
 * **TagsViewPanel**: UI component that displays the list of currently active tag filters applied (e.g., via find command).
-* **TemplateViewPanel**: UI component that allows users to create, edit, and view email templates corresponding to customer statuses.
-* **StatusViewState**: Model object representing the current state of selected or displayed status filters for UI update.
 * **TagsViewState**: Model object representing the current state of selected or displayed tag filters for UI update.
+* **Template Storage**: Subsystem for persisting email templates. Uses `TemplateStorage` interface with file-based implementation (`TemplateStorageManager`). Templates stored as individual files per status.
+* **TemplateViewPanel**: UI component that allows users to create, edit, and view email templates corresponding to customer statuses.
 * **TemplateViewState**: Model object representing which template is being edited, along with its content, for template editor synchronization.
-* **ResultDisplay**: A UI box or output panel that shows feedback, messages, and results to users following command execution.
-* **PersonListPanel**: The panel or list view in the UI that displays all persons/contacts matching the current list or filter.
-* **LogicManager**: The concrete implementation of the application’s Logic component. Orchestrates command parsing, command execution, and data flow between UI and Model.
+* **UI Component**: JavaFX-based view layer. Inherits from `UiPart` base class. FXML files in `resources/view` define layouts, Java classes handle logic.
+* **UiPart**: Abstract Java class that defines common logic for UI components/parts (JavaFX controls) in the app. All custom UI views inherit from this base class
+* **UniquePersonList**: Internal data structure in `AddressBook` that ensures no duplicate persons. Duplicates determined by `Person#isSamePerson()` method.
+* **UX**: User Experience. How the user feels when interacting with the system.
+* **Validation**: Input checking performed by parsers and domain objects. For example, `Phone` validates format, `Email` validates structure. Throws `ParseException` or `IllegalArgumentException` on invalid input.
 
 --------------------------------------------------------------------------------------------------------------------
 
