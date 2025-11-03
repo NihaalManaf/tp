@@ -1342,3 +1342,11 @@ testers are expected to do more *exploratory* testing.
 
    1. Other test cases to try: `find p:9876`, `find e:example.com`, `find n:alex david` (multiple keywords), `find s:Invalid` (invalid status)<br>
       Expected: Error thrown or empty list!
+
+## **Appendix: Planned Enhancements**
+
+### Better Phone Number Validation
+
+Because the app is platform‑independent, we cannot reliably determine the user’s region to infer a default country code. Additionally, telephone numbers vary widely from country to country, with varying length of country codes and local numbers. Hence, implementing robust parsing without third‑party libraries is out of scope for this release. For example, `+355` is considered as a valid number by our application, but in reality, it is invalid as all 3 digits are used for the country code.
+
+We plan to be able to implement a better phone validation customised to the country code, if provided. Additionally, we plan to infer a reasonable default country code from the device locale or user settings, so that we could better check for duplicate numbers by removing the country code prefix.
