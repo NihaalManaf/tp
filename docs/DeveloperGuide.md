@@ -10,22 +10,18 @@ title: Developer Guide
 
 ## **Acknowledgements**
 
-Nihaal Manaf
+#### Nihaal Manaf
+* Used Cursor to help write test cases for the find command! (model: Auto)
+* Used Cursor to help check for poor code quality in play like DRY (model: Auto)
+* Used Cursor for error checking, debugging in general(model: Auto)
+* Used Cursor to help understand the codebase architecture pattern and understand how to implement status view and tag view (model: Sonnet 4.5)
+* Used Cursor to build the tag view plane and status view plane in sidebar panel! (model: Auto)
 
-- Used Cursor to help write test cases for the find command! (model: Auto)
-- Used Cursor to help check for poor code quality in play like DRY (model: Auto)
-- Used Cursor for error checking, debugging in general(model: Auto)
-- Used Cursor to help understand the codebase architecture pattern and understand how to implement status view and tag view (model: Sonnet 4.5)
-- Used Cursor to build the tag view plane and status view plane in sidebar panel! (model: Auto)
-
----
-
-Sean Hardjanto
-
-- Used Copilot to write test cases for delete and template (Claude Sonnet 4.5)
-- Used Copilot to check and write JavaDoc comments for delete and template methods (Claude Sonnet 4.5)
-- Used Copilot to scan code for areas of code to increase code quality (Claude Sonnet 4.5)
-- Used Copilot to assist with debugging of code (Claude Sonnet 4.5)
+#### Sean Hardjanto
+* Used Copilot to write test cases for delete and template (Claude Sonnet 4.5)
+* Used Copilot to check and write JavaDoc comments for delete and template methods (Claude Sonnet 4.5)
+* Used Copilot to scan code for areas of code to increase code quality (Claude Sonnet 4.5)
+* Used Copilot to assist with debugging of code (Claude Sonnet 4.5)
 
 ---
 
@@ -148,11 +144,12 @@ How the parsing works:
 
 The `Model` component,
 
-- stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
-- stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
-- stores a `UserPrefs` object that represents the user's preferences. This is exposed to the outside as `ReadOnlyUserPrefs` objects.
-- stores view state objects (`StatusViewState`, `TagsViewState`, `TemplateViewState`) as observable properties that track the current UI filter and display states. These are exposed as `ReadOnlyObjectProperty` instances that the UI can observe for reactive updates.
-- does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
+* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
+* stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
+* stores a `UserPrefs` object that represents the user's preferences. This is exposed to the outside as `ReadOnlyUserPrefs` objects.
+* stores view state objects (`StatusViewState`, `TagsViewState`, `TemplateViewState`) as observable properties that track the current UI filter and display states. These are exposed as `ReadOnlyObjectProperty` instances that the UI can observe for reactive updates.
+* does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
+
 
 ### Storage component
 
@@ -328,30 +325,26 @@ The template feature supports all six contact statuses (UNCONTACTED, CONTACTED, 
 The template system includes automatic handling of blank or invalid template content to ensure data integrity:
 
 **Default Templates:**
-
-- Each status has a default template in the format: "This is the default template for status [StatusName]"
-- Default templates are automatically created when:
+* Each status has a default template in the format: "This is the default template for status [StatusName]"
+* Default templates are automatically created when:
   - A template file doesn't exist for a status
   - A template file contains only whitespace or is empty
   - A user attempts to save blank content
 
 **Blank Content Detection:**
-
-- The system checks for blank content (null, empty string, or whitespace-only) in two places:
+* The system checks for blank content (null, empty string, or whitespace-only) in two places:
   1. **During Save (`saveTemplate`)**: When a user saves a template with blank content, it's automatically replaced with the default template
   2. **During Read (`readTemplate`)**: When reading a template file that contains blank content, the file is replaced with the default template
 
 **User Feedback:**
-
-- When saving blank content, users see: "Detected empty template as input, saving as the default template instead."
-- This prevents accidental deletion of templates and ensures meaningful content is always available
+* When saving blank content, users see: "Detected empty template as input, saving as the default template instead."
+* This prevents accidental deletion of templates and ensures meaningful content is always available
 
 **Implementation Details:**
-
-- `TemplateStorageManager.saveTemplate()` uses `String.isBlank()` to detect blank content before writing
-- `TemplateStorageManager.readTemplate()` validates file content after reading and replaces blank files
-- `TemplateCommand.executeSave()` detects blank content to show appropriate user feedback
-- All operations maintain consistency across template copy, open, and save workflows
+* `TemplateStorageManager.saveTemplate()` uses `String.isBlank()` to detect blank content before writing
+* `TemplateStorageManager.readTemplate()` validates file content after reading and replaces blank files
+* `TemplateCommand.executeSave()` detects blank content to show appropriate user feedback
+* All operations maintain consistency across template copy, open, and save workflows
 
 #### Design considerations:
 
@@ -403,6 +396,20 @@ The template system includes automatic handling of blank or invalid template con
 - **Alternative 3:** Prevent saving blank templates with error message.
   - Pros: Prevents data loss, clear user feedback about invalid input.
   - Cons: Frustrating UX when users want to reset to default (would need separate command), doesn't handle externally-modified files with blank content, no automatic recovery from corrupted template files.
+
+**Aspect: How to handle blank/empty template content:**
+
+* **Alternative 1 (current choice):** Automatically replace blank content with default template.
+  * Pros: Prevents accidental deletion of templates, ensures meaningful content always exists, provides clear fallback behavior, maintains data integrity across all operations.
+  * Cons: Users cannot intentionally create truly empty templates, slightly more complex implementation with validation in both read and write paths.
+
+* **Alternative 2:** Allow saving and storing blank templates.
+  * Pros: Simpler implementation, gives users complete control, allows intentional blank templates.
+  * Cons: Users could accidentally delete all content and lose their work, template copy operations would copy whitespace/empty content (confusing UX), no clear indication when template is blank vs. intentionally empty, violates principle of least surprise.
+
+* **Alternative 3:** Prevent saving blank templates with error message.
+  * Pros: Prevents data loss, clear user feedback about invalid input.
+  * Cons: Frustrating UX when users want to reset to default (would need separate command), doesn't handle externally-modified files with blank content, no automatic recovery from corrupted template files.
 
 ### Status Feature
 
@@ -765,6 +772,7 @@ Use case ends.
 3a1. CMS indicates that no contacts are found.<br/>
 Use case ends.
 
+
 #### Use case: UC04 - Find customers by various criteria
 
 **System:** Contact Management System (CMS)
@@ -830,9 +838,10 @@ Use case ends.
 
 **Guarantees:**
 
-- Opening a template does not modify any data.
-- Template is saved only when the save command is explicitly issued.
-- If the template view is switched without saving, no changes are will be saved.
+* Opening a template does not modify any data.
+* Template is saved only when the save command is explicitly issued.
+* If the template view is switched without saving, no changes are will be saved.
+* Blank or whitespace-only content is automatically replaced with the default template.
 
 **MSS:**
 
@@ -855,17 +864,15 @@ Use case ends.
 2a1. CMS indicates that an error has happened.<br/>
 Use case ends.
 
-3a. No template exists for the specified status.<br/>
-3a1. CMS displays an empty template.<br/>
-Use case resumes from step 4.
 3a. No template exists for the specified status, or the template file contains only blank/whitespace content.<br/>
-3a1. CMS displays the default template for that status.<br/>
-Use case resumes from step 4.
+   3a1. CMS displays the default template for that status.<br/>
+   Use case resumes from step 4.
 
 6a. Salesperson saves blank or whitespace-only content.<br/>
-6a1. CMS detects the blank content and saves the default template instead.<br/>
-6a2. CMS displays: "Detected empty template as input, saving as the default template instead."<br/>
-Use case ends.
+   6a1. CMS detects the blank content and saves the default template instead.<br/>
+   6a2. CMS displays: "Detected empty template as input, saving as the default template instead."<br/>
+   Use case ends.
+
 
 #### Use case: UC07 - Copy email template to clipboard
 
@@ -875,9 +882,9 @@ Use case ends.
 
 **Guarantees:**
 
-- Copying a template does not modify any data.
-- The template content is placed on the system clipboard.
-- If the template file is blank or contains only whitespace, the default template is copied instead.
+* Copying a template does not modify any data.
+* The template content is placed on the system clipboard.
+* If the template file is blank or contains only whitespace, the default template is copied instead.
 
 **MSS:**
 
@@ -894,9 +901,10 @@ Use case ends.
 2a1. CMS indicates that an error has happened.<br/>
 Use case ends.
 
-3a. No template exists for the specified status.<br/>
-3a1. CMS copies an empty string to the clipboard.<br/>
-Use case resumes from step 4.
+3a. No template exists for the specified status, or the template file contains only blank/whitespace content.<br/>
+   3a1. CMS retrieves the default template for that status and copies it to the clipboard.<br/>
+   Use case resumes from step 5.
+
 
 #### Use case: UC08 - Edit contact
 
