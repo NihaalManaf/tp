@@ -91,14 +91,14 @@ Adds a person to the address book.
 **Parameters:**
 
 - `n:NAME` - The full name of the contact (required, contains letters, numbers, spaces, and symbols such as hyphens, apostrophes, commas, slashes and periods)
-- `p:PHONE_NUMBER` - The phone number (required, consists of a single optional `+` at the start and numbers only)
+- `p:PHONE_NUMBER` - The phone number (required)
 - `e:EMAIL` - The email address (required)
 - `a:ADDRESS` - The physical address (optional, max 200 characters)
-- `s:STATUS` - The contact status (optional, one of: "Contacted", "Uncontacted", "Busy", "Rejected", "Accepted", "Unreachable"; defaults to "Uncontacted")
-- `t:TAG` - Tags for categorization (optional, can have multiple; must contain only alphanumeric characters with no spaces)
+- `s:STATUS` - The contact status (optional, defaults to "Uncontacted". Must be one of: "Contacted", "Uncontacted", "Busy", "Rejected", "Accepted", "Unreachable")
+- `t:TAG` - Tags for categorization (optional, can have any number of tag (including 0). Each tag consist of only lowercase alphanumeric characters not longer than 50 characters. None of the tag value can be empty. )
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
-A person can have any number of tags (including 0), but only 1 status (default: "Uncontacted")
+Person with the same phone number, is considered as duplicate and cannot be added. But we treat `+6598765432` and `98765432` as 2 different number, because they might not be in the same country code.
 </div>
 
 **Examples:**
@@ -438,10 +438,10 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** | `add n:NAME p:PHONE_NUMBER e:EMAIL a:ADDRESS [t:TAG]…​` <br> e.g., `add n:James Ho p:22224444 e:jamesho@example.com a:123, Clementi Rd, 1234665 t:friend t:colleague`
+**Add** | `add n:NAME p:PHONE_NUMBER e:EMAIL [a:ADDRESS] [s:STATUS] [t:TAG]…​` <br> e.g., `add n:James Ho p:22224444 e:jamesho@example.com a:123, Clementi Rd, 1234665 t:friend t:colleague`
 **Clear** | `clear`
 **Delete** | `delete INDEX [MORE_INDICES]...`<br> e.g., `delete 3` or `delete 1 2 3`
-**Edit** | `edit INDEX [n:NAME] [p:PHONE_NUMBER] [e:EMAIL] [a:ADDRESS] [t:TAG]…​`<br> e.g.,`edit 2 n:James Lee e:jameslee@example.com`
+**Edit** | `edit INDEX [n:NAME] [p:PHONE_NUMBER] [e:EMAIL] [a:ADDRESS] [s:STATUS] [t:TAG]…​`<br> e.g.,`edit 2 n:James Lee e:jameslee@example.com`
 **Status** | `status INDEX [STATUS]`<br> e.g. `status 4 busy`
 **Find** | `find KEYWORD [MORE_KEYWORDS]` OR `find [n:NAME] [t:TAG]... [s:STATUS] [p:PHONE] [e:EMAIL]`<br> e.g., `find John`, `find n:alice t:friends s:Contacted`
 **List** | `list`
