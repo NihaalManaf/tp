@@ -9,7 +9,7 @@ title: Developer Guide
 
 ## **Acknowledgements**
 
-
+#### Nihaal Manaf
 * Used Cursor to help write test cases for the find command! (model: Auto)
 * Used Cursor to help check for poor code quality in play like DRY (model: Auto)
 * Used Cursor for error checking, debugging in general(model: Auto)
