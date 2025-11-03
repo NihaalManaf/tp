@@ -3,7 +3,13 @@ layout: page
 title: User Guide
 ---
 
-AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized for use via a Command Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
+OnlySales is a **desktop app for managing contacts, optimised for Salespeople**, especially tech salespeople.
+What makes OnlySales unique is that it is a Command Line Interface-based (CLI) app. Essentially, what it means is
+that if you can type fast, OnlySales can get your contact management tasks done faster than traditional
+apps that need you to use a mouse.
+
+Whether you are on the go with your slim notebook or at home with your mechanical keyboard, OnlySales is
+your friend to help you close all those SALES, with ONLY your keyboard!
 
 - Table of Contents
 {:toc}
@@ -254,6 +260,10 @@ When you use `find t:friends s:Contacted`, the Tag view will highlight "friends"
 
 Deletes one or more persons from the address book.
 
+<div markdown="span" class="alert alert-danger">:exclamation: **Warning:**
+Deleting a contact is an irreversible process. Once deleted, the contact information cannot be recovered. Make sure you have exported your address book if you need a backup.
+</div>
+
 **Format:** `delete INDEX [MORE_INDICES]...`
 
 * Deletes the person(s) at the specified `INDEX` (and `MORE_INDICES` if provided).
@@ -262,6 +272,7 @@ Deletes one or more persons from the address book.
 * Multiple indices can be specified to delete multiple persons at once.
 * Indices can be provided in any order.
 * **All indices must be valid** - if any index is invalid, the command will fail and no persons will be deleted. The error message will show which specific indices are invalid.
+* **All indices must be unique** - if duplicate indices are detected, the command will fail and no persons will be deleted.
 
 **Examples:**
 * `list` followed by `delete 2` deletes the 2nd person in the address book.
@@ -269,10 +280,17 @@ Deletes one or more persons from the address book.
 * `delete 1 3 5` deletes the 1st, 3rd, and 5th persons in the displayed list.
 * `delete 4 2 6` deletes the 2nd, 4th, and 6th persons in the displayed list (order doesn't matter).
 * `delete 2 99` (when only 2 persons exist) will fail with error message "Invalid index(es) detected: 99" and no deletions will occur.
+* `delete 1 1 3` will fail with error message "Duplicate indices were detected! Please ensure all indices are unique." and no deletions will occur.
+
+![Delete Example](images/deleteSample.png)
 
 ### Managing email templates :
 
 Manages email templates for different contact statuses. You can open, edit, save, and copy templates to streamline your email communications.
+
+<div markdown="span" class="alert alert-info">:information_source: **Keyboard Navigation:**
+You can navigate between the command input box and the template editor using only your keyboard by pressing `Tab` to move to the template editor and `Shift + Tab` to return to the command input box (works on Windows, macOS, and Linux).
+</div>
 
 #### Opening a template for editing : `template s:STATUS`
 
@@ -285,11 +303,14 @@ Opens the template editor for a specific contact status.
 * Status is case-insensitive (e.g., `contacted`, `CONTACTED`, `Contacted` all work).
 * The template editor allows you to view and edit the email template.
 * Changes are not saved automatically - use `template save` to save your changes.
+* If no custom template exists for the status, a default template will be displayed (e.g., "This is the default template for status Contacted").
 
 **Examples:**
 * `template s:Contacted` opens the template editor for the "Contacted" status.
 * `template s:rejected` opens the template editor for the "Rejected" status.
 * `template s:BUSY` opens the template editor for the "Busy" status.
+
+![Status Template Example](images/statusTemplate.png)
 
 #### Saving the current template : `template save`
 
@@ -300,9 +321,14 @@ Saves the currently open template.
 * Saves any changes made to the template currently displayed in the template editor.
 * A template must be open (using `template s:STATUS`) before you can save.
 * If no template is currently open, an error message will be shown.
+* **Important:** If you save a template that contains only whitespace or is empty, it will be automatically replaced with the default template for that status.
+* When saving blank content, you will see the message: "Detected empty template as input, saving as the default template instead."
 
 **Examples:**
 * After opening a template with `template s:Contacted` and making changes, use `template save` to save your edits.
+* If you clear all content and save, the default template will be restored.
+
+![Save Template Example](images/saveTemplate.png)
 
 #### Copying a template to clipboard : `template copy s:STATUS`
 
@@ -315,10 +341,14 @@ Copies the content of a template to your clipboard without opening the editor.
 * Status is case-insensitive.
 * The template is copied as-is from storage - you can then paste it into your email client.
 * Does not open the template editor.
+* **This command works anywhere in the application** - you don't need to have a template open to use it.
+* If the template file contains only whitespace or is empty, the default template will be copied instead and the file will be automatically updated with the default template.
 
 **Examples:**
 * `template copy s:Contacted` copies the "Contacted" template to your clipboard.
 * `template copy s:unreachable` copies the "Unreachable" template to your clipboard.
+
+![Copy Template Example](images/copyTemplate.png)
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 Use `template copy` for quick access to templates when you need to send emails, and use `template s:STATUS` followed by `template save` when you need to update your templates.
@@ -373,15 +403,15 @@ Exits the program.
 
 ### Saving the data
 
-AddressBook data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
+OnlySales data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
 
 ### Editing the data file
 
-AddressBook data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+OnlySales data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
 
 <div markdown="span" class="alert alert-warning">:exclamation: **Caution:**
-If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
-Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+If your changes to the data file makes its format invalid, OnlySales will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.<br>
+Furthermore, certain edits can cause the OnlySales to behave in unexpected ways (e.g., if a value entered is outside of the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 </div>
 
 ### Archiving data files `[coming in v2.0]`
@@ -393,7 +423,7 @@ _Details coming soon ..._
 ## FAQ
 
 **Q**: How do I transfer my data to another Computer?<br>
-**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous AddressBook home folder. Alternatively, you can use the import and export commands.
+**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous OnlySales home folder. Alternatively, you can use the import and export commands.
 
 ---
 

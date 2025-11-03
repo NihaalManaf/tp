@@ -97,6 +97,32 @@ public class TemplateCommandTest {
     }
 
     @Test
+    public void execute_saveBlankTemplate_savesDefaultTemplate() throws Exception {
+        StorageStub storageStub = new StorageStub();
+        ModelManager model = new ModelManager();
+
+        // Test with empty string
+        model.setTemplateViewState(new seedu.address.model.TemplateViewState(Status.CONTACTED, ""));
+        TemplateCommand saveCommand1 = new TemplateCommand(storageStub);
+        CommandResult result1 = saveCommand1.execute(model);
+
+        // Should show blank template message
+        assertEquals(TemplateCommand.MESSAGE_SAVE_BLANK_TEMPLATE, result1.getFeedbackToUser());
+        assertEquals("This is the default template for status Contacted",
+                storageStub.getSavedTemplate(Status.CONTACTED));
+
+        // Test with whitespace only
+        model.setTemplateViewState(new seedu.address.model.TemplateViewState(Status.UNCONTACTED, "   \t\n  "));
+        TemplateCommand saveCommand2 = new TemplateCommand(storageStub);
+        CommandResult result2 = saveCommand2.execute(model);
+
+        // Should show blank template message
+        assertEquals(TemplateCommand.MESSAGE_SAVE_BLANK_TEMPLATE, result2.getFeedbackToUser());
+        assertEquals("This is the default template for status Uncontacted",
+                storageStub.getSavedTemplate(Status.UNCONTACTED));
+    }
+
+    @Test
     public void execute_allStatuses_success() throws Exception {
         StorageStub storageStub = new StorageStub();
         ModelManager model = new ModelManager();
@@ -240,7 +266,7 @@ public class TemplateCommandTest {
         assertEquals(String.format(TemplateCommand.MESSAGE_COPY_TEMPLATE_SUCCESS, "Contacted"),
                 result.getFeedbackToUser());
         assertFalse(result.isShowTemplate());
-        assertEquals("Default template for CONTACTED", clipboardStub.getString());
+        assertEquals("This is the default template for status Contacted", clipboardStub.getString());
     }
 
     @Test
@@ -262,7 +288,10 @@ public class TemplateCommandTest {
             assertEquals(String.format(TemplateCommand.MESSAGE_COPY_TEMPLATE_SUCCESS, statusName),
                     result.getFeedbackToUser());
             assertFalse(result.isShowTemplate());
-            assertEquals("Default template for " + status, clipboardStub.getString());
+
+            // Format status name (e.g., CONTACTED -> Contacted)
+            String formattedStatus = status.name().charAt(0) + status.name().substring(1).toLowerCase();
+            assertEquals("This is the default template for status " + formattedStatus, clipboardStub.getString());
         }
     }
 
@@ -282,6 +311,25 @@ public class TemplateCommandTest {
         assertEquals(String.format(TemplateCommand.MESSAGE_COPY_TEMPLATE_SUCCESS, "Contacted"),
                 result.getFeedbackToUser());
         assertEquals("Custom template content", clipboardStub.getString());
+    }
+
+    @Test
+    public void execute_copyBlankTemplate_copiesDefaultTemplate() throws Exception {
+        StorageStub storageStub = new StorageStub();
+        ClipboardStub clipboardStub = new ClipboardStub();
+        ModelManager model = new ModelManager();
+
+        // Save a blank template (which should become default)
+        storageStub.saveTemplate(Status.BUSY, "   \t\n  ");
+
+        // Copy the template - should get default, not whitespace
+        TemplateCommand command = new TemplateCommand(Status.BUSY, storageStub, clipboardStub);
+        CommandResult result = command.execute(model);
+
+        assertEquals(String.format(TemplateCommand.MESSAGE_COPY_TEMPLATE_SUCCESS, "Busy"),
+                result.getFeedbackToUser());
+        // Should copy the default template, not the whitespace
+        assertEquals("This is the default template for status Busy", clipboardStub.getString());
     }
 
     @Test
@@ -335,6 +383,43 @@ public class TemplateCommandTest {
         assertEquals(expected, command.toString());
     }
 
+    @Test
+    public void execute_saveTemplateThrowsIoException_throwsCommandException() {
+        FailingStorageStub failingStorage = new FailingStorageStub();
+        ModelManager model = new ModelManager();
+
+        // Set up a template view state
+        model.setTemplateViewState(new seedu.address.model.TemplateViewState(Status.CONTACTED, "Test content"));
+
+        TemplateCommand saveCommand = new TemplateCommand(failingStorage);
+
+        assertThrows(CommandException.class, String.format(
+                TemplateCommand.MESSAGE_STORAGE_ERROR, "Test IOException"), () -> saveCommand.execute(model));
+    }
+
+    @Test
+    public void execute_openTemplateThrowsIoException_throwsCommandException() {
+        FailingStorageStub failingStorage = new FailingStorageStub();
+        ModelManager model = new ModelManager();
+
+        TemplateCommand openCommand = new TemplateCommand(Status.CONTACTED, failingStorage);
+
+        assertThrows(CommandException.class, String.format(
+                TemplateCommand.MESSAGE_STORAGE_ERROR, "Test IOException"), () -> openCommand.execute(model));
+    }
+
+    @Test
+    public void execute_copyTemplateThrowsIoException_throwsCommandException() {
+        FailingStorageStub failingStorage = new FailingStorageStub();
+        ClipboardStub clipboardStub = new ClipboardStub();
+        ModelManager model = new ModelManager();
+
+        TemplateCommand copyCommand = new TemplateCommand(Status.CONTACTED, failingStorage, clipboardStub);
+
+        assertThrows(CommandException.class, String.format(
+                TemplateCommand.MESSAGE_STORAGE_ERROR, "Test IOException"), () -> copyCommand.execute(model));
+    }
+
     /**
      * A stub implementation of ClipboardProvider for testing.
      */
@@ -349,6 +434,22 @@ public class TemplateCommandTest {
         @Override
         public void setString(String v) {
             value = v;
+        }
+    }
+
+    /**
+     * A failing storage stub that always throws IOException for testing error handling.
+     */
+    private static class FailingStorageStub extends StorageStub {
+        @Override
+        public String readTemplate(seedu.address.model.person.Status status) throws java.io.IOException {
+            throw new java.io.IOException("Test IOException");
+        }
+
+        @Override
+        public void saveTemplate(seedu.address.model.person.Status status, String content)
+                throws java.io.IOException {
+            throw new java.io.IOException("Test IOException");
         }
     }
 }

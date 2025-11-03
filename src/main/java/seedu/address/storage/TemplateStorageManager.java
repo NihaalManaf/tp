@@ -54,7 +54,17 @@ public class TemplateStorageManager implements TemplateStorage {
             return defaultContent;
         }
 
-        return FileUtil.readFromFile(filePath);
+        String content = FileUtil.readFromFile(filePath);
+
+        // If the file contains only whitespace or is empty, replace it with default template
+        if (content == null || content.isBlank()) {
+            logger.info("Template file for " + status + " is blank, replacing with default content");
+            String defaultContent = getDefaultTemplate(status);
+            saveTemplate(status, defaultContent);
+            return defaultContent;
+        }
+
+        return content;
     }
 
     @Override
@@ -64,14 +74,17 @@ public class TemplateStorageManager implements TemplateStorage {
         // Ensure directory exists
         FileUtil.createIfMissing(templateDirectoryPath);
 
-        FileUtil.writeToFile(filePath, content);
+        // If content is blank (empty or only whitespace), save the default template instead
+        String contentToSave = (content == null || content.isBlank()) ? getDefaultTemplate(status) : content;
+
+        FileUtil.writeToFile(filePath, contentToSave);
         logger.info("Saved template for " + status + " to " + filePath);
     }
 
     @Override
     public String getDefaultTemplate(Status status) {
         String statusName = formatStatusName(status);
-        return "Template for " + statusName + " contacts";
+        return "This is the default template for status " + statusName;
     }
 
     /**
