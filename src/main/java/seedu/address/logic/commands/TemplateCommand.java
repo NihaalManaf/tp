@@ -32,6 +32,8 @@ public class TemplateCommand extends Command {
 
     public static final String MESSAGE_OPEN_TEMPLATE_SUCCESS = "Opened template for %s status";
     public static final String MESSAGE_SAVE_TEMPLATE_SUCCESS = "Template saved for %s status";
+    public static final String MESSAGE_SAVE_BLANK_TEMPLATE =
+            "Detected empty template as input, saving as the default template instead.";
     public static final String MESSAGE_COPY_TEMPLATE_SUCCESS = "Copied template for %s status to clipboard";
     public static final String MESSAGE_NO_TEMPLATE_TO_SAVE = "No template is currently open. "
             + "Use 'template s:STATUS' to open a template first.";
@@ -148,8 +150,15 @@ public class TemplateCommand extends Command {
         }
 
         try {
-            templateStorage.saveTemplate(currentState.getStatus(), currentState.getContent());
-            String successMessage = createSaveSuccessMessage(currentState.getStatus());
+            String content = currentState.getContent();
+            boolean isBlankContent = content == null || content.isBlank();
+
+            templateStorage.saveTemplate(currentState.getStatus(), content);
+
+            // Use different message if content was blank
+            String successMessage = isBlankContent
+                    ? MESSAGE_SAVE_BLANK_TEMPLATE
+                    : createSaveSuccessMessage(currentState.getStatus());
             return new CommandResult(successMessage);
         } catch (IOException e) {
             throw new CommandException(String.format(MESSAGE_STORAGE_ERROR, e.getMessage()));

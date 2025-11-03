@@ -4,7 +4,9 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -36,6 +38,8 @@ public class DeleteCommand extends Command {
     public static final String MESSAGE_DELETE_PERSONS_SUCCESS = "Deleted %1$d Person(s):\n%2$s";
     public static final String MESSAGE_INVALID_INDICES = "Invalid index(es) detected: %1$s\n"
             + "Please ensure all indices are valid before deleting.";
+    public static final String MESSAGE_DUPLICATE_INDICES = "Duplicate indices were detected!\n"
+            + "Please ensure all indices are unique.";
 
     private final List<Index> targetIndices;
 
@@ -64,12 +68,20 @@ public class DeleteCommand extends Command {
     }
 
     /**
-     * Validates that all target indices are within the bounds of the list.
+     * Validates that all target indices are within the bounds of the list and are unique.
      *
      * @param personList The list of persons to check against.
-     * @throws CommandException If any index is out of bounds.
+     * @throws CommandException If any index is out of bounds or if there are duplicate indices.
      */
     private void validateAllIndices(List<Person> personList) throws CommandException {
+        // Check for duplicates first
+        Set<Integer> seenIndices = new HashSet<>();
+        for (Index index : targetIndices) {
+            if (!seenIndices.add(index.getZeroBased())) {
+                throw new CommandException(MESSAGE_DUPLICATE_INDICES);
+            }
+        }
+        // Then check for invalid indices
         List<Integer> invalidIndices = new ArrayList<>();
         for (Index index : targetIndices) {
             if (index.getZeroBased() >= personList.size()) {
