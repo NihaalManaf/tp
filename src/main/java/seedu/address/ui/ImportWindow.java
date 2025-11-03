@@ -33,7 +33,7 @@ public class ImportWindow extends UiPart<Stage> {
     private static final String ALERT_IMPORT_FAILED_TITLE = "Import Failed";
     private static final String ALERT_IMPORT_FAILED_HEADER = "Failed to import data";
     private static final String ALERT_IMPORT_FAILED_TEXT =
-            "Please ensure that you only paste the content of the entire address book JSON file.";
+            "Please ensure that you only paste the content of the valid address book JSON file.";
 
     private static final String ALERT_NO_CLIPBOARD_TITLE = "Error";
     private static final String ALERT_NO_CLIPBOARD_HEADER = "No Clipboard Data";
