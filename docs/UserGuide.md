@@ -15,11 +15,11 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 1. Ensure you have Java `17` or above installed in your Computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
-1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
+1. Download the latest `.jar` file from [here](https://github.com/AY2526S1-CS2103T-T08-2/tp/releases/).
 
 1. Copy the file to the folder you want to use as the _home folder_ for your OnlySales.
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
+1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar OnlySales.jar` command to run the application.<br>
    A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
    ![Ui](images/Ui.png)
 
@@ -99,7 +99,7 @@ A person can have any number of tags (including 0), but only 1 status (default: 
 * `add n:John Doe p:98765432 e:johnd@example.com`
 * `add n:Betsy Crowe t:friend e:betsycrowe@example.com a:Newgate Prison p:1234567 t:criminal s:contacted`
 
-![Add Command Result](images/addCommandResult.png)
+![Add Command Result](images/AddCommand.png)
 
 ### Listing all persons : `list`
 
@@ -142,14 +142,26 @@ Edits an existing person in the address book.
 *  `edit 2 n:Betsy Crower t:` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
 *  `edit 3 a:557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694 s:Busy` Edits the address and status of the 3rd person to be `557 Bukit Timah Rd, #01-17 Crown Centre, Singapore 269694` and `Busy` respectively.
 
-### Locating customers: `find`
+### Finding customers: `find`
 
-Finds customers based on various search criteria including name, tags, status, phone number, or email.
+You can find customers by searching for their name, tags, status, phone number, or email. There are two ways to use the `find` command:
 
-**Format:** `find KEYWORD [MORE_KEYWORDS]` OR `find [n:NAME] [t:TAG]... [s:STATUS] [p:PHONE] [e:EMAIL]`
+- **Basic search:** Type one or more names after `find` to look up customers by name. (See examples below.)
+- **Advanced search:** Use prefixes like `n:`, `t:`, `s:`, `p:`, or `e:` to search more specifically by name, tag, status, phone, or email.
+
+Use basic search when you just want to find by name. Use advanced search if you want to search by tags, status, phone or email, or combine several criteria!
+
+Check the examples below for the correct usage of each search style.
+
+**Format:** `find NAME [MORE_NAMES]` OR `find [n:NAME] [t:TAG]... [s:STATUS] [p:PHONE] [e:EMAIL]`
+
+<p align="center">
+  <img src="images/FindCommand.png" alt="Find Command example showing Basic and Advanced Search input fields and results"><br>
+  <em>Find Command example showing Basic Search and its results</em>
+</p>
 
 **Basic Search (by name):**
-
+- The basic search is for names only!
 - The search is case-insensitive. e.g `hans` will match `Hans`
 - The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
 - Only full words will be matched e.g. `Han` will not match `Hans`
@@ -165,8 +177,13 @@ Finds customers based on various search criteria including name, tags, status, p
 - `e:EMAIL` - Search by email address
 - Multiple criteria can be combined for more precise searches
 - All searches are case-insensitive
-- You can use either prefixes (advanced search) or a basic name-only search.
-- Do not mix styles in one command. For example, use `find n:alice t:friend` (advanced) or `find alice` (basic), not `find alice t:friend`.
+- For each advanced search command, you can specify at most one of each of the following: name, email, address, status, and phone number. You can, however, include as many tags (`t:TAG`) as you like in a single search!
+
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:**
+Do not mix styles in one command. For example, use `find n:alice t:friend` (advanced) or `find alice` (basic), not `find alice t:friend`.
+</div>
+
 
 
 **Examples:**
@@ -197,7 +214,6 @@ Finds customers based on various search criteria including name, tags, status, p
 
 **Search by email:**
 
-- `find e:gmail.com` returns customers with Gmail addresses
 - `find e:john@example.com` returns customers with that specific email
 
 **Combined multi-criteria search:**
@@ -206,6 +222,11 @@ Finds customers based on various search criteria including name, tags, status, p
 - `find n:john s:Contacted` returns customers named John with "Contacted" status
 - `find t:VIP s:Uncontacted` returns VIP customers who haven't been contacted yet
 - `find n:alice t:friends s:Contacted` returns customers named Alice, tagged as friends, and with "Contacted" status
+- `find s:Contacted s:Uncontacted` returns an error as you can only search for one status!
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+If you're wondering why we have 2 kinds of find command, it's to allow you to search either as broadly as possible (using basic search) or as specific as possible (using advanced search). Sky's the limit!
+</div>
 
 ### Tag View and Status View Integration
 
@@ -220,6 +241,7 @@ When dealing with a large number of customers, it is important that salespeople 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
 When you use `find t:friends s:Contacted`, the Tag view will highlight "friends" and the Status view will highlight "Contacted", making it easy to see your current filters at a glance.
 </div>
+
 
 **Visual Example:**
 
@@ -337,6 +359,11 @@ Import replaces your entire address book when data is valid. Make sure to export
 Clears all entries from the address book.
 
 **Format:** `clear`
+
+<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
+This action is irreversible! All contacts will be permanently deleted from the address book right after you enter the clear command!
+</div>
+
 
 ### Exiting the program : `exit`
 
