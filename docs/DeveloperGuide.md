@@ -996,17 +996,55 @@ Use case ends.
 
 ### Glossary
 
+* **Address Book**: The core domain model of the application. Represents the collection of all contacts and provides operations for managing them.
 * **API (Application Programming Interface)**: The set of public methods and interfaces that define how components interact with each other. Each major component (UI, Logic, Model, Storage) defines its API through an interface.
+* **Case-insensitive**: String matching that ignores letter casing (e.g., "John" matches "joHn", "JOHN").
 * **CLI (Command-Line Interface)**: Text-based user interface where users type commands. Parsed by `AddressBookParser` and individual `XYZCommandParser` classes.
 * **Clipboard**: System clipboard abstracted through the `ClipboardProvider` interface. Allows copying templates and address book data for external use. Production code uses `SystemClipboardProvider`, tests use stubs.
+* **Command**: An executable object representing a user action. All commands extend the abstract `Command` class and implement `execute(Model)`. Examples: `AddCommand`, `DeleteCommand`, `TemplateCommand`.
+* **CommandResult**: Encapsulates the outcome of command execution. Contains success/error message and flags indicating UI actions (e.g., `isShowHelp`, `isExit`, `isShowTemplate`).
 * **Contact**: Refers to a `Person` object in the domain model. Used interchangeably with "Person" in documentation.
 * **Email Template**: Persistent text content associated with a `Status` enum value. Stored in JSON files by `TemplateStorage` and managed via `TemplateCommand`.
+* **Export/Import**: Features to serialise/deserialise the entire `AddressBook` to/from clipboard as a JSON formatted string. Uses `JsonAddressBookUtil` for conversion. Enables easier data sharing between users.
+* **Filter**: Applying a `Predicate<Person>` to the `filteredPersons` observable list in `Model`. Updates the UI to show only matching contacts.
 * **GUI (Graphical User Interface)**: The JavaFX-based visual interface. Implemented in the `UI` component with FXML layouts and corresponding controller classes.
 * **Index**: A 1-based position reference used in commands to identify contacts in the displayed list. Internally converted to 0-based for `List` operations. Represented by the `Index` class.
 * **Mainstream OS**: Windows, Linux, MacOS - target platforms for the application.
+* **Model**: The component responsible for holding application data in memory. Manages `AddressBook`, `UserPrefs`, and filtered lists. Exposes data through `ObservableList` for reactive UI updates.
+* **Observer Pattern**: Design pattern used to keep UI synchronized with Model. JavaFX `ObservableList` and `ObjectProperty` notify listeners (UI components) when data changes.
+* **Parameter**: Command argument specified with a prefix (e.g., `n:NAME`, `p:PHONE`). Parsed by `ArgumentTokenizer` which splits input into `ArgumentMultimap`.
+* **Parser**: Class responsible for converting user input strings into `Command` objects. All parsers implement the `Parser` interface.
 * **PDPA (Personal Data Protection Act)**: Singapore's data protection regulation. Application supports compliance through bulk deletion and data export features.
 * **Predicate**: A functional interface representing a boolean-valued function. Used extensively for filtering (e.g. `PersonMatchesKeywordsPredicate`, `NameContainsKeywordsPredicate`).
+* **Prefix**: A `Prefix` object (e.g., `PREFIX_NAME`, `PREFIX_PHONE`) used by parsers to identify parameter types. Defined in `CliSyntax`.
 * **Status**: An enum-like class representing contact lifecycle states (Contacted, Rejected, Accepted, Unreachable, Busy, Uncontacted). Used for filtering and template association.
+* **Storage**: The component handling data persistence. Implements both `AddressBookStorage` and `UserPrefStorage` interfaces. Uses JSON format.
+* **Template Storage**: Subsystem for persisting email templates. Uses `TemplateStorage` interface with file-based implementation (`TemplateStorageManager`). Templates stored as individual files per status.
+* **UI Component**: JavaFX-based view layer. Inherits from `UiPart` base class. FXML files in `resources/view` define layouts, Java classes handle logic.
+* **UniquePersonList**: Internal data structure in `AddressBook` that ensures no duplicate persons. Duplicates determined by `Person#isSamePerson()` method.
+* **Validation**: Input checking performed by parsers and domain objects. For example, `Phone` validates format, `Email` validates structure. Throws `ParseException` or `IllegalArgumentException` on invalid input.
+* **ObservableList**: A JavaFX collection that notifies listeners about changes (additions, removals, updates). Used to keep the UI view synchronized with app data in real time.
+* **ObjectProperty**: A JavaFX property type that holds and notifies changes to a single object, supporting binding and listeners for UI updates.
+* **ClipboardProvider**: An abstraction/interface for operations that interact with the system clipboard (e.g. for copying contacts information or templates programmatically).
+* **FileSystemProvider**: Interface that abstracts file read/write operations from the file system for portability and testing.
+* **SystemClipboardProvider**: The production implementation of `ClipboardProvider` that interacts with the real system clipboard on the user’s OS.
+* **SystemFileSystemProvider**: The production implementation of `FileSystemProvider` that uses the local file system for file operations.
+* **JsonAddressBookUtil**: A utility class that handles conversion (serialization/deserialization) between Address Book data structures and JSON format.
+* **UiPart**: Abstract Java class that defines common logic for UI components/parts (JavaFX controls) in the app. All custom UI views inherit from this base class
+* **ModelManager**: The main implementation of the `Model` interface. Manages, updates, and exposes application data in-memory and propagates property changes to the UI.
+* **MainWindow**: The primary application window in the UI, containing CommandBox, PersonListPanel, SidebarPanel, and other subcomponents.
+* **CommandBox**: The text input area in the UI where users enter commands.
+* **ImportWindow**: A separate UI window dedicated to importing customer data from the clipboard, allowing preview or validation before adding contacts.
+* **SidebarPanel**: A UI panel that contains and displays active filters; houses the StatusViewPanel and TagsViewPanel.
+* **StatusViewPanel**: UI component that displays the list of currently active status filters applied (e.g., via find command).
+* **TagsViewPanel**: UI component that displays the list of currently active tag filters applied (e.g., via find command).
+* **TemplateViewPanel**: UI component that allows users to create, edit, and view email templates corresponding to customer statuses.
+* **StatusViewState**: Model object representing the current state of selected or displayed status filters for UI update.
+* **TagsViewState**: Model object representing the current state of selected or displayed tag filters for UI update.
+* **TemplateViewState**: Model object representing which template is being edited, along with its content, for template editor synchronization.
+* **ResultDisplay**: A UI box or output panel that shows feedback, messages, and results to users following command execution.
+* **PersonListPanel**: The panel or list view in the UI that displays all persons/contacts matching the current list or filter.
+* **LogicManager**: The concrete implementation of the application’s Logic component. Orchestrates command parsing, command execution, and data flow between UI and Model.
 
 --------------------------------------------------------------------------------------------------------------------
 
