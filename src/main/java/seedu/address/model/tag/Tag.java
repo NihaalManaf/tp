@@ -10,7 +10,8 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Tag {
 
-    public static final String MESSAGE_CONSTRAINTS = "Tags names should be lowercase alphanumeric characters with length <= 50";
+    public static final String MESSAGE_CONSTRAINTS =
+            "Tags names should be lowercase alphanumeric characters with length <= 50";
     public static final String VALIDATION_REGEX = "[a-z0-9]{1,50}";
 
     public final String tagName;
@@ -40,11 +41,10 @@ public class Tag {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof Tag)) {
+        if (!(other instanceof Tag otherTag)) {
             return false;
         }
 
-        Tag otherTag = (Tag) other;
         return tagName.equals(otherTag.tagName);
     }
 
