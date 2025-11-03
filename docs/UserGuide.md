@@ -18,7 +18,7 @@ your friend to help you close all those SALES, with ONLY your keyboard!
 
 ## Quick start
 
-1. Ensure you have Java `17` or above installed in your Computer.<br>
+1. Ensure you have any version of Java `17` installed in your Computer.<br>
    **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
 
 1. Download the latest `.jar` file from [here](https://github.com/AY2526S1-CS2103T-T08-2/tp/releases/).
@@ -300,7 +300,7 @@ Opens the template editor for a specific contact status.
 
 * Opens the template editor window for the specified `STATUS`.
 * `STATUS` must be one of: `Contacted`, `Uncontacted`, `Rejected`, `Accepted`, `Unreachable`, or `Busy`.
-* Status is case-insensitive (e.g., `contacted`, `CONTACTED`, `Contacted` all work).
+* Status is case-insensitive (e.g. `contacted`, `CONTACTED`, `Contacted` all work).
 * The template editor allows you to view and edit the email template.
 * Changes are not saved automatically - use `template save` to save your changes.
 * If no custom template exists for the status, a default template will be displayed (e.g., "This is the default template for status Contacted").
@@ -383,6 +383,20 @@ Import replaces your entire address book when data is valid. Make sure to export
 
 ![Import Contact Example](images/importContact.png)
 
+### Export contacts: `export`
+
+Exports all contacts from the address book to your clipboard. This allows you to share your contacts with other OnlySales users or create backups of your data.
+
+**Format:** `export`
+
+<div markdown="span" class="alert alert-info">:information_source: **Note:**
+The exported data includes all contact information including names, phone numbers, email addresses, physical addresses, statuses, and tags.
+</div>
+
+<div markdown="span" class="alert alert-primary">:bulb: **Tip:**
+You can use this with the `import` command to transfer your contacts between different OnlySales installations or share them with other users.
+</div>
+
 
 ### Clearing all entries : `clear`
 
@@ -438,16 +452,16 @@ _Details coming soon ..._
 
 Action | Format, Examples
 --------|------------------
-**Add** | `add n:NAME p:PHONE_NUMBER e:EMAIL [a:ADDRESS] [s:STATUS] [t:TAG]…​` <br> e.g., `add n:James Ho p:22224444 e:jamesho@example.com a:123, Clementi Rd, 1234665 t:friend t:colleague`
+**Add** | `add n:NAME p:PHONE_NUMBER e:EMAIL [a:ADDRESS] [s:STATUS] [t:TAG]...` <br> e.g. `add n:James Ho p:22224444 e:jamesho@example.com a:123, Clementi Rd, 1234665 t:friend t:colleague`
 **Clear** | `clear`
-**Delete** | `delete INDEX [MORE_INDICES]...`<br> e.g., `delete 3` or `delete 1 2 3`
-**Edit** | `edit INDEX [n:NAME] [p:PHONE_NUMBER] [e:EMAIL] [a:ADDRESS] [s:STATUS] [t:TAG]…​`<br> e.g.,`edit 2 n:James Lee e:jameslee@example.com`
+**Delete** | `delete INDEX [MORE_INDICES]...`<br> e.g. `delete 3` or `delete 1 2 3`
+**Edit** | `edit INDEX [n:NAME] [p:PHONE_NUMBER] [e:EMAIL] [a:ADDRESS] [s:STATUS] [t:TAG]...`<br> e.g.`edit 2 n:James Lee e:jameslee@example.com`
 **Status** | `status INDEX [STATUS]`<br> e.g. `status 4 busy`
-**Find** | `find KEYWORD [MORE_KEYWORDS]` OR `find [n:NAME] [t:TAG]... [s:STATUS] [p:PHONE] [e:EMAIL]`<br> e.g., `find John`, `find n:alice t:friends s:Contacted`
+**Find** | `find KEYWORD [MORE_KEYWORDS]` OR `find [n:NAME] [t:TAG]... [s:STATUS] [p:PHONE] [e:EMAIL]`<br> e.g. `find John`, `find n:alice t:friends s:Contacted`
 **List** | `list`
 **Help** | `help`
-**Template (Open)** | `template s:STATUS`<br> e.g., `template s:Contacted`
+**Template (Open)** | `template s:STATUS`<br> e.g. `template s:Contacted`
 **Template (Save)** | `template save`
-**Template (Copy)** | `template copy s:STATUS`<br> e.g., `template copy s:Rejected`
+**Template (Copy)** | `template copy s:STATUS`<br> e.g. `template copy s:Rejected`
 **Import Contacts** | `import`
 **Export Contacts** | `export`

@@ -10,6 +10,11 @@ title: Developer Guide
 
 ## **Acknowledgements**
 
+#### Zhao Ruixuan
+* Used cursor to write some test cases for status and export (model: auto)
+* Used cursor to check if status and export implementation were correct (model: auto)
+* Used ChatGPT to check for spelling and formatting issues in the UG and DG (model: GPT-5)
+
 #### Nihaal Manaf
 * Used Cursor to help write test cases for the find command! (model: Auto)
 * Used Cursor to help check for poor code quality in play like DRY (model: Auto)
@@ -86,7 +91,7 @@ The **API** of this component is specified in [`Ui.java`](https://github.com/AY2
 
 ![Structure of the UI Component](images/UiClassDiagram.png)
 
-The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter`, `SidebarPanel`, `TemplateViewPanel` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
+The UI consists of a `MainWindow` that is made up of parts e.g. `CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter`, `SidebarPanel`, `TemplateViewPanel` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
 
 **New UI Components in OnlySales:**
 
@@ -96,7 +101,7 @@ The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `Re
 - `TagsViewPanel` - Displays all currently active tag filters applied through the find command
 - `TemplateViewPanel` - Displays and manages email templates for different customer status types
 
-The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/resources/view/MainWindow.fxml)
+The `UI` component uses the JavaFX UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/AY2526S1-CS2103T-T08-2/tp/tree/master/src/main/resources/view/MainWindow.fxml)
 
 The `UI` component,
 
@@ -121,8 +126,8 @@ The sequence diagram below illustrates the interactions within the `Logic` compo
 
 How the `Logic` component works:
 
-1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g., `DeleteCommandParser`) and uses it to parse the command.
-1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteCommand`) which is executed by the `LogicManager`.
+1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g. `DeleteCommandParser`) and uses it to parse the command.
+1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g. `DeleteCommand`) which is executed by the `LogicManager`.
 1. The command can communicate with the `Model` when it is executed (e.g. to delete a person).<br>
    Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take several interactions (between the command object and the `Model`) to achieve.
 1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
@@ -132,9 +137,8 @@ Here are the other classes in `Logic` (omitted from the class diagram above) tha
 <img src="images/ParserClasses.png" width="600"/>
 
 How the parsing works:
-
-- When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
-- All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
+* When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g. `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g. `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
+* All `XYZCommandParser` classes (e.g. `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
 
 ### Model component
 
@@ -144,8 +148,8 @@ How the parsing works:
 
 The `Model` component,
 
-* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
-* stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
+* stores the address book data i.e. all `Person` objects (which are contained in a `UniquePersonList` object).
+* stores the currently 'selected' `Person` objects (e.g. results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
 * stores a `UserPrefs` object that represents the user's preferences. This is exposed to the outside as `ReadOnlyUserPrefs` objects.
 * stores view state objects (`StatusViewState`, `TagsViewState`, `TemplateViewState`) as observable properties that track the current UI filter and display states. These are exposed as `ReadOnlyObjectProperty` instances that the UI can observe for reactive updates.
 * does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
@@ -180,7 +184,7 @@ This section describes some noteworthy details on how certain features are imple
 
 #### Overview
 
-The Status View and Tag View feature provides visual feedback to users about which filters are currently active when using the `find` command. When users search for customers by status (e.g., `find s:Contacted`) or tags (e.g., `find t:friends`), dedicated UI panels automatically update to display the active filters, making it easy to see what subset of data is being viewed.
+The Status View and Tag View feature provides visual feedback to users about which filters are currently active when using the `find` command. When users search for customers by status (e.g. `find s:Contacted`) or tags (e.g. `find t:friends`), dedicated UI panels automatically update to display the active filters, making it easy to see what subset of data is being viewed.
 
 #### Architecture
 
@@ -254,7 +258,7 @@ The following sequence diagram shows how the view states are updated when a user
 
 ### Template Feature
 
-#### Implementation
+#### Implementation Details
 
 The template feature allows salespersons to create, edit, and copy email templates associated with different contact statuses. This streamlines the process of sending personalized emails to contacts at different stages of the sales process.
 
@@ -298,7 +302,7 @@ Step 4. The salesperson decides to save the edited template by executing `templa
 
 ![TemplateState3](images/TemplateState3.png)
 
-<div markdown="span" class="alert alert-info">:information_source: **Note:** If the salesperson switches to a different view (e.g., executes `list` or `find`) without saving, the edited content is discarded and not persisted.
+<div markdown="span" class="alert alert-info">:information_source: **Note:** If the salesperson switches to a different view (e.g. executes `list` or `find`) without saving, the edited content is discarded and not persisted.
 
 </div>
 
@@ -485,11 +489,11 @@ The status command is executed through the following sequence of steps:
   - Cons:
     - More inconvenient for salespeople when they want to reset everyone's status (e.g. when starting a new sale)
 
-### Export Command Feature
+### Export Command
 
 #### Implementation
 
-The export command feature allows users to export the address book data in JSON format to the system clipboard. It is implemented through the `ExportCommand` class and supported by two key interfaces:
+The export command allows users to export the address book data in JSON format to the system clipboard. It is implemented through the `ExportCommand` class and supported by two key interfaces:
 
 - `ClipboardProvider` - For copying data to system clipboard.
 - `FileSystemProvider` - For reading data from files.
@@ -622,8 +626,8 @@ The following activity diagram illustrates the complete workflow of sharing cont
 - Salespersons who manage a large number of contacts
 - Prefer desktop apps over other types
 - Can type fast and prefer typing to mouse interactions for efficiency
-- Need to categorize leads by tags and track sales-specific statuses (e.g., Contacted, Rejected, Accepted)
-- Occasionally need to import many contacts at once (e.g., from sales manager assignments)
+- Need to categorize leads by tags and track sales-specific statuses (e.g. Contacted, Rejected, Accepted)
+- Occasionally need to import many contacts at once (e.g. from sales manager assignments)
 - Are reasonably comfortable using CLI apps
 
 **Value proposition**: An address book tailored for salespeople to manage contacts significantly faster than a typical mouse/GUI driven app, with support for bulk additions, powerful filtering by name/tag/status, status tracking to streamline outreach workflows, and templated email generation for selected contact cohorts.
@@ -649,14 +653,13 @@ The following activity diagram illustrates the complete workflow of sharing cont
 
 **Field validations for contacts**:
 
-| Field       | Validation Rule                                                                                                                                                                                                                                                                                                                                                                   | Rationale                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Name**    | Must contain only alphanumeric characters, spaces, hyphens, apostrophes, slashes, commas, and periods. Cannot be blank or start with whitespace.                                                                                                                                                                                                                                  | Supports international names (e.g., "Mary-Jane", "O'Brien", "Dr. Smith").                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| **Phone**   | Must contain only digits, a single optional `+` at the start and be at least 3 digits long. This should not be duplicated.                                                                                                                                                                                                                                                        | Allows both local and international formats. Minimum length prevents some invalid inputs like "1" or "12". We use the phone number to check for duplicate person. <br />However, we do not take into account the country code when comparing the phone number, that is, we treat `+6598765432` and `98765432` as 2 different number. This is because we want to give users the choice to omit the country code if they are dealing with only local customer, but still not assuming that they are in a certain country. |
-| **Email**   | Must follow standard email format, which we enforce losely by checking for `@` separating local part and domain.<br />- Local part: alphanumeric and special characters (`+`, `_`, `.`, `-`), cannot start/end with special characters<br>- Domain: alphanumeric domain labels, 2 characters or longer, separated by periods. It must end with at least 2-characters domain label | Helps prevent typo of definitely invalid email address such as "name@", "abcgmail.com" and "@gmail.com".                                                                                                                                                                                                                                                                                                                                                                                                                |
-| **Address** | Can contain any characters but must not exceed 200 characters.                                                                                                                                                                                                                                                                                                                    | Allows flexibility for diverse address formats while preventing unreasonably long inputs that could affect UI display.                                                                                                                                                                                                                                                                                                                                                                                                  |
-| **Tag**     | Only lowercase alphanumeric characters, not longer than 50 characters (no spaces or special characters).                                                                                                                                                                                                                                                                          | Tags should be a single word as it is used only for categorisation and not as a note. We decided upon the use of lowercase alphanumeric character only to ease the checking of duplicate tags, searching, and readability.                                                                                                                                                                                                                                                                                              |
-| **Status**  | View the list below table for the list of status, and recommended meaning. Defaults to "Uncontacted" if not specified.                                                                                                                                                                                                                                                            | Helps to track contacts for the sales workflow. Case-insensitive matching improves user experience.                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| Field       | Validation Rule                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 | Rationale                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Name**    | Must contain only alphanumeric characters, spaces, hyphens, apostrophes, slashes, commas, and periods. Cannot be blank or start with whitespace.                                                                                                                                                                                                                                                                                                                                                                | Supports international names (e.g., "Mary-Jane", "O'Brien", "Dr. Smith").                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| **Phone**   | Must contain only digits, a single optional `+` at the start and be at least 3 digits long. This should not be duplicated.                                                                                                                                                                                                                                                                                                                                                                                      | Allows both local and international formats. Minimum length prevents some invalid inputs like "1" or "12". We use the phone number to check for duplicate person. <br />However, we do not take into account the country code when comparing the phone number, that is, we treat `+6598765432` and `98765432` as 2 different number. This is because we want to give users the choice to omit the country code if they are dealing with only local customer, but still not assuming that they are in a certain country. |
+| **Email**   | Must follow standard email format, which we enforce losely by checking for `@` separating local part and domain.<br />- Local part: alphanumeric and special characters (`+`, `_`, `.`, `-`), cannot start/end with special characters<br>- Domain: alphanumeric domain labels, 2 characters or longer, separated by periods. It must end with at least 2-characters domain label<br>- Email validation intentionally does not enforce top-level domain requirements (like .com, .org, etc.) in email addresses | Helps prevent typo of definitely invalid email address such as "name@", "abcgmail.com" and "@gmail.com". Also helps to accommodate rare but valid use cases where contacts may have email addresses on internal networks or custom domains that do not follow the conventional format.                                                                                                                                                                                                                                  |
+| **Tag**     | Only lowercase alphanumeric characters, not longer than 50 characters (no spaces or special characters).                                                                                                                                                                                                                                                                                                                                                                                                        | Tags should be a single word as it is used only for categorisation and not as a note. We decided upon the use of lowercase alphanumeric character only to ease the checking of duplicate tags, searching, and readability.                                                                                                                                                                                                                                                                                              |
+| **Status**  | View the list below table for the list of status, and recommended meaning. Defaults to "Uncontacted" if not specified.                                                                                                                                                                                                                                                                                                                                                                                          | Helps to track contacts for the sales workflow. Case-insensitive matching improves user experience.                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
 **Valid contact statuses**:
 
@@ -717,8 +720,8 @@ Priorities: Essential (must have) - `* * *`, Typical (nice to have) - `* *`, Nov
 **Extensions:**<br/>
 
 4a. CMS detects an error in the entered data.<br/>
-4a1. CMS indicates an error has happened.<br/>
-Use case resumes from step 2.
+   4a1. CMS indicates an error has happened.<br/>
+   Use case resumes from step 2.
 
 #### Use case: UC02 - Import address book from clipboard
 
@@ -741,12 +744,12 @@ Use case resumes from step 2.
 **Extensions:**
 
 3a. Clipboard is empty.<br />
-3a1. CMS displays: "Clipboard does not contain any text to import".<br />
-Use case ends.
+   3a1. CMS displays: "Clipboard does not contain any text to import".<br />
+   Use case ends.
 
 3b. Clipboard content is not valid address book JSON or fails validation.<br />
-3b1. CMS displays: "Failed to import: Clipboard does not contain valid address book JSON.".<br />
-Use case ends.
+   3b1. CMS displays: "Failed to import: Clipboard does not contain valid address book JSON.".<br />
+   Use case ends.
 
 #### Use case: UC03 - List all contacts
 
@@ -769,8 +772,8 @@ Use case ends.
 **Extensions:**
 
 3a. The contact list is empty.<br/>
-3a1. CMS indicates that no contacts are found.<br/>
-Use case ends.
+   3a1. CMS indicates that no contacts are found.<br/>
+   Use case ends.
 
 
 #### Use case: UC04 - Find customers by various criteria
@@ -795,12 +798,12 @@ Use case ends.
 **Extensions:**
 
 2a. Invalid search criteria format provided.<br/>
-2a1. CMS indicates invalid command format and shows usage instructions.<br/>
-Use case ends.
+   2a1. CMS indicates invalid command format and shows usage instructions.<br/>
+   Use case ends.
 
 3a. No customers match the search criteria.<br/>
-3a1. CMS displays an empty list while keeping the filters visible in tag view and status view to show search intent.<br/>
-Use case ends.
+   3a1. CMS displays an empty list while keeping the filters visible in tag view and status view to show search intent.<br/>
+   Use case ends.
 
 #### Use case: UC05 - Find contact by status
 
@@ -823,12 +826,12 @@ Use case ends.
 **Extensions:**
 
 2a. The specified status does not exist.<br/>
-2a1. CMS indicates that an error has happened.<br/>
-Use case ends.
+   2a1. CMS indicates that an error has happened.<br/>
+   Use case ends.
 
 4a. No contacts match the specified status.<br/>
-4a1. CMS indicates that no contacts are found.<br/>
-Use case ends.
+   4a1. CMS indicates that no contacts are found.<br/>
+   Use case ends.
 
 #### Use case: UC06 - Open and edit email template
 
@@ -856,13 +859,13 @@ Use case ends.
 
 **Extensions:**
 
-*a. At any time, Salesperson enters a different command (e.g., list, find).<br/>
-*a1. CMS switches back to the main view and discards any unsaved edits.<br/>
-Use case ends.
+*a. At any time, Salesperson enters a different command (e.g. list, find).<br/>
+   *a1. CMS switches back to the main view and discards any unsaved edits.<br/>
+   Use case ends.
 
 2a. The specified status is invalid.<br/>
-2a1. CMS indicates that an error has happened.<br/>
-Use case ends.
+   2a1. CMS indicates that an error has happened.<br/>
+   Use case ends.
 
 3a. No template exists for the specified status, or the template file contains only blank/whitespace content.<br/>
    3a1. CMS displays the default template for that status.<br/>
@@ -898,8 +901,8 @@ Use case ends.
 **Extensions:**
 
 2a. The specified status is invalid.<br/>
-2a1. CMS indicates that an error has happened.<br/>
-Use case ends.
+   2a1. CMS indicates that an error has happened.<br/>
+   Use case ends.
 
 3a. No template exists for the specified status, or the template file contains only blank/whitespace content.<br/>
    3a1. CMS retrieves the default template for that status and copies it to the clipboard.<br/>
@@ -928,12 +931,12 @@ Use case ends.
 **Extensions:**
 
 2a. The specified contact ID does not exist.<br/>
-2a1. CMS indicates that an error has happened. <br/>
-Use case resumes from step 2.
+   2a1. CMS indicates that an error has happened. <br/>
+   Use case resumes from step 2.
 
 3a. CMS detects an error in the entered data.<br/>
-3a1. CMS indicates that an error has happened. <br/>
-Use case resumes from step 2.
+   3a1. CMS indicates that an error has happened. <br/>
+   Use case resumes from step 2.
 
 #### Use case: UC09 - Delete contact(s)
 
@@ -960,8 +963,8 @@ Use case resumes from step 2.
 **Extensions:**
 
 3a. One or more of the given contact IDs are invalid.<br/>
-3a1. CMS displays which contact ID(s) are invalid and indicates that no deletions were performed.<br/>
-Use case resumes at step 2.
+   3a1. CMS displays which contact ID(s) are invalid and indicates that no deletions were performed.<br/>
+   Use case resumes at step 2.
 
 #### Use case: UC10 - Set contact status
 
@@ -984,16 +987,16 @@ Use case resumes at step 2.
 **Extensions:**
 
 2a. No status is specified.<br/>
-2a1. CMS indicates that an error has happened.<br/>
-Use case ends.
+   2a1. CMS defaults the status of the contact to be 'Uncontacted".<br/>
+   Use case resumes at step 4.
 
 3a. The specified status is invalid.<br/>
-3a1. CMS indicates that an error has happened.<br/>
-Use case ends.
+   3a1. CMS indicates that an error has happened.<br/>
+   Use case ends.
 
 3b. The specified contact ID does not exist.<br/>
-3b1. CMS indicates that an error has happened.<br/>
-Use case ends.
+   3b1. CMS indicates that an error has happened.<br/>
+   Use case ends.
 
 #### Use case: UC11 - Export Contacts
 
@@ -1020,12 +1023,12 @@ Use case ends.
 **Extensions:**
 
 3a. CMS cannot read the address book file.<br/>
-3a1. CMS shows an error message.<br/>
-Use case ends.
+   3a1. CMS shows an error message.<br/>
+   Use case ends.
 
 5a. System clipboard is unavailable.<br/>
-5a1. CMS shows an error message.<br/>
-Use case ends.
+   5a1. CMS shows an error message.<br/>
+   Use case ends.
 
 #### Use case: UC12 - Import Contacts
 
@@ -1049,91 +1052,88 @@ Use case ends.
 
 **Extensions:**
 1a. Salesperson presses F7 or clicks the import button under File.<br/>
-1a1. CMS shows an import contact preview window.<br/>
-1a2. User clicks paste JSON button.<br/>
-Use case resumes at step 3.
+   1a1. CMS shows an import contact preview window.<br/>
+   1a2. User clicks paste JSON button.<br/>
+   Use case resumes at step 3.
 
 3a. Clipboard is empty.<br/>
-3a1. CMS shows an error message.<br/>
-Use case ends.
+   3a1. CMS shows an error message.<br/>
+   Use case ends.
 
 3b. Cannot access system clipboard.<br/>
-3b1. CMS shows an error message.<br/>
-Use case ends.
+   3b1. CMS shows an error message.<br/>
+   Use case ends.
 
 4a. The JSON data is invalid or malformed.<br/>
-4a1. CMS shows an error message describing the issue.<br/>
-4a2. No changes are made to the existing data.<br/>
-Use case ends.
+   4a1. CMS shows an error message describing the issue.<br/>
+   4a2. No changes are made to the existing data.<br/>
+   Use case ends.
 
 ### Non-Functional Requirements
 
-1. Should work on any _mainstream OS_ as long as it has Java `17` or above installed.
+1. Should work on any _mainstream OS_ as long as it has Java `17` installed (Java 17 JDK+FX Azul distribution on macOS).
 2. Should be able to hold up to 1000 persons without a noticeable sluggishness in performance for typical usage, especially in things like returning search results or filtering by label.
 3. A user with above average typing speed (>60 WPM) for regular English text (i.e. not code, not system admin commands) should be able to accomplish most of the tasks faster using commands than using the mouse.
 4. The commands should follow **consistent patterns** to reduce confusion and make it easier to learn them.
 5. User data should be **automatically saved** after commands such that user data is not lost even after unexpected shutdowns.
 6. The program should be able to be self-contained as a single JAR/ZIP file that should work without requiring any installer.
 7. The GUI should _work well_ for standard screen resolutions 1920x1080 and higher, and, for screen scales 100% and 125%, meaning that no clipping or obvious bugs show in the GUI.
-8. The GUI should be _usable_ (i.e., all functions can be used even if the user experience is not optimal) for resolutions 1280x720 and higher, and, for screen scales 150%.
+8. The GUI should be _usable_ (i.e. all functions can be used even if the user experience is not optimal) for resolutions 1280x720 and higher, and, for screen scales 150%.
 9. There should not be a server component. All data should be stored on the user's local machine.
 
 ### Glossary
 
-- **Address Book**: The core domain model of the application. Represents the collection of all contacts and provides operations for managing them.
-- **API (Application Programming Interface)**: The set of public methods and interfaces that define how components interact with each other. Each major component (UI, Logic, Model, Storage) defines its API through an interface.
-- **Case-insensitive**: String matching that ignores letter casing (e.g., "John" matches "john", "JOHN"). Implemented using `toLowerCase()` or `equalsIgnoreCase()` in predicates.
-- **CLI (Command-Line Interface)**: Text-based user interface where users type commands. Parsed by `AddressBookParser` and individual `XYZCommandParser` classes.
-- **Clipboard**: System clipboard abstracted through the `ClipboardProvider` interface. Allows copying templates and address book data for external use. Production code uses `SystemClipboardProvider`, tests use stubs.
-- **Command**: An executable object representing a user action. All commands extend the abstract `Command` class and implement `execute(Model)`. Examples: `AddCommand`, `DeleteCommand`, `TemplateCommand`.
-- **CommandResult**: Encapsulates the outcome of command execution. Contains success/error message and flags indicating UI actions (e.g., `isShowHelp`, `isExit`, `isShowTemplate`).
-- **Contact**: Refers to a `Person` object in the domain model. Used interchangeably with "Person" in documentation.
-- **Email Template**: Persistent text content associated with a `Status` enum value. Stored in JSON files by `TemplateStorage` and managed via `TemplateCommand`.
-- **Export/Import**: Features to serialize/deserialize the entire `AddressBook` to/from clipboard as JSON. Uses `JsonAddressBookUtil` for conversion. Enables data sharing between users.
-- **Filter**: Applying a `Predicate<Person>` to the `filteredPersons` observable list in `Model`. Updates the UI to show only matching contacts.
-- **GUI (Graphical User Interface)**: The JavaFX-based visual interface. Implemented in the `UI` component with FXML layouts and corresponding controller classes.
-- **Index**: A 1-based position reference used in commands to identify contacts in the displayed list. Internally converted to 0-based for `List` operations. Represented by the `Index` class.
-- **JAR file**: Java ARchive - executable package containing compiled `.class` files and resources. Built by Gradle and run with `java -jar addressbook.jar`.
-- **JSON (JavaScript Object Notation)**: Text-based data format used for persistence. `JsonAdaptedPerson` classes bridge between domain objects and JSON representation. Handled by Jackson library.
-- **Mainstream OS**: Windows, Linux, Unix, MacOS - target platforms for the application.
-- **Model**: The component responsible for holding application data in memory. Manages `AddressBook`, `UserPrefs`, and filtered lists. Exposes data through `ObservableList` for reactive UI updates.
-- **Observer Pattern**: Design pattern used to keep UI synchronized with Model. JavaFX `ObservableList` and `ObjectProperty` notify listeners (UI components) when data changes.
-- **Parameter**: Command argument specified with a prefix (e.g., `n:NAME`, `p:PHONE`). Parsed by `ArgumentTokenizer` which splits input into `ArgumentMultimap`.
-- **Parser**: Class responsible for converting user input strings into `Command` objects. Follows the hierarchy: `AddressBookParser` → `XYZCommandParser` → `Command`. All parsers implement the `Parser` interface.
-- **PDPA (Personal Data Protection Act)**: Singapore's data protection regulation. Application supports compliance through bulk deletion and data export features.
-- **Predicate**: A functional interface representing a boolean-valued function. Used extensively for filtering (e.g., `PersonMatchesKeywordsPredicate`, `NameContainsKeywordsPredicate`).
-- **Prefix**: A `Prefix` object (e.g., `PREFIX_NAME`, `PREFIX_PHONE`) used by parsers to identify parameter types. Defined in `CliSyntax`.
-- **Status**: An enum-like class representing contact lifecycle states (Contacted, Rejected, Accepted, Unreachable, Busy, Uncontacted). Used for filtering and template association.
-- **Storage**: The component handling data persistence. Implements both `AddressBookStorage` and `UserPrefStorage` interfaces. Uses JSON format via Jackson library.
-- **Tag**: A domain object representing a category label. Each `Person` can have multiple `Tag` objects stored in a `Set<Tag>`. Implemented as immutable value objects.
-- **Template Storage**: Subsystem for persisting email templates. Uses `TemplateStorage` interface with file-based implementation (`TemplateStorageManager`). Templates stored as individual files per status.
-- **UI Component**: JavaFX-based view layer. Inherits from `UiPart` base class. FXML files in `resources/view` define layouts, Java classes handle logic.
-- **UniquePersonList**: Internal data structure in `AddressBook` that ensures no duplicate persons. Duplicates determined by `Person#isSamePerson()` method.
-- **Validation**: Input checking performed by parsers and domain objects. For example, `Phone` validates format, `Email` validates structure. Throws `ParseException` or `IllegalArgumentException` on invalid input.
-- **ObservableList**: A JavaFX collection that notifies listeners about changes (additions, removals, updates). Used to keep the UI view synchronized with app data in real time.
-- **ObjectProperty**: A JavaFX property type that holds and notifies changes to a single object, supporting binding and listeners for UI updates.
-- **ClipboardProvider**: An abstraction/interface for operations that interact with the system clipboard (e.g. for copying data or templates programmatically).
-- **FileSystemProvider**: Interface that abstracts file read/write operations from the file system for portability and testing.
-- **SystemClipboardProvider**: The production implementation of `ClipboardProvider` that interacts with the real system clipboard on the user’s OS.
-- **SystemFileSystemProvider**: The production implementation of `FileSystemProvider` that uses the local file system for file operations.
-- **JsonAddressBookUtil**: A utility class that handles conversion (serialization/deserialization) between Address Book data structures and JSON format.
-- **UiPart**: Abstract Java class that defines common logic for UI components/parts (JavaFX controls) in the app. All custom UI views inherit from this base class
-- **ModelManager**: The main implementation of the `Model` interface. Manages, updates, and exposes application data in-memory and propagates property changes to the UI.
-- **MainWindow**: The primary application window in the UI, containing CommandBox, PersonListPanel, SidebarPanel, and other subcomponents.
-- **CommandBox**: The text input area in the UI where users enter commands.
-- **ImportWindow**: A separate UI window dedicated to importing customer data from the clipboard, allowing preview or validation before adding contacts.
-- **SidebarPanel**: A UI panel that contains and displays active filters; houses the StatusViewPanel and TagsViewPanel.
-- **StatusViewPanel**: UI component that displays the list of currently active status filters applied (e.g., via find command).
-- **TagsViewPanel**: UI component that displays the list of currently active tag filters applied (e.g., via find command).
-- **TemplateViewPanel**: UI component that allows users to create, edit, and view email templates corresponding to customer statuses.
-- **StatusViewState**: Model object representing the current state of selected or displayed status filters for UI update.
-- **TagsViewState**: Model object representing the current state of selected or displayed tag filters for UI update.
-- **TemplateViewState**: Model object representing which template is being edited, along with its content, for template editor synchronization.
-- **ResultDisplay**: A UI box or output panel that shows feedback, messages, and results to users following command execution.
-- **PersonListPanel**: The panel or list view in the UI that displays all persons/contacts matching the current list or filter.
-- **LogicManager**: The concrete implementation of the application’s Logic component. Orchestrates command parsing, command execution, and data flow between UI and Model.
+* **Address Book**: The core domain model of the application. Represents the collection of all contacts and provides operations for managing them.
+* **API (Application Programming Interface)**: The set of public methods and interfaces that define how components interact with each other. Each major component (UI, Logic, Model, Storage) defines its API through an interface.
+* **Case-insensitive**: String matching that ignores letter casing (e.g., "John" matches "joHn", "JOHN").
+* **CLI (Command-Line Interface)**: Text-based user interface where users type commands. Parsed by `AddressBookParser` and individual `XYZCommandParser` classes.
+* **Clipboard**: System clipboard abstracted through the `ClipboardProvider` interface. Allows copying templates and address book data for external use. Production code uses `SystemClipboardProvider`, tests use stubs.
+* **Command**: An executable object representing a user action. All commands extend the abstract `Command` class and implement `execute(Model)`. Examples: `AddCommand`, `DeleteCommand`, `TemplateCommand`.
+* **CommandResult**: Encapsulates the outcome of command execution. Contains success/error message and flags indicating UI actions (e.g., `isShowHelp`, `isExit`, `isShowTemplate`).
+* **Contact**: Refers to a `Person` object in the domain model. Used interchangeably with "Person" in documentation.
+* **Email Template**: Persistent text content associated with a `Status` enum value. Stored in JSON files by `TemplateStorage` and managed via `TemplateCommand`.
+* **Export/Import**: Features to serialise/deserialise the entire `AddressBook` to/from clipboard as a JSON formatted string. Uses `JsonAddressBookUtil` for conversion. Enables easier data sharing between users.
+* **Filter**: Applying a `Predicate<Person>` to the `filteredPersons` observable list in `Model`. Updates the UI to show only matching contacts.
+* **GUI (Graphical User Interface)**: The JavaFX-based visual interface. Implemented in the `UI` component with FXML layouts and corresponding controller classes.
+* **Index**: A 1-based position reference used in commands to identify contacts in the displayed list. Internally converted to 0-based for `List` operations. Represented by the `Index` class.
+* **Mainstream OS**: Windows, Linux, MacOS - target platforms for the application.
+* **Model**: The component responsible for holding application data in memory. Manages `AddressBook`, `UserPrefs`, and filtered lists. Exposes data through `ObservableList` for reactive UI updates.
+* **Observer Pattern**: Design pattern used to keep UI synchronized with Model. JavaFX `ObservableList` and `ObjectProperty` notify listeners (UI components) when data changes.
+* **Parameter**: Command argument specified with a prefix (e.g., `n:NAME`, `p:PHONE`). Parsed by `ArgumentTokenizer` which splits input into `ArgumentMultimap`.
+* **Parser**: Class responsible for converting user input strings into `Command` objects. All parsers implement the `Parser` interface.
+* **PDPA (Personal Data Protection Act)**: Singapore's data protection regulation. Application supports compliance through bulk deletion and data export features.
+* **Predicate**: A functional interface representing a boolean-valued function. Used extensively for filtering (e.g. `PersonMatchesKeywordsPredicate`, `NameContainsKeywordsPredicate`).
+* **Prefix**: A `Prefix` object (e.g., `PREFIX_NAME`, `PREFIX_PHONE`) used by parsers to identify parameter types. Defined in `CliSyntax`.
+* **Status**: An enum-like class representing contact lifecycle states (Contacted, Rejected, Accepted, Unreachable, Busy, Uncontacted). Used for filtering and template association.
+* **Storage**: The component handling data persistence. Implements both `AddressBookStorage` and `UserPrefStorage` interfaces. Uses JSON format.
+* **Template Storage**: Subsystem for persisting email templates. Uses `TemplateStorage` interface with file-based implementation (`TemplateStorageManager`). Templates stored as individual files per status.
+* **UI Component**: JavaFX-based view layer. Inherits from `UiPart` base class. FXML files in `resources/view` define layouts, Java classes handle logic.
+* **UniquePersonList**: Internal data structure in `AddressBook` that ensures no duplicate persons. Duplicates determined by `Person#isSamePerson()` method.
+* **Validation**: Input checking performed by parsers and domain objects. For example, `Phone` validates format, `Email` validates structure. Throws `ParseException` or `IllegalArgumentException` on invalid input.
+* **ObservableList**: A JavaFX collection that notifies listeners about changes (additions, removals, updates). Used to keep the UI view synchronized with app data in real time.
+* **ObjectProperty**: A JavaFX property type that holds and notifies changes to a single object, supporting binding and listeners for UI updates.
+* **ClipboardProvider**: An abstraction/interface for operations that interact with the system clipboard (e.g. for copying contacts information or templates programmatically).
+* **FileSystemProvider**: Interface that abstracts file read/write operations from the file system for portability and testing.
+* **SystemClipboardProvider**: The production implementation of `ClipboardProvider` that interacts with the real system clipboard on the user’s OS.
+* **SystemFileSystemProvider**: The production implementation of `FileSystemProvider` that uses the local file system for file operations.
+* **JsonAddressBookUtil**: A utility class that handles conversion (serialization/deserialization) between Address Book data structures and JSON format.
+* **UiPart**: Abstract Java class that defines common logic for UI components/parts (JavaFX controls) in the app. All custom UI views inherit from this base class
+* **ModelManager**: The main implementation of the `Model` interface. Manages, updates, and exposes application data in-memory and propagates property changes to the UI.
+* **MainWindow**: The primary application window in the UI, containing CommandBox, PersonListPanel, SidebarPanel, and other subcomponents.
+* **CommandBox**: The text input area in the UI where users enter commands.
+* **ImportWindow**: A separate UI window dedicated to importing customer data from the clipboard, allowing preview or validation before adding contacts.
+* **SidebarPanel**: A UI panel that contains and displays active filters; houses the StatusViewPanel and TagsViewPanel.
+* **StatusViewPanel**: UI component that displays the list of currently active status filters applied (e.g., via find command).
+* **TagsViewPanel**: UI component that displays the list of currently active tag filters applied (e.g., via find command).
+* **TemplateViewPanel**: UI component that allows users to create, edit, and view email templates corresponding to customer statuses.
+* **StatusViewState**: Model object representing the current state of selected or displayed status filters for UI update.
+* **TagsViewState**: Model object representing the current state of selected or displayed tag filters for UI update.
+* **TemplateViewState**: Model object representing which template is being edited, along with its content, for template editor synchronization.
+* **ResultDisplay**: A UI box or output panel that shows feedback, messages, and results to users following command execution.
+* **PersonListPanel**: The panel or list view in the UI that displays all persons/contacts matching the current list or filter.
+* **LogicManager**: The concrete implementation of the application’s Logic component. Orchestrates command parsing, command execution, and data flow between UI and Model.
 
----
+--------------------------------------------------------------------------------------------------------------------
 
 ## **Appendix: Instructions for manual testing**
 
@@ -1250,12 +1250,12 @@ testers are expected to do more *exploratory* testing.
 
 1. Importing with invalid JSON
 
-   1. Copy invalid JSON to clipboard (e.g., `{invalid json}`).
+   1. Copy invalid JSON to clipboard (e.g. `{invalid json}`).
 
    1. Test case: `import`<br>
       Expected: Error message "Failed to import: Clipboard does not contain valid address book JSON.". Address book remains unchanged.
 
-   1. Copy non-address-book JSON to clipboard (e.g., `{"name": "test"}`).
+   1. Copy non-address-book JSON to clipboard (e.g. `{"name": "test"}`).
 
    1. Test case: `import`<br>
       Expected: Error message "Failed to import: Clipboard does not contain valid address book JSON.". Address book remains unchanged.
