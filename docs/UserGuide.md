@@ -3,19 +3,19 @@ layout: page
 title: User Guide
 ---
 
-## Why OnlySales?
-
-As a salesperson, you need to:
-  * Track hundreds of contacts
-  * Quickly search and filter their contact information
-  * Send multiple follow-up email quickly
-
 Hello to all salespeople! Welcome to our user guide on Only Sales! Whether you are technical or not doesn't matter! This guide is for you! (If you're unsure of anything, you can refer to the [glossary](#glossary) at the end of this guide.)
 
 OnlySales is a **desktop app for managing contacts, optimised for Salespeople**, especially tech salespeople.
 What makes OnlySales unique is that it is a Command Line Interface-based (CLI) app. Essentially, what it means is
 that if you can type fast, OnlySales can get your contact management tasks done faster than traditional
 apps that need you to use a mouse.
+
+## Why OnlySales?
+
+As a salesperson, you need to:
+  * Track hundreds of contacts
+  * Quickly search and filter their contact information
+  * Send multiple follow-up email quickly
 
 Whether you are on the go with your slim notebook or at home with your mechanical keyboard, OnlySales is
 your friend to help you close all those SALES, with ONLY your keyboard!
