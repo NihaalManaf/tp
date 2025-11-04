@@ -56,10 +56,10 @@ Go to [this page](https://github.com/AY2526S1-CS2103T-T08-2/tp/releases/) and do
 ### Step 3: Choose where to put OnlySales
 
 1. Create a new folder on your computer (or choose an existing one) where you want to keep OnlySales. This will be where OnlySales will store all your contacts and settings.
-   
-  <div markdown="span" class="alert alert-primary">:bulb: **Tip:** You might want to create or use a blank folder to avoid clutter. It can be called "OnlySales" on your Desktop or Documents folder for easy access. </div>
 
 2. Move or copy the `.jar` file you downloaded into this folder.
+
+  <div markdown="span" class="alert alert-primary">:bulb: **Tip:** You might want to create or use a blank folder to avoid clutter. It can be called "OnlySales" on your Desktop or Documents folder for easy access. </div>
 
 ### Step 4: Launch OnlySales
 
