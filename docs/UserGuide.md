@@ -142,7 +142,7 @@ Sets a person's status in the address book.
 
 **Format:** `status INDEX [STATUS]`
 
-* Changes the status of the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a number** 1, 2, 3, …​ This field is mandatory.
+* Changes the status of the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a valid number according to what is displayed in the list below** (e.g., 1, 2, 3, …​). This field is mandatory.
 * Changes the status of the person with the specified `STATUS`. The status of a person can only be "Contacted", "Uncontacted", "Busy", "Rejected", "Accepted" and "Unreachable". If no status is specified, it defaults to "Uncontacted".
 * The status input is case-insensitive.
 
@@ -158,7 +158,7 @@ Edits an existing person in the address book.
 
 **Format:** `edit INDEX [n:NAME] [p:PHONE] [e:EMAIL] [a:ADDRESS] [s:STATUS] [t:TAG]...`
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a number** 1, 2, 3, …​
+* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a valid number according to what is displayed in the list below** (e.g., 1, 2, 3, …​).
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
 * When editing the phone number, it needs to be unique so that the edited contact is not treated as a duplicated person.
@@ -297,7 +297,7 @@ Deleting a contact is an irreversible process. Once deleted, the contact informa
 
 * Deletes the person(s) at the specified `INDEX` (and `MORE_INDICES` if provided).
 * The index refers to the index number shown in the displayed person list.
-* The index **must be a number** 1, 2, 3, …​
+* The index **must be a valid number according to what is displayed in the list below** (e.g., 1, 2, 3, …​).
 * Multiple indices can be specified to delete multiple persons at once.
 * Indices can be provided in any order.
 * **All indices must be valid** - if any index is invalid, the command will fail and no persons will be deleted. The error message will show which specific indices are invalid.
