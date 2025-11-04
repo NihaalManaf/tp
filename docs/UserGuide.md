@@ -35,37 +35,71 @@ your friend to help you close all those SALES, with ONLY your keyboard!
 
 ## Quick start
 
-1. Ensure you have any version of Java `17` installed in your Computer. Installation guide for:<br>
-    * [**Windows Java Installation**](https://se-education.org/guides/tutorials/javaInstallationWindows.html)
-    * [**Mac Java Installation**](https://se-education.org/guides/tutorials/javaInstallationMac.html)
-    * [**Linux Java Installation**](https://se-education.org/guides/tutorials/javaInstallationLinux.html)
-1. Download the latest `.jar` file from [here](https://github.com/AY2526S1-CS2103T-T08-2/tp/releases/).
+### Step 1: Install Java (if you don't have it already)
 
-1. Copy the file to the folder you want to use as the _home folder_ for your OnlySales.
+OnlySales needs Java to run. **Java** is a free program that runs applications on your computer—think of it as the engine that powers OnlySales. You need any version of Java version 17 installed (version 17.x.x).
 
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar OnlySales.jar` command to run the application.<br>
-   A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
-   ![Ui](images/Ui.png)
-   <p class="figcaption">Sample screenshot of the app</p>
+**How to check if you have the right version of Java:**
+- On Windows: Press the Windows key, type "cmd" and press Enter. In the window that opens, type `java -version` and press Enter.
+- On Mac: Open the Terminal app (found in Applications > Utilities) and type `java -version`.
+- On Linux: Press Ctrl+Alt+T or search for "Terminal" in your applications menu and open it. Type `java -version`. 
 
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
-   Some example commands you can try:
+**If you need to install Java**, follow these guides:
+- [**Windows Java Installation**](https://se-education.org/guides/tutorials/javaInstallationWindows.html)
+- [**Mac Java Installation**](https://se-education.org/guides/tutorials/javaInstallationMac.html)
+- [**Linux Java Installation**](https://se-education.org/guides/tutorials/javaInstallationLinux.html)
 
-   - `list` : Lists all contacts.
+### Step 2: Download OnlySales
 
-   - `add n:John Doe p:98765432 e:johnd@example.com a:John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+Go to [this page](https://github.com/AY2526S1-CS2103T-T08-2/tp/releases/) and download the latest file that ends in `.jar`.
 
-   - `delete 3` : Deletes the 3rd contact shown in the current list.
+### Step 3: Choose where to put OnlySales
 
-   * `delete 1 2 3` : Deletes the 1st, 2nd, and 3rd contacts shown in the current list.
+1. Create a new folder on your computer (or choose an existing one) where you want to keep OnlySales. This will be where OnlySales will store all your contacts and settings.
    
-   * `template s:Contacted` : Opens the email template editor for contacts with "Contacted" status.
+  <div markdown="span" class="alert alert-primary">:bulb: **Tip:** You might want to create or use a blank folder to avoid clutter. It can be called "OnlySales" on your Desktop or Documents folder for easy access. </div>
 
-   * `clear` : Deletes all contacts.
+2. Move or copy the `.jar` file you downloaded into this folder.
 
-   - `exit` : Exits the app.
+### Step 4: Launch OnlySales
 
-1. Refer to the [Features](#features) below for details of each command.
+1. **Open a command terminal** (also called Command Prompt on Windows or Terminal on Mac):
+   - **Windows**: Press the Windows key, type "cmd" or "Command Prompt", and press Enter
+   - **Mac**: Open the Terminal app from Applications > Utilities
+   - **Linux**: Press Ctrl+Alt+T or search for "Terminal" in your applications menu
+
+2. **Navigate to your folder**: In the terminal window, type `cd` followed by a space, then drag and drop your OnlySales folder into the terminal window (this automatically types the folder path), and press Enter.
+
+3. **Start OnlySales**: Type `java -jar OnlySales.jar` and press Enter to open the file.
+
+4. The app similar to the image below should appear in a few seconds. You'll see some sample contacts to help you get started.
+   
+![Ui](images/Ui.png)
+<p class="figcaption">Sample screenshot of the app</p>
+
+### Step 5: Try your first commands
+
+You'll see a text box near the top of the OnlySales app — this is where you type commands.
+
+**Here are some simple commands to get you started:**
+
+- Type `help` and press Enter to open the help window.
+
+- Type `list` and press Enter to see all your contacts.
+
+- Type `add n:John Doe p:98765432 e:johnd@example.com a:John street, block 123, #01-01` and press Enter to add a new contact.
+  
+  **What do those letters mean?** The `n:`, `p:`, `e:`, and `a:` are shortcuts that stand for Name, Phone, Email, and Address. For more details, refer to the Features section below.
+
+- Type `delete 3` and press Enter to remove the 3rd contact from your list (be careful — this cannot be undone!).
+
+- Type `template s:Contacted` and press Enter to open the email template editor for contacts you've already contacted.
+
+- Type `clear` and press Enter to delete all contacts (no undo button, use with caution!).
+
+- Type `exit` and press Enter to close OnlySales.
+
+**That's it!** You're ready to start managing your contacts. For more detailed information about each command and all the features OnlySales offers, check out the [Features](#features) section below.
 
 ---
 
