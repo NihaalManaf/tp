@@ -21,12 +21,14 @@ title: Developer Guide
 * Used Cursor for error checking, debugging in general(model: Auto)
 * Used Cursor to help understand the codebase architecture pattern and understand how to implement status view and tag view (model: Sonnet 4.5)
 * Used Cursor to build the tag view plane and status view plane in sidebar panel! (model: Auto)
+* Used github copilot to review #223 PR
 
 #### Sean Hardjanto
 * Used Copilot to write test cases for delete and template (Claude Sonnet 4.5)
 * Used Copilot to check and write JavaDoc comments for delete and template methods (Claude Sonnet 4.5)
 * Used Copilot to scan code for areas of code to increase code quality (Claude Sonnet 4.5)
 * Used Copilot to assist with debugging of code (Claude Sonnet 4.5)
+* Used Copilot to check through UG and DG (Claude Sonnet 4.5)
 
 #### Poh Anson
 
