@@ -10,6 +10,8 @@ As a salesperson, you need to:
   * Quickly search and filter their contact information
   * Send multiple follow-up email quickly
 
+Hello to all salespeople! Welcome to our user guide on Only Sales! Whether you are technical or not doesn't matter! This guide is for you! (If you're unsure of anything, you can refer to the [glossary](#glossary) at the end of this guide.)
+
 OnlySales is a **desktop app for managing contacts, optimised for Salespeople**, especially tech salespeople.
 What makes OnlySales unique is that it is a Command Line Interface-based (CLI) app. Essentially, what it means is
 that if you can type fast, OnlySales can get your contact management tasks done faster than traditional
@@ -140,7 +142,7 @@ Sets a person's status in the address book.
 
 **Format:** `status INDEX [STATUS]`
 
-* Changes the status of the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​ This field is mandatory.
+* Changes the status of the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a number** 1, 2, 3, …​ This field is mandatory.
 * Changes the status of the person with the specified `STATUS`. The status of a person can only be "Contacted", "Uncontacted", "Busy", "Rejected", "Accepted" and "Unreachable". If no status is specified, it defaults to "Uncontacted".
 * The status input is case-insensitive.
 
@@ -156,7 +158,7 @@ Edits an existing person in the address book.
 
 **Format:** `edit INDEX [n:NAME] [p:PHONE] [e:EMAIL] [a:ADDRESS] [s:STATUS] [t:TAG]...`
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
+* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a number** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
 * Existing values will be updated to the input values.
 * When editing the phone number, it needs to be unique so that the edited contact is not treated as a duplicated person.
@@ -171,16 +173,16 @@ Edits an existing person in the address book.
 
 ### Finding customers: `find`
 
-You can find customers by searching for their name, tags, status, phone number, or email. There are two ways to use the `find` command:
+You can find customers by searching for their name, tags, status, phone number, email, or address. There are two ways to use the `find` command:
 
 - **Basic search:** Type one or more names after `find` to look up customers by name. (See examples below.)
-- **Advanced search:** Use prefixes like `n:`, `t:`, `s:`, `p:`, or `e:` to search more specifically by name, tag, status, phone, or email.
+- **Advanced search:** Use prefixes like `n:`, `t:`, `s:`, `p:`, `e:`, or `a:` to search more specifically by name, tag, status, phone, email, or address.
 
-Use basic search when you just want to find by name. Use advanced search if you want to search by tags, status, phone or email, or combine several criteria!
+Use basic search when you just want to find by name. Use advanced search if you want to search by tags, status, phone, email, address, or combine several criteria!
 
 Check the examples below for the correct usage of each search style.
 
-**Format:** `find NAME [MORE_NAMES]` OR `find [n:NAME] [t:TAG]... [s:STATUS] [p:PHONE] [e:EMAIL]`
+**Format:** `find NAME [MORE_NAMES]` OR `find [n:NAME] [t:TAG]... [s:STATUS] [p:PHONE] [e:EMAIL] [a:ADDRESS]`
 
 <p align="center">
   <img src="images/FindCommand.png" alt="Find Command example showing Basic and Advanced Search input fields and results"><br>
@@ -202,6 +204,7 @@ Check the examples below for the correct usage of each search style.
 - `s:STATUS` - Search by contact status (Uncontacted, Contacted, Rejected, Accepted, Unreachable, Busy)
 - `p:PHONE` - Search by phone number
 - `e:EMAIL` - Search by email address
+- `a:ADDRESS` - Search by address
 - Multiple criteria can be combined for more precise searches
 - All searches are case-insensitive
 - For each advanced search command, you can specify at most one of each of the following: name, email, address, status, and phone number. You can, however, include as many tags (`t:TAG`) as you like in a single search!
@@ -242,6 +245,11 @@ Do not mix styles in one command. For example, use `find n:alice t:friend` (adva
 **Search by email:**
 
 - `find e:john@example.com` returns customers with that specific email
+
+**Search by address:**
+
+- `find a:Singapore` returns all customers with "Singapore" in their address
+- `find a:Clementi` returns all customers with "Clementi" in their address
 
 **Combined multi-criteria search:**
 
@@ -289,7 +297,7 @@ Deleting a contact is an irreversible process. Once deleted, the contact informa
 
 * Deletes the person(s) at the specified `INDEX` (and `MORE_INDICES` if provided).
 * The index refers to the index number shown in the displayed person list.
-* The index **must be a positive integer** 1, 2, 3, …​
+* The index **must be a number** 1, 2, 3, …​
 * Multiple indices can be specified to delete multiple persons at once.
 * Indices can be provided in any order.
 * **All indices must be valid** - if any index is invalid, the command will fail and no persons will be deleted. The error message will show which specific indices are invalid.
@@ -323,8 +331,11 @@ Opens the template editor for a specific contact status.
 * `STATUS` must be one of: `Contacted`, `Uncontacted`, `Rejected`, `Accepted`, `Unreachable`, or `Busy`.
 * Status is case-insensitive (e.g. `contacted`, `CONTACTED`, `Contacted` all work).
 * The template editor allows you to view and edit the email template.
-* Changes are not saved automatically - use `template save` to save your changes.
 * If no custom template exists for the status, a default template will be displayed (e.g., "This is the default template for status Contacted").
+
+<div markdown="span" class="alert alert-warning">:exclamation: **Warning:**
+Changes are not saved automatically - use `template save` to save your changes.
+</div>
 
 **Examples:**
 * `template s:Contacted` opens the template editor for the "Contacted" status.
@@ -406,12 +417,16 @@ Import replaces your entire address book when data is valid. Make sure to export
 
 ### Export contacts: `export`
 
-Exports all contacts from the address book to your clipboard. This allows you to share your contacts with other OnlySales users or create backups of your data.
+Exports all contacts from the address book and copies all information to your clipboard. This allows you to share your contacts with other OnlySales users or create backups of your data.
 
 **Format:** `export`
 
+* Copies all contact information from your address book to your clipboard in JSON format.
+* The exported data includes all contact information including names, phone numbers, email addresses, physical addresses, statuses, and tags.
+* After running this command, you can paste the data anywhere (e.g., into a text file, share with another user, or use with the `import` command).
+
 <div markdown="span" class="alert alert-info">:information_source: **Note:**
-The exported data includes all contact information including names, phone numbers, email addresses, physical addresses, statuses, and tags.
+The export command copies all information to your clipboard automatically. You can then paste it wherever you need it.
 </div>
 
 <div markdown="span" class="alert alert-primary">:bulb: **Tip:**
@@ -460,10 +475,31 @@ Furthermore, certain edits can cause the OnlySales to behave in unexpected ways 
 **A**: OnlySales only stores data locally on your laptop, no data is sent to external servers. However, the data file is not encrypted, so do ensure that your device is password protected.
 
 **Q**: How do I handle duplicate contacts?<br/>
-**A**: It would be unlikely that there would be a duplicate as each phone number would be owned by a person. You could resolve this by deleting the unwanted entries, or include or exclude the country code for local contacts.
+**A**: It would be unlikely that there would be a duplicate as each phone number would be owned by a different person. You could resolve this by deleting the unwanted entries, or include or exclude the country code for local contacts.
 
 **Q**: The app is not functioning as expected.<br/>
 **A**: Do check the known issues and FAQ. If you have any issues, please file a bug report at: [Customer Feedback Form](https://forms.gle/UBbeXtpVAmTjDf499)
+
+**Q**: Can I search for contacts by address?<br/>
+**A**: Yes! You can use the advanced search feature with the `a:` prefix. For example, `find a:Singapore` will find all contacts with "Singapore" in their address.
+
+**Q**: What happens if I accidentally delete a contact?<br/>
+**A**: Unfortunately, deletion is permanent and cannot be undone. However, you can use the `export` command regularly to create backups of your address book, which you can then import if needed.
+
+**Q**: How do I edit multiple contacts at once?<br/>
+**A**: OnlySales currently supports editing one contact at a time using the `edit` command. To modify multiple contacts, you'll need to edit them individually. However, you can use the `find` command to filter contacts and then edit them one by one.
+
+**Q**: Can I use OnlySales without an internet connection?<br/>
+**A**: Yes! OnlySales is a desktop application that works completely offline. All your data is stored locally on your computer. 
+
+**Q**: What file format does OnlySales use for storing data?<br/>
+**A**: OnlySales stores all contact data in JSON format in the `data/addressbook.json` file. This makes it easy to backup, transfer, or even manually edit if you're comfortable with JSON.
+
+**Q**: How many contacts can I store in OnlySales?<br/>
+**A**: There's no hard limit on the number of contacts you can store. However, for optimal performance, we recommend keeping your address book under 10,000 contacts.
+
+**Q**: Can I customize the email templates?<br/>
+**A**: Absolutely! Use the `template s:STATUS` command to open and edit templates for any status. Don't forget to use `template save` after making changes!
 
 ---
 
