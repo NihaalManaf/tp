@@ -311,7 +311,9 @@ Deleting a contact is an irreversible process. Once deleted, the contact informa
 * `delete 2 99` (when only 2 persons exist) will fail with error message "Invalid index(es) detected: 99" and no deletions will occur.
 * `delete 1 1 3` will fail with error message "Duplicate indices were detected! Please ensure all indices are unique." and no deletions will occur.
 
-![Delete Example](images/deleteSample.png)
+![Delete Example](images/deleteSample2.png)
+Example of where 3 contacts are deleted with the command 
+`delete 1 2 3`
 
 ### Managing email templates :
 
@@ -507,6 +509,34 @@ Furthermore, certain edits can cause the OnlySales to behave in unexpected ways 
 
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running. Alternatively, you can use the `import` and `export` commands.
 2. **If you minimise the Help Window or Import Preview Window**, attempting to open them again (using `help` command, `F1`, or `F7`) will not create a new window. The remedy is to manually restore the minimised window.
+
+---
+
+## Glossary
+
+This glossary defines key terms used throughout this user guide to help you understand OnlySales better.
+
+**Address Book**: The collection of all your contacts stored in OnlySales. This is saved as a JSON file (`addressbook.json`) in the `data` folder.
+
+**CLI (Command Line Interface)**: A text-based way to interact with OnlySales by typing commands instead of clicking buttons with a mouse.
+
+**Contact**: A person's information stored in OnlySales, including their name, phone number, email, address, status, and tags.
+
+**Export**: The process of copying all your contact data to your clipboard in JSON format, which can then be pasted elsewhere or imported into another OnlySales installation.
+
+**Import**: The process of loading contact data from your clipboard (in JSON format) into OnlySales, replacing your current address book.
+
+**Index**: A number that identifies the position of a contact in the displayed list. For example, if you see a list of contacts, the first one has index 1, the second has index 2, and so on.
+
+**JSON (JavaScript Object Notation)**: A text-based data format used by OnlySales to store contact information. It's human-readable and can be edited manually if needed.
+
+**Prefix**: A short code followed by a colon (like `n:`, `p:`, `e:`) used in commands to specify what type of information you're providing. For example, `n:` means name, `p:` means phone number.
+
+**Status**: A label that indicates the current state of a contact in your sales pipeline. OnlySales supports six statuses: Contacted, Uncontacted, Busy, Rejected, Accepted, and Unreachable.
+
+**Tag**: A keyword or label you can assign to contacts for easier categorization and searching. A contact can have multiple tags.
+
+**Template**: A pre-written email message associated with a specific contact status. You can customize templates and copy them to use in your email communications.
 
 ---
 
